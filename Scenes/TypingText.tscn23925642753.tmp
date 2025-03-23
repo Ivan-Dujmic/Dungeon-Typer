@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpclphm5ivcxl"]
+
+[ext_resource type="Script" uid="uid://ctgt33j18vr04" path="res://Scripts/TypingText.gd" id="1_3w6x7"]
+
+[node name="TypingText" type="RichTextLabel"]
+offset_right = 40.0
+offset_bottom = 40.0
+bbcode_enabled = true
+text = "Textaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+scroll_active = false
+script = ExtResource("1_3w6x7")
