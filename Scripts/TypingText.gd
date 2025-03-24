@@ -15,21 +15,26 @@ var partial_color = "#74e876"	# Color for complete characters of the current wor
 var wrong_color = "#ff3c00"	# Color for wrongly typed characters
 var incoming_color = "#ffffff"	# Color for current and incoming characters
 
+var next_words: Array[String] = []
+var chars_of_word_complete = 0
+
 func generate_random_word() -> String:
 	return word_list[rng.randi_range(0, word_list_size-1)]
 	#return("123456789")
 	
 func append_random_word():
-	text += (generate_random_word() + space_sub)
+	var random_word = generate_random_word() + space_sub
+	text += random_word
+	next_words.append(random_word)
 
 func init_text():
 	# Adds the colors tags and empty text at start
 	text += ("[color=" + complete_color + "]")
 	text += (" ".repeat(24))
 	text += ("[/color]")
-	#for color in [partial_color, wrong_color, incoming_color]:
+	for color in [partial_color]:
 		# [color="COLOR_HEX"][/color]
-	#	text += ("[color=" + color + "]" + "[/color]")
+		text += ("[color=" + color + "]" + "[/color]")
 
 func _ready():
 	print("TypingText ready")
@@ -56,9 +61,17 @@ func _unhandled_input(event: InputEvent):
 		var next_char = get_parsed_text().substr(24, 1)
 		var next_char_unicode = next_char.unicode_at(0)	# 24 because we're writing at the middle of the text
 		if (next_char_unicode == key) or (key == " ".unicode_at(0) and next_char_unicode == space_sub_unicode):	# If correct input
+			chars_of_word_complete += 1
+			text = text.erase(70)	# Remove completed char from incoming characters
+			text = text.insert(62, next_char)	# Put completed char in partially completed characters
 			text = text.erase(15)	# Remove leftmost character
-			text = text.insert(38, next_char)	# Put completed char in completed characters
-			text = text.erase(47)	# Remove completed char from incoming characters
 			if key == 32:	# Space, next word
+				print(text)
+				text = text.insert(39 - chars_of_word_complete, next_words[0])	# Put completed word in completed part
+				print(text)
+				text = text.erase(62, chars_of_word_complete)
+				print(text)
+				next_words.remove_at(0)
+				chars_of_word_complete = 0
 				append_random_word()
 				player.move(Vector2(16, 0))
