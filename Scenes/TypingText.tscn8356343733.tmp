@@ -13,10 +13,8 @@ script = ExtResource("1_bosu8")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-bbcode_enabled = true
 
 [node name="Right" type="RichTextLabel" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-bbcode_enabled = true

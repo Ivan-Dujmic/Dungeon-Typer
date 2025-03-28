@@ -55,6 +55,5 @@ func draw_all_tiles():
 			walls_layer.set_cell(pos, 0, texture_cords)
 
 func _ready():
-	print("DungeonGenerator ready")
 	init_dungeon_start()
 	draw_all_tiles()

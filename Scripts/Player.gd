@@ -12,7 +12,6 @@ func move(move_amount: Vector2):
 	new_position += move_amount
 
 func _ready():
-	print("Player ready")
 	position = Vector2(2 * TILE_SIZE, 5 * TILE_SIZE)
 
 func _process(delta):

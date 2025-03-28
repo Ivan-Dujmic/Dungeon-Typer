@@ -4,4 +4,4 @@ extends Node2D
 @onready var player = $TilesViewportContainer/TilesViewport/Player
 
 func _ready():
-	print("Game ready")
+	return
