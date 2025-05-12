@@ -1,155 +1,146 @@
-extends Control
+extends RichTextLabel
+class_name TypingText
 
-@onready var player = $"../../TilesViewportContainer/TilesViewport/Player"
-@onready var left_text = $Left
-@onready var right_text = $Right
+# "Constructor" variables
+var on_word_complete: Callable	# Function to be called when a word is complete
+var font_size
+var chars_per_side	# Max chars on incoming side and completed part individually
+var incoming_word_count
 
-var word_list: Array[String] = []
-var word_list_size: int
-var rng = RandomNumberGenerator.new()
+# Holds the text controller to which self should subscribe
+var text_controller
 
+# Format
 var font_path = "res://Fonts/ia-writer-mono-latin-400-normal.ttf"
 var font_family: Font
 var space_sub = "⎵"	# Used to show a whitespace
 var space_sub_unicode = space_sub.unicode_at(0)
-
 var colors = {
 	"complete": "#08850a",	# Color for complete words
-	"partial": "#74e876",	# Color for complete characters of the current word
 	"wrong": "#ff3c00",		# Color for mistypes
 	"incoming": "#ffffff",	# Color for current and incoming characters
 	"special": "#ffdd80",	# Color for current and incoming special characters
 }
 
+# Word tracking
+var incoming_words: Array = []	# Keeps the incoming words and their properties (special...)
+var incorrect_mode = false	# Was the previous char mistyped?
+var left_chars = ""	# Remember complete chars of current word and/or an incorrect char so we can undo
+
+# Word modifiers
+var rng = RandomNumberGenerator.new()
+var special_word_chance = 0.05	# 1 = 100%
+
+# Positional variables (because of tags)
+var pos_first_left	# First character on left side
+var pos_last_correct	# Last character on left side when incorrect_mode = false
+var pos_wrong	# Last character on left side when incorrect_mode = true
+var pos_first_raw_right	# Opening color tag of first right side (incoming) word
+var pos_first_right	# Next incoming char
+
 var color_tags_size = "[color=\"#000000\"][/color]".length()
 
-var font_size = 49
-var chars_per_side = 26
-var incoming_word_count = 12
-
-var next_words: Array[String] = []
-var chars_of_word_complete = 0	# How many characters of the current word are already typed
-var chars_wrong = 0	# How many characters of the current word are wrongly typed
-var last_removed_chars = ""	# Remember chars that were just removed from completed characters so we can return them if needed
-
-enum MistypeModes { MULTIPLE_MISS, ONE_MISS, SKIP_MISS }
-# MULTIPLE_MISS -> Can keep missing until no more text left, but has to fix before moving
-# ONE_MISS -> Any miss after the first miss will stay at the first miss, but has to fix before moving
-# SKIP_MISS -> Can go to next word without fixing, but that word won't count to moving
-var mistype_mode = MistypeModes.MULTIPLE_MISS
-var can_move_on_mistype = false	# Tells us if next finished word will move after getting a mistype
-
-var special_word_chance = 0.0	# 1 = 100%
-var bold_word_chance = 0.0	# 1 = 100%
-
-func get_string_in_tags(string: String, color: String, bold: bool) -> String:
-	var result = ""
-	result += "[color=\"" + colors[color] + "\"]"
-	if bold:
-		result += "[b]"
-	result += string
-	if bold:
-		result += "[/b]"
-	result += "[/color]"
-
+func get_string_in_tags(string: String, color: String) -> String:
+	var result = "[color=\"" + colors[color] + "\"]" + string + "[/color]"
 	return result
 
-func generate_random_word() -> String:
-	return word_list[rng.randi_range(0, word_list_size-1)]
-
 func append_random_word():
-	var random_word = generate_random_word() + space_sub
+	var random_word = text_controller.generate_word() + space_sub
 
+	var is_special = false
 	var color = "incoming"
 	if rng.randf_range(0.0, 1.0) <= special_word_chance:
+		is_special = true
 		color = "special"
 
-	var bold = false
-	if rng.randf_range(0.0, 1.0) <= bold_word_chance:
-		bold = true
+	text += get_string_in_tags(random_word, color)
+	incoming_words.append({ "word": random_word, "is_special": is_special })
 
-	right_text.text += get_string_in_tags(random_word, color, bold)
-	next_words.append(random_word)
+func reset():
+	for _c in range(left_chars.length()):
+		text = text.insert(pos_first_right, left_chars[-1])	# Return the last complete/wrong char to incoming
+		left_chars = left_chars.substr(0, left_chars.length() - 1)
+		if incorrect_mode:
+			text = text.erase(pos_wrong - 1)
+			incorrect_mode = false
+		else:
+			text = text.erase(pos_last_correct - 1)
+		text = text.insert(pos_first_left, " ")
+
+func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_side_init: int, incoming_word_count_init: int, position_init: Vector2):
+	on_word_complete = on_word_complete_init
+	font_size = font_size_init
+	chars_per_side = chars_per_side_init
+	incoming_word_count = incoming_word_count_init
+	position = position_init
 	
-func init_text():
+	# Font and wrap settings
+	font_family = load(font_path)
+	add_theme_font_override("normal_font", font_family)
+	add_theme_font_size_override("normal_font_size", font_size)
+	autowrap_mode = TextServer.AUTOWRAP_OFF
+	
+	# Position and size
+	var elem_size = font_family.get_string_size("A".repeat(2 * chars_per_side), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	set_size(Vector2(elem_size.x, elem_size.y * 2))
+	
+	# Positional variables
+	pos_first_left = "[color=\"#000000\"]".length()
+	pos_last_correct = "[color=\"#000000\"]".length() + chars_per_side
+	pos_wrong = "[color=\"#000000\"][/color][color=\"#000000\"]".length() + chars_per_side
+	pos_first_raw_right = "[color=\"#000000\"][/color]".length() * 2 + chars_per_side
+	pos_first_right = "[color=\"#000000\"][/color][color=\"#000000\"][/color][color=\"#000000\"]".length() + chars_per_side
+	
+	# Word initialization
+	# The left (complete) side always has a fixed number of raw characters = 2 * color_tags_size + chars_per_size
+	# The right side has each word in it's own tags
+	text = get_string_in_tags(" ".repeat(chars_per_side), "complete") + get_string_in_tags("", "wrong")
 	for i in range(incoming_word_count):
 		append_random_word()
 
-	left_text.text += get_string_in_tags(" ".repeat(chars_per_side), "complete", false)
-
-# Returns bbcode index of char in given RichTextLabel
-# mode: 0->first_char ; 1->last_char
-func get_char_index(side: RichTextLabel, mode: int) -> int:
-	var depth = 0
-	if mode == 0:
-		for i in range(side.text.length()):
-			if side.text[i] == "[":
-				depth += 1
-			elif side.text[i] == "]":
-				depth -= 1
-			elif depth == 0:
-				return i
-
-	if mode == 1:
-		for i in range(side.text.length() - 1, -1, -1):
-			if side.text[i] == "]":
-				depth += 1
-			elif side.text[i] == "[":
-				depth -= 1
-			elif depth == 0:
-				return i
-
-	return -1
-
-func adjust_left_size():
-	# Left part should end at the middle of the screen
-	var text_size = font_family.get_string_size(left_text.get_parsed_text(), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	left_text.position = Vector2((get_viewport().size.x / 2) - text_size.x, 850)
-	left_text.set_size(Vector2(text_size.x, text_size.y * 2))
-
 func _ready():
-	# Font and wrap settings
-	font_family = load(font_path)
-	left_text.add_theme_font_override("normal_font", font_family)
-	right_text.add_theme_font_override("normal_font", font_family)
-	left_text.add_theme_font_size_override("normal_font_size", font_size)
-	right_text.add_theme_font_size_override("normal_font_size", font_size)
-	left_text.add_theme_font_size_override("bold_font_size", font_size)
-	right_text.add_theme_font_size_override("bold_font_size", font_size)
-	left_text.autowrap_mode = TextServer.AUTOWRAP_OFF
-	right_text.autowrap_mode = TextServer.AUTOWRAP_OFF
-
-	var right_side_size = font_family.get_string_size("A".repeat(chars_per_side), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-
-	right_text.position = Vector2(get_viewport().size.x / 2, 850)	# Right part starts at the middle of the screen
-	right_text.set_size(Vector2(right_side_size.x, right_side_size.y * 2))
-
-	# Load word list
-	var word_list_script = load("res://Data/WordList.gd")
-	word_list = word_list_script.word_list
-	word_list_size = word_list.size()
-
-	init_text()
-
-func _unhandled_input(event: InputEvent):
-	if event is InputEventKey and event.pressed:
-		var key = event.unicode
-		var next_char = right_text.get_parsed_text().substr(0, 1)
-		var next_char_unicode = next_char.unicode_at(0)
-		if key != 0 and ((next_char_unicode == key) or (key == " ".unicode_at(0) and next_char_unicode == space_sub_unicode)):	# If correct input
-			chars_of_word_complete += 1
-			right_text.text = right_text.text.erase(get_char_index(right_text, 0))	# Remove completed char from incoming characters
-			last_removed_chars += left_text.text[get_char_index(left_text, 0)]	# Remember the leftmost character
-			left_text.text = left_text.text.erase(get_char_index(left_text, 0))	# Remove leftmost character
-			left_text.text += get_string_in_tags(next_char, "partial", false)	# Put completed char in partially completed characters
-			adjust_left_size()
-			if key == 32:	# Space, complete word
-				left_text.text = left_text.text.erase(left_text.text.length() - chars_of_word_complete * (color_tags_size + 1), chars_of_word_complete * (color_tags_size + 1))
-				left_text.text += get_string_in_tags(next_words[0], "complete", false)
-				#text = text.insert(15 + typing_index - chars_of_word_complete, next_words[0])	# Put completed word in completed part
-				#text = text.erase(38 + typing_index, chars_of_word_complete)	# Remove completed word from partially complete part
-				next_words.remove_at(0)
-				last_removed_chars = ""	# Because we can't return to finished correct words
-				chars_of_word_complete = 0
-				append_random_word()
-				player.move(Vector2(16, 0))
+	text_controller = get_node("/root/Game/TextController")
+	text_controller.attach(self)
+	
+func process_input(event):
+	var next_char = text.substr(pos_first_right, 1)
+	var next_char_unicode = next_char.unicode_at(0)
+	if not incorrect_mode and event.unicode != 0 and ((next_char_unicode == event.unicode) or (event.unicode == " ".unicode_at(0) and next_char_unicode == space_sub_unicode)):	# If correct input		left_chars += next_char
+		left_chars += next_char
+		text = text.erase(pos_first_right)	# Remove completed char from incoming characters
+		text = text.insert(pos_last_correct, next_char)	# Put complete char on left side
+		text = text.erase(pos_first_left)	# Remove leftmost character
+		if event.unicode == 32:	# Space, complete word
+			text = text.erase(pos_first_left, chars_per_side)	# Erase completed word
+			text = text.insert(pos_first_left, " ".repeat(chars_per_side))
+			text = text.erase(pos_first_raw_right, color_tags_size)	# Remove the color tags of the complete incoming word on right
+			var completed_word = incoming_words.pop_at(0)	# Remove completed incoming word
+			left_chars = ""	# Because we can't return to finished correct words
+			append_random_word()
+			on_word_complete.call(completed_word)
+			return { "type": text_controller.InputResult.FINISHED, "word": completed_word["word"] }
+		return { "type": text_controller.InputResult.CORRECT }
+	elif event.keycode == KEY_BACKSPACE:	# Backspace
+		if left_chars.length() != 0:
+			text = text.insert(pos_first_right, left_chars[-1])	# Return the last complete/wrong char to incoming
+			left_chars = left_chars.substr(0, left_chars.length() - 1)
+			if incorrect_mode:
+				text = text.erase(pos_wrong - 1)
+				incorrect_mode = false
+			else:
+				text = text.erase(pos_last_correct - 1)
+			text = text.insert(pos_first_left, " ")
+		if left_chars.length() == 0:	# If last char was just removed
+			return { "type": text_controller.InputResult.DELETED }
+		return { "type": text_controller.InputResult.CORRECT }
+	# TODO: CTRL + Backspace
+	else:	# Wrong input
+		if not incorrect_mode:
+			incorrect_mode = true
+			left_chars += next_char
+			text = text.erase(pos_first_right)	# Remove wrong char from incoming characters
+			text = text.insert(pos_wrong, next_char)	# Put wrong char on left side
+			text = text.erase(pos_first_left)	# Remove leftmost character
+			return { "type": text_controller.InputResult.INCORRECT }
+		else:
+			return { "type": text_controller.InputResult.CORRECT }

@@ -2,21 +2,8 @@
 
 [ext_resource type="Script" uid="uid://chwjmundcmiaa" path="res://Scripts/TypingText.gd" id="1_bosu8"]
 
-[node name="TypingText" type="Control"]
-layout_mode = 3
-anchors_preset = 0
+[node name="TypingText" type="RichTextLabel"]
 offset_right = 40.0
 offset_bottom = 40.0
+bbcode_enabled = true
 script = ExtResource("1_bosu8")
-
-[node name="Left" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-bbcode_enabled = true
-
-[node name="Right" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-bbcode_enabled = true

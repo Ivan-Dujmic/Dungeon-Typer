@@ -7,7 +7,7 @@
 atlas = ExtResource("1_rpqav")
 region = Rect2(80, 32, 16, 16)
 
-[node name="Sprite2D" type="Sprite2D"]
+[node name="Player" type="Sprite2D"]
 z_index = 1
 texture = SubResource("AtlasTexture_rpqav")
 centered = false
