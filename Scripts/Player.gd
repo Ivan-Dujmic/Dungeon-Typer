@@ -25,6 +25,10 @@ func move(move_amount: Vector2):
 
 		new_position = next_position
 		moved_distance += step_size
+		
+		# Generate and erase dungeon
+		dungeon_generator.generate_to_x_line(next_tile.x + 20)
+		dungeon_generator.erase_to_x_line(next_tile.x - 10)
 
 func _ready():
 	position = Vector2(2 * TILE_SIZE, 5 * TILE_SIZE)
