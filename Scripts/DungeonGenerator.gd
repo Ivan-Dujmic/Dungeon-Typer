@@ -10,20 +10,34 @@ var rng = RandomNumberGenerator.new()
 var floor_tiles: Dictionary[Vector2i, bool] = {}
 var wall_tiles: Dictionary[Vector2i, bool] = {}
 
+# Also remember tiles sorted by the x coordinate for faster cleanup
+var x_sorted_floor_tiles: Dictionary[int, Array]
+var x_sorted_wall_tiles: Dictionary[int, Array]
+
 func init_dungeon_start():
 	# Floor
 	for x in range(1, 20):
+		if not x_sorted_floor_tiles.has(x):
+			x_sorted_floor_tiles[x] = []
 		for y in range(4, 7):
 			floor_tiles[Vector2i(x,y)] = true
+			x_sorted_floor_tiles[x].push_back(y)
 	
 	# Upper and lower walls
 	for x in range(0, 20):
+		if not x_sorted_wall_tiles.has(x):
+			x_sorted_wall_tiles[x] = []
 		wall_tiles[Vector2i(x, 3)] = true
+		x_sorted_wall_tiles[x].push_back(3)
 		wall_tiles[Vector2i(x, 7)] = true
+		x_sorted_wall_tiles[x].push_back(7)
 	
 	# Left walls
+	if not x_sorted_wall_tiles.has(0):
+		x_sorted_wall_tiles[0] = []
 	for y in range(4,7):
 		wall_tiles[Vector2i(0, y)] = true
+		x_sorted_wall_tiles[0].push_back(y)
 
 func draw_all_tiles():
 	for pos in floor_tiles:

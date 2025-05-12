@@ -134,6 +134,8 @@ func process_input(event):
 			return { "type": text_controller.InputResult.DELETED }
 		return { "type": text_controller.InputResult.CORRECT }
 	# TODO: CTRL + Backspace
+	elif event.unicode == 0:	# Modfier keys shouldn't cause a mistake
+		return { "type": text_controller.InputResult.CORRECT }
 	else:	# Wrong input
 		if not incorrect_mode:
 			incorrect_mode = true

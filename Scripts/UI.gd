@@ -50,7 +50,6 @@ func _ready():
 		position
 	)
 
-# Function for child typing text
 func _on_word_complete_forward(_completed_word, player):
 	player.move(Vector2(16, 0))
 	
