@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b8w8gbtnm42q7"]
+[gd_scene load_steps=8 format=3 uid="uid://b8w8gbtnm42q7"]
 
 [ext_resource type="PackedScene" uid="uid://chrw2ysysmqt8" path="res://Scenes/Background.tscn" id="1_gl6un"]
 [ext_resource type="Script" uid="uid://bjmkt0u31kwlj" path="res://Scripts/Game.gd" id="1_kldst"]
 [ext_resource type="PackedScene" uid="uid://bvrendp8d0u0u" path="res://Scenes/Player.tscn" id="2_j5yw3"]
 [ext_resource type="PackedScene" uid="uid://cdnr0kpfo5kd3" path="res://Scenes/DungeonGenerator.tscn" id="3_j5yw3"]
+[ext_resource type="Script" uid="uid://coymtd8ikc2n" path="res://Scripts/EnemyGenerator.gd" id="5_2irst"]
 [ext_resource type="Script" uid="uid://dhnwgxltb5676" path="res://Scripts/UI.gd" id="5_fgofq"]
 [ext_resource type="Script" uid="uid://bkjvlxjha3dst" path="res://Scripts/TextController.gd" id="6_7lihs"]
 
@@ -32,7 +33,8 @@ z_index = -1
 position = Vector2(54, 76)
 offset = Vector2(70, -70)
 
-[node name="Enemies" type="Node" parent="TilesViewportContainer/TilesViewport"]
+[node name="EnemyGenerator" type="Node" parent="TilesViewportContainer/TilesViewport"]
+script = ExtResource("5_2irst")
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("5_fgofq")

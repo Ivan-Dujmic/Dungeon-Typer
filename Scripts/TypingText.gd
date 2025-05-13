@@ -49,7 +49,7 @@ func append_random_word():
 
 	var is_special = false
 	var color = "incoming"
-	if rng.randf_range(0.0, 1.0) <= special_word_chance:
+	if rng.randf() <= special_word_chance:
 		is_special = true
 		color = "special"
 

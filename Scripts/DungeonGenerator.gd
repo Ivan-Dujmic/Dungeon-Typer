@@ -3,6 +3,8 @@ extends Node2D
 @onready var floor_layer = $Floor
 @onready var wall_layer = $Walls
 
+@onready var enemy_generator = $"../EnemyGenerator"
+
 var rng = RandomNumberGenerator.new()
 var diverging_path_chance = 0.1	# 1 = 100%
 
@@ -50,7 +52,7 @@ func draw_to_x_tiles(new_x: int):
 						texture_cords = Vector2i(0, 4)
 					elif floor_tiles.has(Vector2i(x - 1, y - 1)):  # Tile up left
 						texture_cords = Vector2i(5, 4)
-
+					
 					if texture_cords != Vector2i(-1, -1):
 						wall_layer.set_cell(Vector2i(x, y), 0, texture_cords)
 					
@@ -61,7 +63,7 @@ func generate_to_x_line(new_x: int):
 	if new_x > highest_generated_x:
 		var x = highest_generated_x + 1
 		while x <= new_x:
-			if rng.randf_range(0.0, 1.0) <= diverging_path_chance:
+			if rng.randf() <= diverging_path_chance:
 				for x2 in range(x, x+3):
 					x_sorted_wall_tiles[x2] = []
 					x_sorted_floor_tiles[x2] = []
@@ -97,6 +99,8 @@ func generate_to_x_line(new_x: int):
 				x_sorted_floor_tiles[x].push_back(6)
 				wall_tiles[Vector2i(x, 7)] = true
 				x_sorted_wall_tiles[x].push_back(7)
+				
+				enemy_generator.attempt_enemy_spawn("Skeleton", 0.1, Vector2i(x, rng.randi_range(4, 6)))
 			
 			x += 1
 				

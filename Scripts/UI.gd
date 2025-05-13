@@ -1,10 +1,11 @@
 extends CanvasLayer
 
 func _ready():
+	var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/Player")
+	
 	# Preload forward movement typing text
 	var tt = preload("res://Scenes/TypingText.tscn").instantiate()
 	add_child(tt)
-	var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/Player")
 	# Calculate position so that the next typed letter is just after the half screen point
 	var font = load("res://Fonts/ia-writer-mono-latin-400-normal.ttf")
 	var size = font.get_string_size("A".repeat(2 * 26), HORIZONTAL_ALIGNMENT_LEFT, -1, 49)
