@@ -7,8 +7,8 @@ func _ready():
 	var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/Player")
 	# Calculate position so that the next typed letter is just after the half screen point
 	var font = load("res://Fonts/ia-writer-mono-latin-400-normal.ttf")
-	var size = font.get_string_size("A".repeat(2 * 26), HORIZONTAL_ALIGNMENT_LEFT, -1, 42)
-	var position = Vector2((get_viewport().size.x - size.x) / 2, 850)
+	var size = font.get_string_size("A".repeat(2 * 26), HORIZONTAL_ALIGNMENT_LEFT, -1, 49)
+	var position = Vector2((get_viewport().size.x - size.x) / 2, 875)
 	# Function to be called by TypingText on word complete
 	var on_word_complete_forward_func = Callable(self, "_on_word_complete_forward").bind(player)
 	# Initalize
@@ -16,42 +16,49 @@ func _ready():
 		on_word_complete_forward_func,
 		49, 
 		26, 
-		12,
+		10,
 		position
 	)
 		
 	# Preload up movement typing text
 	var tt2 = preload("res://Scenes/TypingText.tscn").instantiate()
+	# Calculate position so that the next typed letter is just after the half screen point
+	var size2 = font.get_string_size("A".repeat(2 * 16), HORIZONTAL_ALIGNMENT_LEFT, -1, 39)
 	add_child(tt2)
-	position = Vector2((get_viewport().size.x - size.x) / 2, 800)
+	position = Vector2((get_viewport().size.x - size2.x) / 2, 840)
 	# Function to be called by TypingText on word complete
 	var on_word_complete_up_func = Callable(self, "_on_word_complete_up").bind(player)
 	# Initalize
 	tt2.initialize(
 		on_word_complete_up_func,
-		49, 
-		26, 
-		12,
+		39, 
+		16, 
+		2,
 		position
 	)
 	
 	# Preload down movement typing text
 	var tt3 = preload("res://Scenes/TypingText.tscn").instantiate()
 	add_child(tt3)
-	position = Vector2((get_viewport().size.x - size.x) / 2, 900)
+	# Calculate position so that the next typed letter is just after the half screen point
+	var size3 = font.get_string_size("A".repeat(2 * 16), HORIZONTAL_ALIGNMENT_LEFT, -1, 39)
+	position = Vector2((get_viewport().size.x - size3.x) / 2, 925)
 	# Function to be called by TypingText on word complete
 	var on_word_complete_down_func = Callable(self, "_on_word_complete_down").bind(player)
 	# Initalize
 	tt3.initialize(
 		on_word_complete_down_func,
-		49, 
-		26, 
-		12,
+		39, 
+		16, 
+		2,
 		position
 	)
 
-func _on_word_complete_forward(_completed_word, player):
-	player.move(Vector2(16, 0))
+func _on_word_complete_forward(completed_word, player):
+	if completed_word.is_special:
+		player.move(Vector2(32, 0))
+	else:
+		player.move(Vector2(16, 0))
 	
 func _on_word_complete_up(_completed_word, player):
 	player.move(Vector2(0, -16))

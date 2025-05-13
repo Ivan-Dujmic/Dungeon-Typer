@@ -1,4 +1,4 @@
-extends Sprite2D
+extends Node2D
 
 @onready var dungeon_generator = $"../DungeonGenerator"
 @onready var background = $"../Background"
