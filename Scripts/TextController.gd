@@ -31,10 +31,11 @@ func generate_word() -> String:
 		var new_word = word_list[rng.randi_range(0, word_list_size-1)]
 		var is_subsumed = false
 		for word in present_words:
-			if word.begins_with(new_word) or new_word.begin_with(word):
+			if word.begins_with(new_word) or new_word.begins_with(word):
 				is_subsumed = true
 				break
 		if not is_subsumed:
+			present_words.push_back(new_word)
 			return new_word
 	return ""
 	

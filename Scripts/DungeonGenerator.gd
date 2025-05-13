@@ -4,6 +4,8 @@ extends Node2D
 @onready var wall_layer = $Walls
 
 var rng = RandomNumberGenerator.new()
+var diverging_path_chance = 0.1	# 1 = 100%
+
 # Storing tile positions as a map so we can check it's surroundings when drawing textures
 # The map value is useless as we are only checking if the key exists in the map which effictively makes this map a set 
 # (there are no sets in GDScript)
@@ -57,21 +59,49 @@ func draw_to_x_tiles(new_x: int):
 # Generate more dungeon until and on specific x
 func generate_to_x_line(new_x: int):
 	if new_x > highest_generated_x:
-		for x in range(highest_generated_x + 1, new_x + 1):
-			x_sorted_wall_tiles[x] = []
-			x_sorted_floor_tiles[x] = []
-			wall_tiles[Vector2i(x, 3)] = true
-			x_sorted_wall_tiles[x].push_back(3)
-			floor_tiles[Vector2i(x, 4)] = true
-			x_sorted_floor_tiles[x].push_back(4)
-			floor_tiles[Vector2i(x, 5)] = true
-			x_sorted_floor_tiles[x].push_back(5)
-			floor_tiles[Vector2i(x, 6)] = true
-			x_sorted_floor_tiles[x].push_back(6)
-			wall_tiles[Vector2i(x, 7)] = true
-			x_sorted_wall_tiles[x].push_back(7)
+		var x = highest_generated_x + 1
+		while x <= new_x:
+			if rng.randf_range(0.0, 1.0) <= diverging_path_chance:
+				for x2 in range(x, x+3):
+					x_sorted_wall_tiles[x2] = []
+					x_sorted_floor_tiles[x2] = []
+					floor_tiles[Vector2i(x2, 4)] = true
+					x_sorted_floor_tiles[x2].push_back(4)
+					floor_tiles[Vector2i(x2, 5)] = true
+					x_sorted_floor_tiles[x2].push_back(5)
+					floor_tiles[Vector2i(x2, 6)] = true
+					x_sorted_floor_tiles[x2].push_back(6)
+					wall_tiles[Vector2i(x2, 7)] = true
+					x_sorted_wall_tiles[x2].push_back(7)
+				for y in range(-2, 4):
+					wall_tiles[Vector2i(x, y)] = true
+					x_sorted_wall_tiles[x].push_back(y)
+					floor_tiles[Vector2i(x+1, y)] = true
+					x_sorted_floor_tiles[x+1].push_back(y)
+					wall_tiles[Vector2i(x+2, y)] = true
+					x_sorted_wall_tiles[x+2].push_back(y)
+				x += 2	# Mark these tiles as generated
+				if x > new_x:
+					new_x = x
+				
+			else:
+				x_sorted_wall_tiles[x] = []
+				x_sorted_floor_tiles[x] = []
+				wall_tiles[Vector2i(x, 3)] = true
+				x_sorted_wall_tiles[x].push_back(3)
+				floor_tiles[Vector2i(x, 4)] = true
+				x_sorted_floor_tiles[x].push_back(4)
+				floor_tiles[Vector2i(x, 5)] = true
+				x_sorted_floor_tiles[x].push_back(5)
+				floor_tiles[Vector2i(x, 6)] = true
+				x_sorted_floor_tiles[x].push_back(6)
+				wall_tiles[Vector2i(x, 7)] = true
+				x_sorted_wall_tiles[x].push_back(7)
 			
-	highest_generated_x = new_x
+			x += 1
+				
+		highest_generated_x = new_x
+	
 	draw_to_x_tiles(new_x - 1)
 	
 # Erase tiles before and on specific x (because the player can't go back)
