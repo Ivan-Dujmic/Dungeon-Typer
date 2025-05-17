@@ -18,7 +18,8 @@ func _ready():
 		49, 
 		26, 
 		10,
-		position
+		position,
+		0.05
 	)
 		
 	# Preload up movement typing text
@@ -34,7 +35,7 @@ func _ready():
 		on_word_complete_up_func,
 		39, 
 		16, 
-		2,
+		4,
 		position
 	)
 	
@@ -51,7 +52,7 @@ func _ready():
 		on_word_complete_down_func,
 		39, 
 		16, 
-		2,
+		4,
 		position
 	)
 

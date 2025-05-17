@@ -1,14 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://d08pcc1fpnw0j"]
+[gd_scene load_steps=2 format=3 uid="uid://d08pcc1fpnw0j"]
 
 [ext_resource type="Script" uid="uid://d0awbb2cmmjhs" path="res://Scripts/Skeleton.gd" id="1_vif15"]
-[ext_resource type="Texture2D" uid="uid://cimriph1p8r3x" path="res://2D Pixel Dungeon Asset Pack/character and tileset/Dungeon_Character.png" id="2_abfcy"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4ie6e"]
-atlas = ExtResource("2_abfcy")
 
 [node name="Skeleton" type="Node2D"]
 script = ExtResource("1_vif15")
 
 [node name="Sprite" type="Sprite2D" parent="."]
-texture = SubResource("AtlasTexture_4ie6e")
 centered = false

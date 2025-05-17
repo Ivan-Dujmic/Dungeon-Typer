@@ -29,7 +29,7 @@ var left_chars = ""	# Remember complete chars of current word and/or an incorrec
 
 # Word modifiers
 var rng = RandomNumberGenerator.new()
-var special_word_chance = 0.05	# 1 = 100%
+var special_word_chance	# 1 = 100%
 
 # Positional variables (because of tags)
 var pos_first_left	# First character on left side
@@ -67,12 +67,13 @@ func reset():
 			text = text.erase(pos_last_correct - 1)
 		text = text.insert(pos_first_left, " ")
 
-func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_side_init: int, incoming_word_count_init: int, position_init: Vector2):
+func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_side_init: int, incoming_word_count_init: int, position_init: Vector2, special_word_chance_init: float = 0):
 	on_word_complete = on_word_complete_init
 	font_size = font_size_init
 	chars_per_side = chars_per_side_init
 	incoming_word_count = incoming_word_count_init
 	position = position_init
+	special_word_chance = special_word_chance_init
 	
 	# Font and wrap settings
 	font_family = load(font_path)
@@ -121,19 +122,22 @@ func process_input(event):
 			return { "type": text_controller.InputResult.FINISHED, "word": completed_word["word"] }
 		return { "type": text_controller.InputResult.CORRECT }
 	elif event.keycode == KEY_BACKSPACE:	# Backspace
-		if left_chars.length() != 0:
-			text = text.insert(pos_first_right, left_chars[-1])	# Return the last complete/wrong char to incoming
-			left_chars = left_chars.substr(0, left_chars.length() - 1)
-			if incorrect_mode:
-				text = text.erase(pos_wrong - 1)
-				incorrect_mode = false
-			else:
-				text = text.erase(pos_last_correct - 1)
-			text = text.insert(pos_first_left, " ")
-		if left_chars.length() == 0:	# If last char was just removed
+		if event.ctrl_pressed:	# CTRL + Backspace
+			reset()
 			return { "type": text_controller.InputResult.DELETED }
-		return { "type": text_controller.InputResult.CORRECT }
-	# TODO: CTRL + Backspace
+		else:	# Just Backspace
+			if left_chars.length() != 0:
+				text = text.insert(pos_first_right, left_chars[-1])	# Return the last complete/wrong char to incoming
+				left_chars = left_chars.substr(0, left_chars.length() - 1)
+				if incorrect_mode:
+					text = text.erase(pos_wrong - 1)
+					incorrect_mode = false
+				else:
+					text = text.erase(pos_last_correct - 1)
+				text = text.insert(pos_first_left, " ")
+			if left_chars.length() == 0:	# If last char was just removed
+				return { "type": text_controller.InputResult.DELETED }
+			return { "type": text_controller.InputResult.CORRECT }
 	elif event.unicode == 0:	# Modfier keys shouldn't cause a mistake
 		return { "type": text_controller.InputResult.CORRECT }
 	else:	# Wrong input
