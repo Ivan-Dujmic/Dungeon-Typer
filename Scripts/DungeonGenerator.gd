@@ -22,6 +22,9 @@ var highest_generated_x
 var highest_erased_x
 var highest_drawn_x
 
+# We don't want to spawn enemies immediately
+var can_spawn = false
+
 # Draws textures for tiles until x
 # Should be called for x only once tiles for x+1 were generated
 func draw_to_x_tiles(new_x: int):
@@ -100,7 +103,8 @@ func generate_to_x_line(new_x: int):
 				wall_tiles[Vector2i(x, 7)] = true
 				x_sorted_wall_tiles[x].push_back(7)
 				
-				enemy_generator.attempt_enemy_spawn("Skeleton", 0.1, Vector2i(x, rng.randi_range(4, 6)))
+				if can_spawn:
+					enemy_generator.attempt_enemy_spawn("Skeleton", 0.3, Vector2i(x, rng.randi_range(4, 6)))
 			
 			x += 1
 				
@@ -140,3 +144,4 @@ func init_dungeon_start():
 
 func _ready():
 	init_dungeon_start()
+	can_spawn = true
