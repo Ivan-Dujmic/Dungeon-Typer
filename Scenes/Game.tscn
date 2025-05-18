@@ -9,31 +9,39 @@
 [ext_resource type="Script" uid="uid://bkjvlxjha3dst" path="res://Scripts/TextController.gd" id="6_7lihs"]
 
 [node name="Game" type="Node2D"]
+z_as_relative = false
 script = ExtResource("1_kldst")
 
 [node name="TilesViewportContainer" type="SubViewportContainer" parent="."]
+y_sort_enabled = true
+texture_filter = 1
 offset_right = 320.0
 offset_bottom = 180.0
-scale = Vector2(6, 6)
 
 [node name="TilesViewport" type="SubViewport" parent="TilesViewportContainer"]
 disable_3d = true
 handle_input_locally = false
+canvas_item_default_texture_filter = 0
 size = Vector2i(320, 180)
 render_target_update_mode = 4
 
-[node name="Background" parent="TilesViewportContainer/TilesViewport" instance=ExtResource("1_gl6un")]
-z_index = -1
+[node name="YSort" type="Node2D" parent="TilesViewportContainer/TilesViewport"]
+y_sort_enabled = true
 
-[node name="DungeonGenerator" parent="TilesViewportContainer/TilesViewport" instance=ExtResource("3_j5yw3")]
+[node name="DungeonGenerator" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("3_j5yw3")]
 
-[node name="Player" parent="TilesViewportContainer/TilesViewport" instance=ExtResource("2_j5yw3")]
+[node name="Player" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("2_j5yw3")]
 
-[node name="Camera" type="Camera2D" parent="TilesViewportContainer/TilesViewport/Player"]
+[node name="Camera" type="Camera2D" parent="TilesViewportContainer/TilesViewport/YSort/Player"]
 position = Vector2(54, 76)
 offset = Vector2(70, -70)
 
-[node name="EnemyGenerator" parent="TilesViewportContainer/TilesViewport" instance=ExtResource("5_2irst")]
+[node name="Background" parent="TilesViewportContainer/TilesViewport/YSort/Player/Camera" instance=ExtResource("1_gl6un")]
+z_index = -2
+z_as_relative = true
+position = Vector2(-64, -138)
+
+[node name="EnemyGenerator" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("5_2irst")]
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("5_fgofq")

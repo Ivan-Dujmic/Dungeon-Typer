@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 func _ready():
-	var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/Player")
+	var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player")
 	
 	# Preload forward movement typing text
 	var tt = preload("res://Scenes/TypingText.tscn").instantiate()

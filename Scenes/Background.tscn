@@ -1,6 +1,11 @@
-[gd_scene format=3 uid="uid://chrw2ysysmqt8"]
+[gd_scene load_steps=2 format=3 uid="uid://chrw2ysysmqt8"]
+
+[ext_resource type="Script" uid="uid://lur4vc2l2j40" path="res://Scripts/Background.gd" id="1_c8m3x"]
 
 [node name="Background" type="Node2D"]
+z_index = -1
+z_as_relative = false
+script = ExtResource("1_c8m3x")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = -26.0

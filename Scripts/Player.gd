@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
 @onready var dungeon_generator = $"../DungeonGenerator"
-@onready var background = $"../Background"
 
 const TILE_SIZE = 16
 var new_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# The position that the character should move to

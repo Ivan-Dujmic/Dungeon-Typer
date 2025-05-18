@@ -36,13 +36,12 @@ func initialize(position_init: Vector2i, speed_init: float):
 func _ready():
 	return
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if (target):
 		var direction = (target.global_position - global_position).normalized()
 		velocity = direction * speed
 			
-		if move_and_slide():
-			print("COLLISION")
+		move_and_slide()
 
 		# Looking direction
 		if direction.x < 0:

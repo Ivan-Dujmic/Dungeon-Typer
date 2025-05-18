@@ -114,12 +114,16 @@ texture = ExtResource("1_hu3hn")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 1:0/0 = 0
+1:0/0/y_sort_origin = 8
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 2:0/0 = 0
+2:0/0/y_sort_origin = 8
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 3:0/0 = 0
+3:0/0/y_sort_origin = 8
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 4:0/0 = 0
+4:0/0/y_sort_origin = 8
 4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 5:0/0 = 0
 5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
@@ -166,12 +170,16 @@ texture = ExtResource("1_hu3hn")
 0:4/0 = 0
 0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 1:4/0 = 0
+1:4/0/y_sort_origin = -1
 1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 2:4/0 = 0
+2:4/0/y_sort_origin = -1
 2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 3:4/0 = 0
+3:4/0/y_sort_origin = -1
 3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 4:4/0 = 0
+4:4/0/y_sort_origin = -1
 4:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 5:4/0 = 0
 5:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
@@ -242,11 +250,14 @@ physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_4ihhh")
 
 [node name="DungeonGenerator" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_4ihhh")
 
 [node name="Floor" type="TileMapLayer" parent="."]
+z_index = -1
 tile_set = SubResource("TileSet_b2bpf")
 collision_enabled = false
 
 [node name="Walls" type="TileMapLayer" parent="."]
+y_sort_enabled = true
 tile_set = SubResource("TileSet_hdu5v")
