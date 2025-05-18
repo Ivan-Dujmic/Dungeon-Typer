@@ -658,7 +658,6 @@ const word_list: Array[String] = [
 "centre",
 "requirements",
 "cheap",
-"nude",
 "kids",
 "finance",
 "true",

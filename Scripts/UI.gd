@@ -58,12 +58,12 @@ func _ready():
 
 func _on_word_complete_forward(completed_word, player):
 	if completed_word.is_special:
-		player.move(Vector2(32, 0))
+		player.move(Vector2(2, 0))
 	else:
-		player.move(Vector2(16, 0))
+		player.move(Vector2(1, 0))
 	
 func _on_word_complete_up(_completed_word, player):
-	player.move(Vector2(0, -16))
+	player.move(Vector2(0, -1))
 	
 func _on_word_complete_down(_completed_word, player):
-	player.move(Vector2(0, 16))
+	player.move(Vector2(0, 1))

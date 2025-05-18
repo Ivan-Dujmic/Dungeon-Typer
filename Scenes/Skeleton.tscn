@@ -1,9 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://d08pcc1fpnw0j"]
+[gd_scene load_steps=3 format=3 uid="uid://d08pcc1fpnw0j"]
 
 [ext_resource type="Script" uid="uid://d0awbb2cmmjhs" path="res://Scripts/Skeleton.gd" id="1_vif15"]
 
-[node name="Skeleton" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bf53h"]
+size = Vector2(10, 10)
+
+[node name="Skeleton" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_vif15")
 
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bf53h")
+
 [node name="Sprite" type="Sprite2D" parent="."]
-centered = false
