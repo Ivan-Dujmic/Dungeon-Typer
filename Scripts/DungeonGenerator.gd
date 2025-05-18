@@ -5,6 +5,8 @@ extends Node2D
 
 @onready var enemy_generator = $"../EnemyGenerator"
 
+var difficulty
+
 var rng = RandomNumberGenerator.new()
 var diverging_path_chance = 0.1	# 1 = 100%
 

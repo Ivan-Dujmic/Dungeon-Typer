@@ -4,7 +4,7 @@ extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
-var difficulty = 10
+var difficulty
 
 # The position should be a tile coordinate
 func attempt_enemy_spawn(enemy: String, chance: float, position_init: Vector2i):

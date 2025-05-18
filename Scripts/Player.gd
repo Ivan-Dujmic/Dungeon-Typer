@@ -1,19 +1,33 @@
 extends CharacterBody2D
 
 @onready var dungeon_generator = $"../DungeonGenerator"
+@onready var range_area = $RangeArea
 
 const TILE_SIZE = 16
 var new_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# The position that the character should move to
 
+var difficulty
+
 # Stats
-var health = 100
-var health_regen = 2
-var attack = 10
-var attack_range = 128
-var speed = 16
+var health
+var health_regen
+var attack
+var action_range
+var speed
 
 func move(move_amount: Vector2):
 	new_position += move_amount * speed
+
+func initialize_stats(init_difficulty):
+	difficulty = init_difficulty
+	
+	health = 100
+	health_regen = 2
+	attack = 10
+	action_range = 160
+	speed = 160 / difficulty
+	
+	range_area.set_range(action_range)
 
 func _ready():
 	global_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)
