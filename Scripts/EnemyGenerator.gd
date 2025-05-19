@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var player = $"../Player"
+@onready var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player")
 
 var rng = RandomNumberGenerator.new()
 

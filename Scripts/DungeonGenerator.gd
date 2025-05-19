@@ -3,7 +3,7 @@ extends Node2D
 @onready var floor_layer = $Floor
 @onready var wall_layer = $Walls
 
-@onready var enemy_generator = $"../EnemyGenerator"
+@onready var enemy_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/EnemyGenerator")
 
 var difficulty
 

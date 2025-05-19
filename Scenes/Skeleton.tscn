@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://d08pcc1fpnw0j"]
+[gd_scene load_steps=5 format=3 uid="uid://d08pcc1fpnw0j"]
 
 [ext_resource type="Script" uid="uid://d0awbb2cmmjhs" path="res://Scripts/Skeleton.gd" id="1_vif15"]
+[ext_resource type="Script" uid="uid://y1ixaqjddf8j" path="res://Scripts/RangeArea.gd" id="2_abfcy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bf53h"]
 size = Vector2(10, 10)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_abfcy"]
 
 [node name="Skeleton" type="CharacterBody2D"]
 y_sort_enabled = true
@@ -17,3 +20,19 @@ shape = SubResource("RectangleShape2D_bf53h")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 y_sort_enabled = true
+
+[node name="RangeArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("2_abfcy")
+
+[node name="CollisionCircle" type="CollisionShape2D" parent="RangeArea"]
+shape = SubResource("CircleShape2D_abfcy")
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="body_entered" from="RangeArea" to="." method="_on_range_area_body_entered"]
+[connection signal="body_exited" from="RangeArea" to="." method="_on_range_area_body_exited"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
