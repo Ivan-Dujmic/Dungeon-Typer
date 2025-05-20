@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@onready var health_bar = get_node("/root/Game/UI/HealthBar")
+@onready var health_bar = get_node("/root/Game/UI/UIHealthBar")
 @onready var dungeon_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/DungeonGenerator")
 @onready var range_area = $RangeArea
 

@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name Skeleton
 
 @onready var range_area = $RangeArea
+@onready var navigation_agent = $NavigationAgent
 
 var sprite
 
@@ -25,17 +26,14 @@ func set_target(new_target):
 	
 func _on_range_area_body_entered(body: Node2D):
 	if body == target:
-		print("ENTER")
 		target_in_range = true
 
 func _on_range_area_body_exited(body: Node2D):
 	if body == target:
-		print("EXIT")
 		target_in_range = false
 	
 func _on_attack_timer_timeout():
 	if target_in_range:
-		print("ATTACK")
 		target.take_damage(attack)
 
 # Position should be a tile coordinate
@@ -57,23 +55,21 @@ func initialize(position_init: Vector2i, speed_init: float):
 	speed = speed_init
 	
 	range_area.set_range(action_range)
+	navigation_agent.target_desired_distance = action_range - 2
 	
 func _ready():
 	return
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	if (target):
-		var diff = target.global_position - global_position
-		var direction = diff.normalized()
-		velocity = direction * speed
-			
-		if abs(diff.length()) > action_range - 2:
+		navigation_agent.target_position = target.global_position
+		
+		if not navigation_agent.is_navigation_finished():
+			var next_path_point = navigation_agent.get_next_path_position()
+			var direction = (next_path_point - global_position).normalized()
+			velocity = direction * speed * delta * 50
 			move_and_slide()
 
-		# Looking direction
-		if direction.x < 0:
-			sprite.scale.x = -1
+			sprite.scale.x = - 1 if velocity.x <= 0 else 1	# Looking direction
 		else:
-			sprite.scale.x = 1
-			sprite.offset = Vector2(0, 0)
-		
+			velocity = Vector2.ZERO

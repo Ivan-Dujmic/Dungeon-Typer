@@ -1,6 +1,7 @@
 extends Node2D
 
-@onready var floor_layer = $Floor
+@onready var navigation_region = $NavigationRegion
+@onready var floor_layer = $NavigationRegion/Floor
 @onready var wall_layer = $Walls
 
 @onready var enemy_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/EnemyGenerator")
@@ -8,7 +9,7 @@ extends Node2D
 var difficulty
 
 var rng = RandomNumberGenerator.new()
-var diverging_path_chance = 0.1	# 1 = 100%
+var diverging_path_chance = 1	# 1 = 100%
 
 # Storing tile positions as a map so we can check it's surroundings when drawing textures
 # The map value is useless as we are only checking if the key exists in the map which effictively makes this map a set 
@@ -62,6 +63,8 @@ func draw_to_x_tiles(new_x: int):
 						wall_layer.set_cell(Vector2i(x, y), 0, texture_cords)
 					
 	highest_drawn_x = new_x
+	#if not navigation_region.is_baking():
+		#navigation_region.bake_navigation_polygon()
 	
 # Generate more dungeon until and on specific x
 func generate_to_x_line(new_x: int):
@@ -80,6 +83,8 @@ func generate_to_x_line(new_x: int):
 					x_sorted_floor_tiles[x2].push_back(6)
 					wall_tiles[Vector2i(x2, 7)] = true
 					x_sorted_wall_tiles[x2].push_back(7)
+					if can_spawn:
+						enemy_generator.attempt_enemy_spawn("Skeleton", 1, Vector2i(x2, rng.randi_range(4, 6)))
 				for y in range(-2, 4):
 					wall_tiles[Vector2i(x, y)] = true
 					x_sorted_wall_tiles[x].push_back(y)

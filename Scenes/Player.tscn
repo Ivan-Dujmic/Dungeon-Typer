@@ -5,8 +5,8 @@
 [ext_resource type="Script" uid="uid://x27ve83j3dnc" path="res://Scripts/PlayerRangeArea.gd" id="3_dewec"]
 [ext_resource type="Script" uid="uid://d3m070vnl5frn" path="res://Scripts/RangeIndicator.gd" id="4_dewec"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bf53h"]
-size = Vector2(10, 10)
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ixxa"]
+radius = 5.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dahhg"]
 atlas = ExtResource("1_rpqav")
@@ -21,7 +21,7 @@ collision_mask = 3
 script = ExtResource("2_kyqiw")
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_bf53h")
+shape = SubResource("CircleShape2D_5ixxa")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 y_sort_enabled = true

@@ -46,7 +46,7 @@ position = Vector2(-64, -138)
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("5_fgofq")
 
-[node name="HealthBar" type="Control" parent="UI"]
+[node name="UIHealthBar" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 20.0
