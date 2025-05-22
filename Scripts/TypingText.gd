@@ -20,12 +20,15 @@ var colors = {
 	"wrong": "#ff3c00",		# Color for mistypes
 	"incoming": "#ffffff",	# Color for current and incoming characters
 	"special": "#ffdd80",	# Color for current and incoming special characters
+	"blocked": "#474747",	# Tint for the text when it is blocked
+	"unblocked": "#ffffff",	# Tint for the text when it is not blocked
 }
 
 # Word tracking
 var incoming_words: Array = []	# Keeps the incoming words and their properties (special...)
 var incorrect_mode = false	# Was the previous char mistyped?
 var left_chars = ""	# Remember complete chars of current word and/or an incorrect char so we can undo
+var is_blocked = true
 
 # Word modifiers
 var rng = RandomNumberGenerator.new()
@@ -66,6 +69,15 @@ func reset():
 		else:
 			text = text.erase(pos_last_correct - 1)
 		text = text.insert(pos_first_left, " ")
+		
+func block():
+	reset()
+	self_modulate = colors["blocked"]
+	is_blocked = true
+	
+func unblock():
+	self_modulate = colors["unblocked"]
+	is_blocked = false
 
 func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_side_init: int, incoming_word_count_init: int, position_init: Vector2, special_word_chance_init: float = 0):
 	on_word_complete = on_word_complete_init
@@ -98,6 +110,8 @@ func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_
 	text = get_string_in_tags(" ".repeat(chars_per_side), "complete") + get_string_in_tags("", "wrong")
 	for i in range(incoming_word_count):
 		append_random_word()
+		
+	text_controller.block(self)	# Block on init, wait for unblock
 
 func _ready():
 	text_controller = get_node("/root/Game/TextController")

@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://paxjg7vp5m3i" path="res://Scenes/EnemyGenerator.tscn" id="5_2irst"]
 [ext_resource type="Script" uid="uid://dhnwgxltb5676" path="res://Scripts/UI.gd" id="5_fgofq"]
 [ext_resource type="Script" uid="uid://bkjvlxjha3dst" path="res://Scripts/TextController.gd" id="6_7lihs"]
-[ext_resource type="Script" uid="uid://co6g0omtsauln" path="res://Scripts/HealthBar.gd" id="7_2irst"]
+[ext_resource type="Script" uid="uid://co6g0omtsauln" path="res://Scripts/UIHealthBar.gd" id="7_2irst"]
 
 [node name="Game" type="Node2D"]
 z_as_relative = false

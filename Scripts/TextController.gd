@@ -12,6 +12,7 @@ enum InputResult {
 var state = 0
 var texts: Array[TypingText]
 var active_texts: Array[TypingText]
+var blocked_texts: Array[TypingText]
 var present_words: Array[String]
 var word_list = load("res://Data/WordList.gd").word_list
 var word_list_size = word_list.size()
@@ -39,6 +40,22 @@ func generate_word() -> String:
 			return new_word
 	return ""
 	
+func block(tt: TypingText):
+	active_texts.erase(tt)
+	texts.erase(tt)
+	blocked_texts.push_back(tt)
+	tt.block()
+	if state == 1 and active_texts.size() == 0:	# If that was the only active text then make all non-blocked active
+		state = 0
+		active_texts = texts.duplicate()
+	
+func unblock(tt: TypingText):
+	blocked_texts.erase(tt)
+	texts.push_back(tt)
+	if state == 0:
+		active_texts.push_back(tt)
+	tt.unblock()
+	
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
 		var incorrect_texts: Array[TypingText] = []
@@ -56,7 +73,7 @@ func _unhandled_input(event: InputEvent):
 					state = 0
 		if state == 0:	# In cases of reset, finish or when input doesn't fit any text
 			active_texts = texts.duplicate()
-		elif state == 1:	# If there's an active texts, then non-matching ones should be reset
+		elif state == 1:	# If there's any active texts left, then non-matching ones should be reset
 			if active_texts.size() - incorrect_texts.size() > 0:
 				for text in incorrect_texts:
 					active_texts.erase(text)

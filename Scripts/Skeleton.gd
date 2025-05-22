@@ -3,6 +3,9 @@ class_name Skeleton
 
 @onready var range_area = $RangeArea
 @onready var navigation_agent = $NavigationAgent
+@onready var health_bar = $HealthBar
+
+signal health_changed(health_ratio: float)
 
 var sprite
 
@@ -14,11 +17,14 @@ var target_in_range = false
 
 # Stats
 var max_health: int
-var health: int
-var health_regen: int
-var attack: int
-var action_range: int
-var speed: float
+var health: int:	# Current health
+	set(value):
+		health = clamp(value, 0, max_health)
+		emit_signal("health_changed", float(health) / max_health)
+var health_regen: int	# Health regen per second
+var attack: int	# Attack power
+var action_range: int	# Pixel range in which the player can performs actions
+var speed: float	# Movement speed
 
 # Changes the enemy's target
 func set_target(new_target):
@@ -35,27 +41,34 @@ func _on_range_area_body_exited(body: Node2D):
 func _on_attack_timer_timeout():
 	if target_in_range:
 		target.take_damage(attack)
+		
+func take_damage(damage: int):
+	health -= damage
 
 # Position should be a tile coordinate
 func initialize(position_init: Vector2i, speed_init: float):
+	# Texture and position
 	sprite = $Sprite
-	
 	var atlas = AtlasTexture.new()
 	atlas.atlas = preload("res://2D Pixel Dungeon Asset Pack/character and tileset/Dungeon_Character.png")
 	atlas.region = Rect2(64 + rng.randi_range(0, 2) * TILE_SIZE, 48, 16, 16)
-	
 	sprite.texture = atlas
 	global_position = (Vector2(position_init) + Vector2(0.5, 0.5)) * TILE_SIZE
 	sprite.centered = true
 	
+	# Init stats
 	health = 20
 	health_regen = 0
 	attack = 10
 	action_range = 15
 	speed = speed_init
 	
+	# Set up action range
 	range_area.set_range(action_range)
 	navigation_agent.target_desired_distance = action_range - 2
+	
+	# Connect health bar
+	health_changed.connect(health_bar.update_health)
 	
 func _ready():
 	return

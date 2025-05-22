@@ -9,7 +9,7 @@ extends Node2D
 var difficulty
 
 var rng = RandomNumberGenerator.new()
-var diverging_path_chance = 1	# 1 = 100%
+var diverging_path_chance = 0.1	# 1 = 100%
 
 # Storing tile positions as a map so we can check it's surroundings when drawing textures
 # The map value is useless as we are only checking if the key exists in the map which effictively makes this map a set 
@@ -84,7 +84,7 @@ func generate_to_x_line(new_x: int):
 					wall_tiles[Vector2i(x2, 7)] = true
 					x_sorted_wall_tiles[x2].push_back(7)
 					if can_spawn:
-						enemy_generator.attempt_enemy_spawn("Skeleton", 1, Vector2i(x2, rng.randi_range(4, 6)))
+						enemy_generator.attempt_enemy_spawn("Skeleton", 0.3, Vector2i(x2, rng.randi_range(4, 6)))
 				for y in range(-2, 4):
 					wall_tiles[Vector2i(x, y)] = true
 					x_sorted_wall_tiles[x].push_back(y)
