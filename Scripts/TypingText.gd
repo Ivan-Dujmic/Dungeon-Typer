@@ -8,7 +8,7 @@ var chars_per_side	# Max chars on incoming side and completed part individually
 var incoming_word_count
 
 # Holds the text controller to which self should subscribe
-var text_controller
+@onready var text_controller = get_node("/root/Game/TextController")
 
 # Format
 var font_path = "res://Fonts/ia-writer-mono-latin-400-normal.ttf"
@@ -87,6 +87,8 @@ func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_
 	position = position_init
 	special_word_chance = special_word_chance_init
 	
+	text_controller.attach(self)
+	
 	# Font and wrap settings
 	font_family = load(font_path)
 	add_theme_font_override("normal_font", font_family)
@@ -114,8 +116,7 @@ func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_
 	text_controller.block(self)	# Block on init, wait for unblock
 
 func _ready():
-	text_controller = get_node("/root/Game/TextController")
-	text_controller.attach(self)
+	return
 	
 func process_input(event):
 	var next_char = text.substr(pos_first_right, 1)

@@ -1,17 +1,19 @@
 extends CharacterBody2D
 class_name Skeleton
 
+var sprite
 @onready var range_area = $RangeArea
 @onready var navigation_agent = $NavigationAgent
 @onready var health_bar = $HealthBar
+@onready var ui = get_node("/root/Game/UI")
+var typing_text 
 
 signal health_changed(health_ratio: float)
 
-var sprite
+const TILE_SIZE = 16
 
 var rng = RandomNumberGenerator.new()
 
-const TILE_SIZE = 16
 var target
 var target_in_range = false
 
@@ -21,6 +23,8 @@ var health: int:	# Current health
 	set(value):
 		health = clamp(value, 0, max_health)
 		emit_signal("health_changed", float(health) / max_health)
+		if health == 0:
+			die()
 var health_regen: int	# Health regen per second
 var attack: int	# Attack power
 var action_range: int	# Pixel range in which the player can performs actions
@@ -45,6 +49,9 @@ func _on_attack_timer_timeout():
 func take_damage(damage: int):
 	health -= damage
 
+func die():
+	queue_free()
+
 # Position should be a tile coordinate
 func initialize(position_init: Vector2i, speed_init: float):
 	# Texture and position
@@ -57,6 +64,7 @@ func initialize(position_init: Vector2i, speed_init: float):
 	sprite.centered = true
 	
 	# Init stats
+	max_health = 20
 	health = 20
 	health_regen = 0
 	attack = 10
@@ -70,11 +78,14 @@ func initialize(position_init: Vector2i, speed_init: float):
 	# Connect health bar
 	health_changed.connect(health_bar.update_health)
 	
+	# Set up TypingText
+	typing_text = ui.create_enemy_tt(self)
+	
 func _ready():
 	return
 
 func _physics_process(delta):
-	if (target):
+	if target:
 		navigation_agent.target_position = target.global_position
 		
 		if not navigation_agent.is_navigation_finished():

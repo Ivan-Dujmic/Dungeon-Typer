@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var health_bar = get_node("/root/Game/UI/UIHealthBar")
 @onready var dungeon_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/DungeonGenerator")
 @onready var range_area = $RangeArea
+@onready var text_controller = get_node("/root/Game/TextController")
 
 const TILE_SIZE = 16
 var new_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# The position that the character should move to
@@ -30,6 +31,14 @@ func take_damage(damage: int):
 	
 func _on_health_regen_timeout():
 	health += health_regen
+
+func _on_range_area_body_entered(body: Node2D):
+	if body is Skeleton:
+		text_controller.unblock(body.typing_text)
+
+func _on_range_area_body_exited(body: Node2D):
+	if body is Skeleton:
+		text_controller.block(body.typing_text)
 
 func initialize_stats(init_difficulty):
 	difficulty = init_difficulty
