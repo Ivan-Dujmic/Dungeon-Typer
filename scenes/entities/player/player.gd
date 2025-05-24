@@ -4,6 +4,7 @@ extends CharacterBody2D
 @onready var dungeon_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/DungeonGenerator")
 @onready var range_area = $RangeArea
 @onready var text_controller = get_node("/root/Game/TextController")
+@onready var animated_sprite = $AnimatedSprite
 
 const TILE_SIZE = 16
 var new_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# The position that the character should move to
@@ -58,11 +59,18 @@ func _ready():
 
 func _physics_process(delta):
 	if global_position != new_position:
+		animated_sprite.play("moving")
 		var diff = new_position - global_position	# Movement needed to get to the desired location
+		
+		if diff.length() < 0.5:
+			global_position = new_position
+			return
+		
 		var motion: Vector2	# Movement to be performed on this tick
 		# The more distant the goal, the faster the movement
 		motion.x = max(abs(diff.x) / 5, 1.0) * sign(diff.x) * delta * 15 if diff.x != 0.0 else 0.0
 		motion.y = max(abs(diff.y) / 5, 1.0) * sign(diff.y) * delta * 15 if diff.y != 0.0 else 0.0
+		
 		var new_diff = new_position - global_position
 		# Don't overshoot
 		if new_diff.sign().x != diff.sign().x:
@@ -76,4 +84,5 @@ func _physics_process(delta):
 		var current_tile_x = global_position.x / 16
 		dungeon_generator.generate_to_x_line(current_tile_x + 20)
 		dungeon_generator.erase_to_x_line(current_tile_x - 10)
-		
+	else:
+		animated_sprite.play("idle")

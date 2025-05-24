@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Skeleton
 
-var sprite
+@onready var animated_sprite = $AnimatedSprite
 @onready var range_area = $RangeArea
 @onready var navigation_agent = $NavigationAgent
 @onready var health_bar = $HealthBar
@@ -54,14 +54,8 @@ func die():
 
 # Position should be a tile coordinate
 func initialize(position_init: Vector2i, speed_init: float):
-	# Texture and position
-	sprite = $Sprite
-	var atlas = AtlasTexture.new()
-	atlas.atlas = preload("res://assets/textures/entities/enemies/skeleton/skeleton.png")
-	atlas.region = Rect2(64 + rng.randi_range(0, 2) * TILE_SIZE, 48, 16, 16)
-	sprite.texture = atlas
+	# Position
 	global_position = (Vector2(position_init) + Vector2(0.5, 0.5)) * TILE_SIZE
-	sprite.centered = true
 	
 	# Init stats
 	max_health = 20
@@ -89,11 +83,14 @@ func _physics_process(delta):
 		navigation_agent.target_position = target.global_position
 		
 		if not navigation_agent.is_navigation_finished():
+			animated_sprite.play("moving")
+			
 			var next_path_point = navigation_agent.get_next_path_position()
 			var direction = (next_path_point - global_position).normalized()
 			velocity = direction * speed * delta * 50
 			move_and_slide()
 
-			sprite.scale.x = - 1 if velocity.x <= 0 else 1	# Looking direction
+			animated_sprite.scale.x = - 1 if velocity.x <= 0 else 1	# Looking direction
 		else:
+			animated_sprite.play("idle")
 			velocity = Vector2.ZERO

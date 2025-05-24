@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cimriph1p8r3x"
-path="res://.godot/imported/skeleton.png-2c12247190a6d07b000be5b4b69d46bb.ctex"
+uid="uid://cc4f5m8nvfuit"
+path="res://.godot/imported/moving.png-03992722dc5291523de5fc5fa20880b6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/entities/enemies/skeleton/skeleton.png"
-dest_files=["res://.godot/imported/skeleton.png-2c12247190a6d07b000be5b4b69d46bb.ctex"]
+source_file="res://assets/textures/entities/player/knight/moving.png"
+dest_files=["res://.godot/imported/moving.png-03992722dc5291523de5fc5fa20880b6.ctex"]
 
 [params]
 
