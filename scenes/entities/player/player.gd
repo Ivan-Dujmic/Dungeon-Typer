@@ -5,9 +5,11 @@ extends CharacterBody2D
 @onready var range_area = $RangeArea
 @onready var text_controller = get_node("/root/Game/TextController")
 @onready var animated_sprite = $AnimatedSprite
+@onready var navigation_agent = $NavigationAgent
 
 const TILE_SIZE = 16
-var new_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# The position that the character should move to
+var target = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# Target location
+var last_position = target
 
 var difficulty
 
@@ -25,7 +27,7 @@ var action_range: int	# Pixel range in which the player can performs actions
 var speed: float	# Movement speed
 
 func move(move_amount: Vector2):
-	new_position += move_amount * speed
+	target += move_amount * speed
 	
 func take_damage(damage: int):
 	health -= damage
@@ -57,32 +59,29 @@ func _ready():
 	global_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)
 	health_changed.connect(health_bar.update_health)
 
-func _physics_process(delta):
-	if global_position != new_position:
-		animated_sprite.play("moving")
-		var diff = new_position - global_position	# Movement needed to get to the desired location
+func _physics_process(_delta):
+	if target:
+		navigation_agent.target_position = target
 		
-		if diff.length() < 0.5:
-			global_position = new_position
-			return
-		
-		var motion: Vector2	# Movement to be performed on this tick
-		# The more distant the goal, the faster the movement
-		motion.x = max(abs(diff.x) / 5, 1.0) * sign(diff.x) * delta * 15 if diff.x != 0.0 else 0.0
-		motion.y = max(abs(diff.y) / 5, 1.0) * sign(diff.y) * delta * 15 if diff.y != 0.0 else 0.0
-		
-		var new_diff = new_position - global_position
-		# Don't overshoot
-		if new_diff.sign().x != diff.sign().x:
-			motion.x = diff.x
-		if new_diff.sign().y != diff.sign().y:
-			motion.y = diff.y
+		if not navigation_agent.is_navigation_finished():
+			animated_sprite.play("moving")
 			
-		if move_and_collide(motion):	# Move and check if collided
-			new_position = global_position
-		
-		var current_tile_x = global_position.x / 16
-		dungeon_generator.generate_to_x_line(current_tile_x + 20)
-		dungeon_generator.erase_to_x_line(current_tile_x - 10)
-	else:
-		animated_sprite.play("idle")
+			var next_path_point = navigation_agent.get_next_path_position()
+			var direction = (next_path_point - global_position).normalized()
+			velocity = direction * max(8, 2 * global_position.distance_to(target))
+			move_and_slide()
+			
+			var current_tile_x = global_position.x / 16
+			dungeon_generator.generate_to_x_line(current_tile_x + 20)
+			dungeon_generator.erase_to_x_line(current_tile_x - 10)
+
+			animated_sprite.scale.x = - 1 if velocity.x < 0 else 1	# Looking direction
+			
+			if last_position == global_position:
+				target = global_position
+				
+			last_position = global_position
+		else:
+			animated_sprite.play("idle")
+			velocity = Vector2.ZERO
+			animated_sprite.scale.x = 1

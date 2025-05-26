@@ -4,7 +4,7 @@ var size = Vector2i(10, 1)
 var health_ratio = 1
 
 var empty_color = Color.DIM_GRAY
-var health_color = Color.GREEN
+var health_color = Color.RED
 
 func _ready():
 	position = Vector2(-size.x / 2, -12)

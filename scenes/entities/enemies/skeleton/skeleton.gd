@@ -87,7 +87,7 @@ func _physics_process(delta):
 			
 			var next_path_point = navigation_agent.get_next_path_position()
 			var direction = (next_path_point - global_position).normalized()
-			velocity = direction * speed * delta * 50
+			velocity = direction * speed
 			move_and_slide()
 
 			animated_sprite.scale.x = - 1 if velocity.x <= 0 else 1	# Looking direction
