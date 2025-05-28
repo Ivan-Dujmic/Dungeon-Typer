@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://dp2ekxset7b2x"]
+
+[ext_resource type="PackedScene" uid="uid://kveuda4p7rla" path="res://scenes/entities/entity.tscn" id="1_essrt"]
+[ext_resource type="Script" uid="uid://d18okrpss7js2" path="res://scenes/entities/enemies/enemy.gd" id="2_c8ylr"]
+[ext_resource type="Script" uid="uid://ckhyyidxy4lij" path="res://scenes/entities/enemies/health_bar.gd" id="3_c8ylr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c8ylr"]
+
+[node name="Entity" instance=ExtResource("1_essrt")]
+script = ExtResource("2_c8ylr")
+
+[node name="CollisionCircle" parent="RangeArea" index="0"]
+shape = SubResource("CircleShape2D_c8ylr")
+
+[node name="ActionTimer" type="Timer" parent="." index="5"]
+autostart = true
+
+[node name="HealthBar" type="Node2D" parent="." index="6"]
+z_index = 1
+script = ExtResource("3_c8ylr")
+
+[connection signal="timeout" from="ActionTimer" to="." method="_on_action_timer_timeout"]

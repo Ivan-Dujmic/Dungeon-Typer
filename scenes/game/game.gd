@@ -6,11 +6,14 @@ extends Node2D
 @onready var enemy_generator = $TilesViewportContainer/TilesViewport/YSort/EnemyGenerator
 @onready var dungeon_generator = $TilesViewportContainer/TilesViewport/YSort/DungeonGenerator
 
+@onready var knight_class = preload("res://scenes/entities/player/knight/knight_class.tres")
+@onready var wizard_class = preload("res://scenes/entities/player/wizard/wizard_class.tres")
+
 var difficulty = 10
 var ratio = 0
 
 func _ready():
-	player.initialize_stats(difficulty)
+	player.initialize(knight_class, difficulty, Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE))
 	enemy_generator.difficulty = difficulty
 	dungeon_generator.difficulty = difficulty
 	

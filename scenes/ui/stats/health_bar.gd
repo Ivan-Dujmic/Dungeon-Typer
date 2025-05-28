@@ -1,4 +1,5 @@
 extends Control
+# Implements HealthBar
 
 var health_ratio = 1.0
 

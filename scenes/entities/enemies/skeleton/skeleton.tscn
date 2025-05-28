@@ -1,121 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://d08pcc1fpnw0j"]
+[gd_scene load_steps=4 format=3 uid="uid://d08pcc1fpnw0j"]
 
+[ext_resource type="PackedScene" uid="uid://dp2ekxset7b2x" path="res://scenes/entities/enemies/enemy.tscn" id="1_j55ia"]
 [ext_resource type="Script" uid="uid://d0awbb2cmmjhs" path="res://scenes/entities/enemies/skeleton/skeleton.gd" id="1_t8pow"]
-[ext_resource type="Texture2D" uid="uid://bskl1mkda3lam" path="res://assets/textures/entities/enemies/skeleton/idle.png" id="2_huws8"]
-[ext_resource type="Script" uid="uid://y1ixaqjddf8j" path="res://scenes/entities/enemies/range_area.gd" id="2_qlua5"]
-[ext_resource type="Script" uid="uid://ckhyyidxy4lij" path="res://scenes/entities/enemies/health_bar.gd" id="3_huws8"]
-[ext_resource type="Texture2D" uid="uid://826sn8vetvdh" path="res://assets/textures/entities/enemies/skeleton/moving.png" id="3_nnsoc"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_4ie6e"]
-radius = 5.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_j55ia"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nnsoc"]
-atlas = ExtResource("2_huws8")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gotl3"]
-atlas = ExtResource("2_huws8")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m475b"]
-atlas = ExtResource("2_huws8")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2j4hg"]
-atlas = ExtResource("2_huws8")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2f7tn"]
-atlas = ExtResource("3_nnsoc")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y6pwt"]
-atlas = ExtResource("3_nnsoc")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4y66g"]
-atlas = ExtResource("3_nnsoc")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1wjvy"]
-atlas = ExtResource("3_nnsoc")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_2f7tn"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nnsoc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gotl3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m475b")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2j4hg")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 2.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2f7tn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y6pwt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4y66g")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1wjvy")
-}],
-"loop": true,
-"name": &"moving",
-"speed": 8.0
-}]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_abfcy"]
-
-[node name="Skeleton" type="CharacterBody2D"]
-y_sort_enabled = true
-collision_layer = 2
-collision_mask = 3
+[node name="Entity" instance=ExtResource("1_j55ia")]
 script = ExtResource("1_t8pow")
 
-[node name="Hitbox" type="CollisionShape2D" parent="."]
-y_sort_enabled = true
-shape = SubResource("CircleShape2D_4ie6e")
-
-[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_2f7tn")
-animation = &"moving"
-
-[node name="RangeArea" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("2_qlua5")
-
-[node name="CollisionCircle" type="CollisionShape2D" parent="RangeArea"]
-shape = SubResource("CircleShape2D_abfcy")
-
-[node name="AttackTimer" type="Timer" parent="."]
-wait_time = 2.0
-autostart = true
-
-[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
-path_desired_distance = 1.0
-path_postprocessing = 1
-radius = 8.0
-
-[node name="HealthBar" type="Node2D" parent="."]
-z_index = 2
-position = Vector2(-6, -12)
-script = ExtResource("3_huws8")
-
-[connection signal="body_entered" from="RangeArea" to="." method="_on_range_area_body_entered"]
-[connection signal="body_exited" from="RangeArea" to="." method="_on_range_area_body_exited"]
-[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
+[node name="CollisionCircle" parent="RangeArea" index="0"]
+shape = SubResource("CircleShape2D_j55ia")

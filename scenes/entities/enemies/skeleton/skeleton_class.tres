@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="EnemyClass" load_steps=13 format=3 uid="uid://b4hjtyf6ldmqt"]
+
+[ext_resource type="Script" uid="uid://ddxdn06ss1j5v" path="res://scenes/entities/enemies/enemy_class.gd" id="1_hu7c4"]
+[ext_resource type="Texture2D" uid="uid://bskl1mkda3lam" path="res://assets/textures/entities/enemies/skeleton/idle.png" id="1_nt04t"]
+[ext_resource type="Texture2D" uid="uid://826sn8vetvdh" path="res://assets/textures/entities/enemies/skeleton/moving.png" id="2_coa8e"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coa8e"]
+atlas = ExtResource("1_nt04t")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7ixc"]
+atlas = ExtResource("1_nt04t")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tl7t"]
+atlas = ExtResource("1_nt04t")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dn4mt"]
+atlas = ExtResource("1_nt04t")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_54q8d"]
+atlas = ExtResource("2_coa8e")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ianw1"]
+atlas = ExtResource("2_coa8e")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1gsa"]
+atlas = ExtResource("2_coa8e")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4s3v"]
+atlas = ExtResource("2_coa8e")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hu7c4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coa8e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7ixc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1tl7t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dn4mt")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_54q8d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ianw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1gsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4s3v")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 8.0
+}]
+
+[resource]
+script = ExtResource("1_hu7c4")
+max_health = 2
+health_regen = 0
+attack = 10
+action_range = 15
+speed = 2.0
+action_cooldown = 2.0
+animation_frames = SubResource("SpriteFrames_hu7c4")
+metadata/_custom_type_script = "uid://ddxdn06ss1j5v"

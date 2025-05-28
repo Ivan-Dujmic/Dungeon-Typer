@@ -1,63 +1,49 @@
-extends CharacterBody2D
+extends Entity
+class_name Player
 
-@onready var health_bar = get_node("/root/Game/UI/UIHealthBar")
-@onready var dungeon_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/DungeonGenerator")
-@onready var range_area = $RangeArea
 @onready var text_controller = get_node("/root/Game/TextController")
-@onready var animated_sprite = $AnimatedSprite
-@onready var navigation_agent = $NavigationAgent
+@onready var health_bar = get_node("/root/Game/UI/HealthBar")
 
-const TILE_SIZE = 16
-var target = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)	# Target location
-var last_position = target
+var target = Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE)	# Target location
+var last_position = target	# For inputs that try to go through obstacles (if no position change then stop trying)
 
-var difficulty
+var luck: float
 
-signal health_changed(health_ratio: float)
-
-# Stats
-var max_health: int
-var health: int:	# Current health
-	set(value):
-		health = clamp(value, 0, max_health)
-		emit_signal("health_changed", float(health) / max_health)
-var health_regen: int	# Health regen per second
-var attack: int	# Attack power
-var action_range: int	# Pixel range in which the player can performs actions
-var speed: float	# Movement speed
+func update_health():
+	health_bar.update_health(float(health) / max_health)
 
 func move(move_amount: Vector2):
 	target += move_amount * speed
 	
-func take_damage(damage: int):
-	health -= damage
-	
-func _on_health_regen_timeout():
-	health += health_regen
-
 func _on_range_area_body_entered(body: Node2D):
-	if body is Skeleton:
+	if body is Enemy:
 		text_controller.unblock(body.typing_text)
 
 func _on_range_area_body_exited(body: Node2D):
-	if body is Skeleton:
+	if body is Enemy:
 		text_controller.block(body.typing_text)
 
-func initialize_stats(init_difficulty):
-	difficulty = init_difficulty
+func initialize(class_init: PlayerClass, difficulty_init: int, position_init: Vector2):
+	difficulty = difficulty_init
 	
-	max_health = 100
-	health = 100
-	health_regen = 1
-	attack = 10
-	action_range = 144
-	speed = 160 / difficulty
+	max_health = class_init.max_health
+	health = max_health
+	health_regen = class_init.health_regen
+	attack = class_init.attack
+	action_range = class_init.action_range
+	speed = class_init.speed / difficulty
+	luck = class_init.luck
 	
 	range_area.set_range(action_range)
+	
+	animated_sprite.sprite_frames = class_init.animation_frames
+	
+	target = position_init
+	last_position = position_init
+	global_position = position_init
 
 func _ready():
-	global_position = Vector2(2.5 * TILE_SIZE, 5.5 * TILE_SIZE)
-	health_changed.connect(health_bar.update_health)
+	return
 
 func _physics_process(_delta):
 	if target:

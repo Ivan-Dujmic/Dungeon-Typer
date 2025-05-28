@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bjmkt0u31kwlj" path="res://scenes/game/game.gd" id="1_87uf6"]
 [ext_resource type="PackedScene" uid="uid://cdnr0kpfo5kd3" path="res://scenes/dungeons/dungeon_generator.tscn" id="2_2a8rs"]
-[ext_resource type="PackedScene" uid="uid://bvrendp8d0u0u" path="res://scenes/entities/player/player.tscn" id="3_4j704"]
+[ext_resource type="PackedScene" uid="uid://d05xsrxdp6exu" path="res://scenes/entities/player/player.tscn" id="3_4j704"]
 [ext_resource type="PackedScene" uid="uid://chrw2ysysmqt8" path="res://scenes/dungeons/background.tscn" id="4_kp23o"]
 [ext_resource type="PackedScene" uid="uid://paxjg7vp5m3i" path="res://scenes/entities/enemies/enemy_generator.tscn" id="5_5jirj"]
 [ext_resource type="Script" uid="uid://dhnwgxltb5676" path="res://scenes/ui/typing/ui.gd" id="6_vaxfo"]
@@ -30,6 +30,8 @@ y_sort_enabled = true
 
 [node name="DungeonGenerator" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("2_2a8rs")]
 
+[node name="EnemyGenerator" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("5_5jirj")]
+
 [node name="Player" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("3_4j704")]
 
 [node name="Camera" type="Camera2D" parent="TilesViewportContainer/TilesViewport/YSort/Player"]
@@ -40,12 +42,10 @@ z_index = -2
 z_as_relative = true
 position = Vector2(-134, -68)
 
-[node name="EnemyGenerator" parent="TilesViewportContainer/TilesViewport/YSort" instance=ExtResource("5_5jirj")]
-
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("6_vaxfo")
 
-[node name="UIHealthBar" type="Control" parent="UI"]
+[node name="HealthBar" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 20.0

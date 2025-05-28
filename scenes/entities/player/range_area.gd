@@ -1,11 +1,7 @@
-extends Area2D
+extends RangeArea
 
-@onready var collision_circle = $CollisionCircle
 @onready var range_indicator = $RangeIndicator
 
 func set_range(radius: float):
-	collision_circle.shape.radius = radius
+	super.set_range(radius)
 	range_indicator.radius = radius
-	
-func _ready():
-	return

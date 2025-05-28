@@ -1,4 +1,5 @@
 extends Area2D
+class_name RangeArea
 
 @onready var collision_circle = $CollisionCircle
 

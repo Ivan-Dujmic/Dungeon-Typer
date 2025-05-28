@@ -5,6 +5,8 @@ extends CanvasLayer
 @onready var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player")
 @onready var camera = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player/Camera")
 
+@onready var typing_text_scene = preload("res://scenes/ui/typing/typing_text.tscn")
+
 var font = load("res://assets/fonts/ia-writer-mono-latin-400-normal.ttf")
 
 # attached_tt_dict[tt] = [object, size, y_offset]
@@ -12,7 +14,7 @@ var attached_tt_dict: Dictionary
 
 func movement_tt_setup():
 	# Preload forward movement typing text
-	var tt_move_forward = preload("res://scenes/ui/typing/typing_text.tscn").instantiate()
+	var tt_move_forward = typing_text_scene.instantiate()
 	add_child(tt_move_forward)
 	# Calculate position so that the next typed letter is just after the half screen point
 	
@@ -32,7 +34,7 @@ func movement_tt_setup():
 	text_controller.unblock(tt_move_forward)
 		
 	# Preload up movement typing text
-	var tt_move_up = preload("res://scenes/ui/typing/typing_text.tscn").instantiate()
+	var tt_move_up = typing_text_scene.instantiate()
 	# Calculate position so that the next typed letter is just after the half screen point
 	size = font.get_string_size("A".repeat(2 * 16), HORIZONTAL_ALIGNMENT_LEFT, -1, 39)
 	add_child(tt_move_up)
@@ -50,7 +52,7 @@ func movement_tt_setup():
 	text_controller.unblock(tt_move_up)
 	
 	# Preload down movement typing text
-	var tt_move_down = preload("res://scenes/ui/typing/typing_text.tscn").instantiate()
+	var tt_move_down = typing_text_scene.instantiate()
 	add_child(tt_move_down)
 	# Calculate position so that the next typed letter is just after the half screen point
 	size = font.get_string_size("A".repeat(2 * 16), HORIZONTAL_ALIGNMENT_LEFT, -1, 39)
@@ -77,7 +79,7 @@ func create_attached_tt(
 	y_offset: int,
 	unblock: bool
 	) -> TypingText:
-	var tt = preload("res://scenes/ui/typing/typing_text.tscn").instantiate()
+	var tt = typing_text_scene.instantiate()
 	add_child(tt)
 	var position = Vector2.ZERO	# Process will do it anyways
 	tt.initialize(
@@ -95,7 +97,7 @@ func create_attached_tt(
 	attached_tt_dict[tt] = [object, size, y_offset]
 	return tt
 
-func create_enemy_tt(enemy) -> TypingText:
+func create_enemy_tt(enemy: Enemy) -> TypingText:
 	var on_word_complete_attack_func = Callable(self, "_on_word_complete_attack").bind(player, enemy)
 	return create_attached_tt(on_word_complete_attack_func, enemy, 24, 14, 2, -13, false)
 
@@ -127,18 +129,18 @@ func _process(_delta):
 ######################################################
 # These functions should be given to appropiate TypingText to call them
 ######################################################
-func _on_word_complete_forward(completed_word, player_arg):
+func _on_word_complete_forward(completed_word, player_arg: Player):
 	if completed_word.is_special:
 		player_arg.move(Vector2(2, 0))
 	else:
 		player_arg.move(Vector2(1, 0))
 	
-func _on_word_complete_up(_completed_word, player_arg):
+func _on_word_complete_up(_completed_word, player_arg: Player):
 	player_arg.move(Vector2(0, -1))
 	
-func _on_word_complete_down(_completed_word, player_arg):
+func _on_word_complete_down(_completed_word, player_arg: Player):
 	player_arg.move(Vector2(0, 1))
 	
-func _on_word_complete_attack(completed_word, player_arg, enemy):
+func _on_word_complete_attack(completed_word, player_arg: Player, enemy: Enemy):
 	var damage = player_arg.attack * 2 if completed_word.is_special else player_arg.attack
 	enemy.take_damage(damage)

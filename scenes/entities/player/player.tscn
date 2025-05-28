@@ -1,120 +1,24 @@
-[gd_scene load_steps=17 format=3 uid="uid://bvrendp8d0u0u"]
+[gd_scene load_steps=6 format=3 uid="uid://d05xsrxdp6exu"]
 
-[ext_resource type="Texture2D" uid="uid://ss5hdy1j6npt" path="res://assets/textures/entities/player/knight/idle.png" id="2_bjvvg"]
-[ext_resource type="Script" uid="uid://qfkrjjlsh686" path="res://scenes/entities/player/player.gd" id="2_kyqiw"]
-[ext_resource type="Texture2D" uid="uid://cc4f5m8nvfuit" path="res://assets/textures/entities/player/knight/moving.png" id="3_8akj5"]
-[ext_resource type="Script" uid="uid://x27ve83j3dnc" path="res://scenes/entities/player/range_area.gd" id="3_dewec"]
-[ext_resource type="Script" uid="uid://d3m070vnl5frn" path="res://scenes/entities/player/range_indicator.gd" id="4_dewec"]
+[ext_resource type="PackedScene" uid="uid://kveuda4p7rla" path="res://scenes/entities/entity.tscn" id="1_u08lt"]
+[ext_resource type="Script" uid="uid://qfkrjjlsh686" path="res://scenes/entities/player/player.gd" id="2_nh4ur"]
+[ext_resource type="Script" uid="uid://d3m070vnl5frn" path="res://scenes/entities/player/range_indicator.gd" id="2_yl6vo"]
+[ext_resource type="Script" uid="uid://x27ve83j3dnc" path="res://scenes/entities/player/range_area.gd" id="3_bjvvg"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_5ixxa"]
-radius = 5.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_nh4ur"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bj7e2"]
-atlas = ExtResource("2_bjvvg")
-region = Rect2(0, 0, 16, 16)
+[node name="Entity" instance=ExtResource("1_u08lt")]
+script = ExtResource("2_nh4ur")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1murt"]
-atlas = ExtResource("2_bjvvg")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5sj0x"]
-atlas = ExtResource("2_bjvvg")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ovg4i"]
-atlas = ExtResource("2_bjvvg")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7wli1"]
-atlas = ExtResource("3_8akj5")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j0oqr"]
-atlas = ExtResource("3_8akj5")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xy2vv"]
-atlas = ExtResource("3_8akj5")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_r4dfn"]
-atlas = ExtResource("3_8akj5")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_70kwc"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bj7e2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1murt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5sj0x")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ovg4i")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 2.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7wli1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j0oqr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xy2vv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r4dfn")
-}],
-"loop": true,
-"name": &"moving",
-"speed": 8.0
-}]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
-
-[node name="Player" type="CharacterBody2D"]
-y_sort_enabled = true
-collision_layer = 2
-collision_mask = 3
-script = ExtResource("2_kyqiw")
-
-[node name="Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_5ixxa")
-
-[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_70kwc")
+[node name="AnimatedSprite" parent="." index="1"]
 animation = &"idle"
 
-[node name="RangeArea" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
-script = ExtResource("3_dewec")
+[node name="RangeArea" parent="." index="2"]
+script = ExtResource("3_bjvvg")
 
-[node name="CollisionCircle" type="CollisionShape2D" parent="RangeArea"]
-shape = SubResource("CircleShape2D_dewec")
+[node name="CollisionCircle" parent="RangeArea" index="0"]
+shape = SubResource("CircleShape2D_nh4ur")
 
-[node name="RangeIndicator" type="Node2D" parent="RangeArea"]
+[node name="RangeIndicator" type="Node2D" parent="RangeArea" index="1"]
 z_index = 5
-script = ExtResource("4_dewec")
-
-[node name="HealthRegen" type="Timer" parent="."]
-autostart = true
-
-[node name="NavigationAgent" type="NavigationAgent2D" parent="."]
-path_desired_distance = 0.1
-target_desired_distance = 0.1
-path_max_distance = 10.0
-path_postprocessing = 2
-radius = 16.0
-
-[connection signal="body_entered" from="RangeArea" to="." method="_on_range_area_body_entered"]
-[connection signal="body_exited" from="RangeArea" to="." method="_on_range_area_body_exited"]
-[connection signal="timeout" from="HealthRegen" to="." method="_on_health_regen_timeout"]
+script = ExtResource("2_yl6vo")

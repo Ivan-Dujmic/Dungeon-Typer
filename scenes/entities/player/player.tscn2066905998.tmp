@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d05xsrxdp6exu"]
+
+[ext_resource type="PackedScene" uid="uid://kveuda4p7rla" path="res://scenes/entities/entity.tscn" id="1_u08lt"]
+[ext_resource type="Script" uid="uid://d3m070vnl5frn" path="res://scenes/entities/player/range_indicator.gd" id="2_yl6vo"]
+
+[node name="Entity" instance=ExtResource("1_u08lt")]
+
+[node name="AnimatedSprite" parent="." index="1"]
+animation = &"idle"
+
+[node name="RangeIndicator" type="Node2D" parent="RangeArea" index="1"]
+z_index = 5
+script = ExtResource("2_yl6vo")
+
+[node name="HealthRegen" type="Timer" parent="." index="4"]
+autostart = true
