@@ -23,6 +23,14 @@ func _on_range_area_body_exited(body: Node2D):
 	if body is Enemy:
 		text_controller.block(body.typing_text)
 
+func _on_range_area_area_entered(area: Area2D):
+	if area is ItemDrop:
+		text_controller.unblock(area.typing_text)
+
+func _on_range_area_area_exited(area: Area2D):
+	if area is ItemDrop:
+		text_controller.block(area.typing_text)
+
 func initialize(class_init: PlayerClass, difficulty_init: int, position_init: Vector2):
 	difficulty = difficulty_init
 	

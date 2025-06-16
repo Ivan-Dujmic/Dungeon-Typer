@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://caifs5fms3kg1"]
+
+[ext_resource type="Script" uid="uid://bq3g0cvgabhdn" path="res://scenes/items/item_drop.gd" id="1_aaasa"]
+[ext_resource type="Script" uid="uid://c45rxougu1ch" path="res://scenes/items/item_data.gd" id="2_5umwt"]
+
+[sub_resource type="Resource" id="Resource_pjagr"]
+script = ExtResource("2_5umwt")
+name = ""
+description = ""
+use_on_pickup = false
+metadata/_custom_type_script = "uid://c45rxougu1ch"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xhhhv"]
+radius = 3.0
+
+[sub_resource type="ImageTexture" id="ImageTexture_xhhhv"]
+
+[node name="ItemDrop" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_aaasa")
+data = SubResource("Resource_pjagr")
+
+[node name="CollisionCircle" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_xhhhv")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = SubResource("ImageTexture_xhhhv")

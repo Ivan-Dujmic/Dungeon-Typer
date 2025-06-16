@@ -8,6 +8,7 @@
 
 [node name="Entity" instance=ExtResource("1_essrt")]
 script = ExtResource("2_c8ylr")
+loot_table = null
 
 [node name="CollisionCircle" parent="RangeArea" index="0"]
 shape = SubResource("CircleShape2D_c8ylr")

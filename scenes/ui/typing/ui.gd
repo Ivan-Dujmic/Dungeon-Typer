@@ -101,6 +101,10 @@ func create_enemy_tt(enemy: Enemy) -> TypingText:
 	var on_word_complete_attack_func = Callable(self, "_on_word_complete_attack").bind(player, enemy)
 	return create_attached_tt(on_word_complete_attack_func, enemy, 24, 14, 2, -13, false)
 
+func create_item_drop_tt(item_drop: ItemDrop) -> TypingText:
+	var on_word_complete_pick_up_func = Callable(self, "_on_word_complete_pick_up").bind(player, item_drop)
+	return create_attached_tt(on_word_complete_pick_up_func, item_drop, 24, 14, 1, -8, false)
+
 func _ready():
 	movement_tt_setup()
 
@@ -144,3 +148,10 @@ func _on_word_complete_down(_completed_word, player_arg: Player):
 func _on_word_complete_attack(completed_word, player_arg: Player, enemy: Enemy):
 	var damage = player_arg.attack * 2 if completed_word.is_special else player_arg.attack
 	enemy.take_damage(damage)
+	
+func _on_word_complete_pick_up(_completed_word, player_arg: Player, item_drop: ItemDrop):
+	if item_drop.data.use_on_pickup:
+		item_drop.data.use_command.new().execute(player_arg)
+		item_drop.queue_free()
+	else:
+		pass # TODO: Add to inventory

@@ -27,6 +27,9 @@ func update_health():
 func take_damage(damage: int):
 	health -= damage
 	
+func heal(healing: int):
+	health += healing
+	
 func die():
 	return	
 
@@ -38,6 +41,12 @@ func _on_range_area_body_entered(_body: Node2D):
 
 func _on_range_area_body_exited(_body: Node2D):
 	return
+	
+func _on_range_area_area_entered(_area: Area2D):
+	pass 
+
+func _on_range_area_area_exited(_area: Area2D):
+	pass
 
 func _ready():
 	return

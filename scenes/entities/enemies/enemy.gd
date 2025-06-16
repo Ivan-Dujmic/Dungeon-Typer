@@ -2,11 +2,15 @@ extends Entity
 class_name Enemy
 
 @onready var ui = get_node("/root/Game/UI")
+@onready var item_drops = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/ItemDrops")
 @onready var health_bar = $"HealthBar"
 @onready var action_timer = $"ActionTimer"
 var typing_text 
 
+@onready var item_drop = preload("res://scenes/items/item_drop.tscn")
+
 var action_cooldown: float
+@export var loot_table: LootTable
 
 var target: Entity
 var target_in_range = false
@@ -30,6 +34,11 @@ func _on_action_timer_timeout():
 		target.take_damage(attack)
 		
 func die():
+	var drops = loot_table.roll()
+	for drop in drops:
+		var new_drop = item_drop.instantiate()
+		item_drops.add_child(new_drop)
+		new_drop.initialize(drop, global_position + Vector2((randf()-0.5)*20, (randf()-0.5)*20))
 	queue_free()
 
 # Position should be a tile coordinate
