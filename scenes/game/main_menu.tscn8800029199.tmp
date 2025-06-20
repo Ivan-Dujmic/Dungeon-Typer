@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=3 uid="uid://qwcucdk6oio8"]
+
+[ext_resource type="Theme" uid="uid://cuf1n62gflky0" path="res://assets/menu/TitleScreen.tres" id="1_gfgjs"]
+[ext_resource type="Script" uid="uid://bawq4cfv2qo38" path="res://scenes/game/main_menu.gd" id="1_ngy02"]
+[ext_resource type="Texture2D" uid="uid://dwoauqnr4rx6o" path="res://assets/menu/logo.png" id="1_sbiqi"]
+[ext_resource type="Texture2D" uid="uid://jh4liwhsymv" path="res://assets/menu/background.png" id="2_e66b0"]
+[ext_resource type="FontFile" uid="uid://nm0wv8f4x7q7" path="res://assets/fonts/ia-writer-mono-latin-700-normal.ttf" id="4_3r4tm"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_gfgjs")
+script = ExtResource("1_ngy02")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1922.0
+offset_bottom = 1281.0
+texture = ExtResource("2_e66b0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_top = 100.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Logo" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_sbiqi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StartNewRunButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "Start New Run"
+
+[node name="StatisticsButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "Statistics"
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "Settings"
+
+[node name="ExitGameButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "Exit Game"
+
+[connection signal="pressed" from="VBoxContainer/StartNewRunButton" to="." method="_on_start_new_run_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/StatisticsButton" to="." method="_on_statistics_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitGameButton" to="." method="_on_exit_game_button_pressed"]

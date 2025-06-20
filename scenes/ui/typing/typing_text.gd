@@ -70,11 +70,15 @@ func reset():
 			text = text.erase(pos_last_correct - 1)
 		text = text.insert(pos_first_left, " ")
 		
+# The TypingText should be blocked through the TextController
+# This method only changes the visuals of the text
 func block():
 	reset()
 	self_modulate = colors["blocked"]
 	is_blocked = true
 	
+# The TypingText should be unblocked through the TextController
+# This method only changes the visuals of the text
 func unblock():
 	self_modulate = colors["unblocked"]
 	is_blocked = false
@@ -121,7 +125,7 @@ func _ready():
 func process_input(event):
 	var next_char = text.substr(pos_first_right, 1)
 	var next_char_unicode = next_char.unicode_at(0)
-	if not incorrect_mode and event.unicode != 0 and ((next_char_unicode == event.unicode) or (event.unicode == " ".unicode_at(0) and next_char_unicode == space_sub_unicode)):	# If correct input		left_chars += next_char
+	if not incorrect_mode and event.unicode != 0 and ((next_char_unicode == event.unicode) or (event.unicode == " ".unicode_at(0) and next_char_unicode == space_sub_unicode)):	# If correct input
 		left_chars += next_char
 		text = text.erase(pos_first_right)	# Remove completed char from incoming characters
 		text = text.insert(pos_last_correct, next_char)	# Put complete char on left side
