@@ -73,8 +73,9 @@ text = "Exit Game"
 [node name="StatsScreenContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 0
+offset_top = 350.0
 offset_right = 1920.0
-offset_bottom = 1080.0
+offset_bottom = 750.0
 alignment = 1
 
 [node name="ReturnButton" type="Button" parent="StatsScreenContainer"]
@@ -85,11 +86,22 @@ theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
 text = "Return to Title Screen"
 
+[node name="Spacer" type="Control" parent="StatsScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatsContainer" type="GridContainer" parent="StatsScreenContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+
 [node name="SettingsScreenContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 0
+offset_top = 230.0
 offset_right = 1920.0
-offset_bottom = 1080.0
+offset_bottom = 810.0
 alignment = 1
 
 [node name="ReturnButton" type="Button" parent="SettingsScreenContainer"]
@@ -99,6 +111,15 @@ size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
 text = "Return to Title Screen"
+
+[node name="Spacer1" type="Control" parent="SettingsScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DisplaySettingsLabel" type="Label" parent="SettingsScreenContainer"]
+layout_mode = 2
+text = "Display Settings"
+horizontal_alignment = 1
 
 [node name="ResolutionButton" type="OptionButton" parent="SettingsScreenContainer"]
 custom_minimum_size = Vector2(500, 70)
@@ -114,6 +135,15 @@ size_flags_horizontal = 4
 custom_minimum_size = Vector2(500, 70)
 layout_mode = 2
 size_flags_horizontal = 4
+
+[node name="Spacer2" type="Control" parent="SettingsScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DangerZoneLabel" type="Label" parent="SettingsScreenContainer"]
+layout_mode = 2
+text = "DANGER ZONE"
+horizontal_alignment = 1
 
 [node name="WipeDataButton" type="Button" parent="SettingsScreenContainer"]
 custom_minimum_size = Vector2(500, 70)

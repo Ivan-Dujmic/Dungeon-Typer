@@ -22,6 +22,43 @@ func _on_exit_game_button_pressed() -> void:
 func _on_return_button_pressed() -> void:
 	load_screen("title_screen")
 	
+# STATS
+func setup_stats_screen():
+	var stats = Progress.get_stats()
+
+	var grid = $StatsScreenContainer/StatsContainer
+	
+	for child in grid.get_children():
+		child.queue_free()
+
+	var index = 0
+	
+	for stat in stats.keys():
+		var name_label = Label.new()
+		name_label.text = stat
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		name_label.add_theme_font_size_override("font_size", 30)
+
+		var value_label = Label.new()
+		value_label.text = str(stats[stat])
+		value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		value_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		value_label.add_theme_font_size_override("font_size", 30)
+		
+		match index % 2:
+			0:
+				name_label.add_theme_color_override("font_color", Color(0.871, 0.401, 0.0))
+				value_label.add_theme_color_override("font_color", Color(0.871, 0.401, 0.0))
+			1:
+				name_label.add_theme_color_override("font_color", Color(0.971, 0.601, 0.1))
+				value_label.add_theme_color_override("font_color", Color(0.971, 0.601, 0.1))
+
+		grid.add_child(name_label)
+		grid.add_child(value_label)
+		
+		index += 1
+		 
 # SETTINGS
 func setup_settings_screen():
 	var resolution_button = $SettingsScreenContainer/ResolutionButton
@@ -33,6 +70,12 @@ func setup_settings_screen():
 	var screen_button = $SettingsScreenContainer/ScreenButton
 	for screen in DisplayServer.get_screen_count():
 		screen_button.add_item("Screen " + str(screen+1))
+	# Label font style
+	for child in screens["settings_screen"].get_children():
+		if child is Label:
+			child.add_theme_font_size_override("font_size", 30)
+			child.add_theme_color_override("font_color", Color(0.871, 0.401, 0.0))
+	
 func _on_resolution_button_item_selected(index: int) -> void:
 	Settings.set_resolution(index)
 func _on_window_mode_button_item_selected(index: int) -> void:
@@ -44,6 +87,7 @@ func _on_wipe_data_button_pressed() -> void:
 	wipe_data_dialog.popup_centered()
 func _on_confirmation_dialog_confirmed() -> void:
 	Progress.wipe_data()
+	setup_stats_screen()
 
 func load_screen(screen: String):
 	screens[current_screen].visible = false
@@ -68,6 +112,7 @@ func load_screen(screen: String):
 func _ready():
 	Settings.apply_all_settings()
 	setup_settings_screen()	
+	setup_stats_screen()
 	load_screen("title_screen")
 
 func _unhandled_input(event):
