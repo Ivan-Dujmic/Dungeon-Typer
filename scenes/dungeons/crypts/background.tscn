@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://chrw2ysysmqt8"]
 
-[ext_resource type="Script" uid="uid://lur4vc2l2j40" path="res://scenes/dungeons/background.gd" id="1_c8m3x"]
+[ext_resource type="Script" uid="uid://lur4vc2l2j40" path="res://scenes/dungeons/crypts/background.gd" id="1_c8m3x"]
 
 [node name="Background" type="Node2D"]
 z_index = -1

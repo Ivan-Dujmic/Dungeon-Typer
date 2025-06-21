@@ -32,18 +32,18 @@ func get_string_in_tags(string: String, color: String) -> String:
 	return result
 
 func reset():
-	text = get_string_in_tags("", "complete") + get_string_in_tags("", "wrong") + get_string_in_tags(raw_text, "incoming")
+	text = " " + get_string_in_tags("", "complete") + get_string_in_tags("", "wrong") + get_string_in_tags(raw_text, "incoming")
 	chars_completed = 0
 	incorrect_mode = false
 	
 	# Positional variables
-	pos_last_correct = "[color=\"#000000\"]".length() - 1
-	pos_incorrect = "[color=\"#000000\"][/color][color=\"#000000\"]".length()
-	pos_first_incoming = "[color=\"#000000\"][/color][color=\"#000000\"][/color][color=\"#000000\"]".length()
+	pos_last_correct = "[color=\"#000000\"]".length()
+	pos_incorrect = "[color=\"#000000\"][/color][color=\"#000000\"]".length() + 1
+	pos_first_incoming = "[color=\"#000000\"][/color][color=\"#000000\"][/color][color=\"#000000\"]".length() + 1
 
 func initialize(text_controller_init, text_init: String, on_word_complete_init: Callable, font_size_init: int, position_init: Vector2):
 	text_controller = text_controller_init
-	raw_text = text_init
+	raw_text = text_init + " "
 	on_word_complete = on_word_complete_init
 	font_size = font_size_init
 	position = position_init
@@ -57,7 +57,7 @@ func initialize(text_controller_init, text_init: String, on_word_complete_init: 
 	autowrap_mode = TextServer.AUTOWRAP_OFF
 	
 	# Position and size
-	var elem_size = font_family.get_string_size(text_init, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var elem_size = font_family.get_string_size(" " + raw_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	set_size(elem_size)
 	var parent_size = get_parent().size
 	var offset = (parent_size - elem_size) / 2

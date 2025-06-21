@@ -1,5 +1,15 @@
 extends Node
 
+var unlocked_dungeons: Array[String] = [
+	"Crypts",
+	"Forest"
+]
+
+var unlocked_characters: Array[String] = [
+	"Knight",
+	"Wizard"
+]
+
 var runs_started: int = 0
 var runs_completed: int = 0
 var words_completed: int = 0
@@ -25,3 +35,12 @@ func wipe_data():
 	characters_typed = 0
 	enemies_defeated = 0
 	items_used = 0
+	
+	unlocked_dungeons = [
+		"Crypts"
+	]
+	
+	unlocked_characters = [
+		"Knight",
+		"Wizard"
+	]

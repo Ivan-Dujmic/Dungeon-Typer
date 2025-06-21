@@ -83,21 +83,6 @@ theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
 text = "Return to Title Screen"
 
-[node name="CharacterSelectScreenContainer" type="VBoxContainer" parent="."]
-visible = false
-offset_top = 200.0
-offset_right = 1920.0
-offset_bottom = 600.0
-alignment = 1
-
-[node name="ReturnButton" type="Button" parent="CharacterSelectScreenContainer"]
-custom_minimum_size = Vector2(500, 70)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("4_3r4tm")
-theme_override_font_sizes/font_size = 35
-text = "Return to Title Screen"
-
 [node name="StatsScreenContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 0
@@ -205,7 +190,6 @@ script = ExtResource("6_xn6kt")
 [connection signal="pressed" from="TitleScreenContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="TitleScreenContainer/ExitGameButton" to="." method="_on_exit_game_button_pressed"]
 [connection signal="pressed" from="DungeonSelectScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
-[connection signal="pressed" from="CharacterSelectScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
 [connection signal="pressed" from="StatsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
 [connection signal="pressed" from="SettingsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
 [connection signal="item_selected" from="SettingsScreenContainer/DisplaySettingsContainer/ResolutionButton" to="." method="_on_resolution_button_item_selected"]
