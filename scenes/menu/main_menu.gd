@@ -5,10 +5,11 @@ extends Control
 	"stats_screen": $StatsScreenContainer,
 	"settings_screen": $SettingsScreenContainer
 }
-@onready var screen_texts: Dictionary[String, Array] = {
+@onready var texts: Dictionary[String, Array] = {
 	"title_screen": [],
 	"stats_screen": [],
-	"settings_screen": []
+	"settings_screen": [],
+	"wipe_data_dialog": []
 }
 var text_controller
 @onready var menu_text_scene = preload("res://scenes/menu/menu_text.tscn")
@@ -98,6 +99,24 @@ func setup_settings_screen():
 	danger_zone_label.add_theme_font_size_override("font_size", 30)
 	danger_zone_label.add_theme_color_override("font_color", Color(1, 0.0, 0.0))
 	
+	# Wipe data dialog custom buttons
+	var wipe_data_dialog = $SettingsScreenContainer/WipeDataDialog
+	var cancel_button = wipe_data_dialog.get_cancel_button()
+	var ok_button = wipe_data_dialog.get_ok_button()
+	ok_button.custom_minimum_size = Vector2(200, 100)
+	cancel_button.custom_minimum_size = Vector2(200, 100)
+	ok_button.text = "         "
+	cancel_button.text = "       "
+	ok_button.size_flags_horizontal = SIZE_SHRINK_CENTER
+	cancel_button.size_flags_horizontal = SIZE_SHRINK_CENTER
+	var font = preload("res://assets/fonts/ia-writer-mono-latin-700-normal.ttf")
+	ok_button.add_theme_font_override("font", font)
+	cancel_button.add_theme_font_override("font", font)
+	ok_button.add_theme_font_size_override("font_size", 20)
+	cancel_button.add_theme_font_size_override("font_size", 20)
+	
+	wipe_data_dialog.text_controller = text_controller
+	
 func _popup_resolution_button():
 		var resolution_button = $SettingsScreenContainer/DisplaySettingsContainer/ResolutionButton
 		resolution_button.show_popup()
@@ -122,10 +141,49 @@ func _on_screen_button_item_selected(index: int) -> void:
 func _on_wipe_data_button_pressed() -> void:
 	var wipe_data_dialog = $SettingsScreenContainer/WipeDataDialog
 	wipe_data_dialog.popup_centered()
+	var ok_button = wipe_data_dialog.get_ok_button()
+	var cancel_button = wipe_data_dialog.get_cancel_button()
+	cancel_button.grab_focus()
+	
+	var wipe_data_ok_func = Callable(self, "_confirm_wipe_data_dialog")
+	var wipe_data_ok_text = menu_text_scene.instantiate()
+	ok_button.add_child(wipe_data_ok_text)
+	wipe_data_ok_text.initialize(text_controller, "WIPE DATA", wipe_data_ok_func, 20, Vector2(0, 0))
+	texts["wipe_data_dialog"].push_back(wipe_data_ok_text)
+
+	var wipe_data_cancel_func = Callable(self, "_cancel_wipe_data_dialog")
+	var wipe_data_cancel_text = menu_text_scene.instantiate()
+	cancel_button.add_child(wipe_data_cancel_text)
+	wipe_data_cancel_text.initialize(text_controller, "Cancel ", wipe_data_cancel_func, 20, Vector2(0, 0))
+	texts["wipe_data_dialog"].push_back(wipe_data_cancel_text)
+
+	text_controller.activate_texts(texts["wipe_data_dialog"])
+	
+func _on_wipe_data_dialog_canceled() -> void:
+	text_controller.activate_texts(texts["settings_screen"])
+	for tt in texts["wipe_data_dialog"]:
+		text_controller.detach(tt)
+		tt.queue_free()
+	texts["wipe_data_dialog"].clear()
 	
 func _on_confirmation_dialog_confirmed() -> void:
 	Progress.wipe_data()
 	setup_stats_screen()
+	text_controller.activate_texts(texts["settings_screen"])
+	for tt in texts["wipe_data_dialog"]:
+		text_controller.detach(tt)
+		tt.queue_free()
+	texts["wipe_data_dialog"].clear()
+	
+func _confirm_wipe_data_dialog():
+	var wipe_data_dialog = $SettingsScreenContainer/WipeDataDialog
+	wipe_data_dialog.hide()
+	_on_confirmation_dialog_confirmed()
+	
+func _cancel_wipe_data_dialog():
+	var wipe_data_dialog = $SettingsScreenContainer/WipeDataDialog
+	wipe_data_dialog.hide()
+	_on_wipe_data_dialog_canceled()
 
 # TEXTS
 func setup_texts():
@@ -135,28 +193,28 @@ func setup_texts():
 	var start_new_run_button = $TitleScreenContainer/StartNewRunButton
 	start_new_run_button.add_child(start_new_run_text)
 	start_new_run_text.initialize(text_controller, "Start New Run", start_new_run_func, 35, Vector2(0, 0))
-	screen_texts["title_screen"].push_back(start_new_run_text)
+	texts["title_screen"].push_back(start_new_run_text)
 
 	var statistics_func = Callable(self, "_on_statistics_button_pressed")
 	var statistics_text = menu_text_scene.instantiate()
 	var statistics_button = $TitleScreenContainer/StatisticsButton
 	statistics_button.add_child(statistics_text)
 	statistics_text.initialize(text_controller, "Statistics ", statistics_func, 35, Vector2(0, 0))
-	screen_texts["title_screen"].push_back(statistics_text)
+	texts["title_screen"].push_back(statistics_text)
 
 	var settings_func = Callable(self, "_on_settings_button_pressed")
 	var settings_text = menu_text_scene.instantiate()
 	var settings_button = $TitleScreenContainer/SettingsButton
 	settings_button.add_child(settings_text)
 	settings_text.initialize(text_controller, "Settings ", settings_func, 35, Vector2(0, 0))
-	screen_texts["title_screen"].push_back(settings_text)
+	texts["title_screen"].push_back(settings_text)
 
 	var exit_func = Callable(self, "_on_exit_game_button_pressed")
 	var exit_text = menu_text_scene.instantiate()
 	var exit_game_button = $TitleScreenContainer/ExitGameButton
 	exit_game_button.add_child(exit_text)
 	exit_text.initialize(text_controller, "Exit Game", exit_func, 35, Vector2(0, 0))
-	screen_texts["title_screen"].push_back(exit_text)
+	texts["title_screen"].push_back(exit_text)
 	
 	# STATS SCREEN
 	var return_func = Callable(self, "_on_return_button_pressed")
@@ -164,14 +222,14 @@ func setup_texts():
 	var return_button = $StatsScreenContainer/ReturnButton
 	return_button.add_child(return_text_1)
 	return_text_1.initialize(text_controller, "Return to Title Screen", return_func, 35, Vector2(0, 0))
-	screen_texts["stats_screen"].push_back(return_text_1)
+	texts["stats_screen"].push_back(return_text_1)
 	
 	# SETTINGS SCREEN	
 	var return_text_2 = menu_text_scene.instantiate()
 	var return_button_2 = $SettingsScreenContainer/ReturnButton
 	return_button_2.add_child(return_text_2)
 	return_text_2.initialize(text_controller, "Return to Title Screen", return_func, 35, Vector2(0, 0))
-	screen_texts["settings_screen"].push_back(return_text_2)
+	texts["settings_screen"].push_back(return_text_2)
 	
 	var display_settings_container = $SettingsScreenContainer/DisplaySettingsContainer
 	
@@ -185,31 +243,28 @@ func setup_texts():
 	display_settings_container.add_child(resolution_text)
 	display_settings_container.move_child(resolution_text, 0)
 	resolution_text.initialize(text_controller, "Resolution ", resolution_func, 35, Vector2(0, 0))
-	screen_texts["settings_screen"].push_back(resolution_text) 
+	texts["settings_screen"].push_back(resolution_text) 
 	
 	var window_mode_func = Callable(self, "_popup_window_mode_button")
 	var window_mode_text = menu_text_scene.instantiate()
 	display_settings_container.add_child(window_mode_text)
 	display_settings_container.move_child(window_mode_text, 2)
 	window_mode_text.initialize(text_controller, "Window Mode", window_mode_func, 35, Vector2(0, 0))
-	screen_texts["settings_screen"].push_back(window_mode_text) 
+	texts["settings_screen"].push_back(window_mode_text) 
 	
 	var screen_func = Callable(self, "_popup_screen_button")
 	var screen_text = menu_text_scene.instantiate()
 	display_settings_container.add_child(screen_text)
 	display_settings_container.move_child(screen_text, 4)
 	screen_text.initialize(text_controller, "Screen ", screen_func, 35, Vector2(0, 0))
-	screen_texts["settings_screen"].push_back(screen_text) 
+	texts["settings_screen"].push_back(screen_text) 
 	
 	var wipe_data_func = Callable(self, "_on_wipe_data_button_pressed")
 	var wipe_data_text = menu_text_scene.instantiate()
 	var wipe_data_button = $SettingsScreenContainer/WipeDataButton
 	wipe_data_button.add_child(wipe_data_text)
 	wipe_data_text.initialize(text_controller, "WIPE DATA", wipe_data_func, 35, Vector2(0, 0))
-	screen_texts["settings_screen"].push_back(wipe_data_text)
-
-	for child in display_settings_container.get_children():
-		print(child.get_class())
+	texts["settings_screen"].push_back(wipe_data_text)
 
 func load_screen(screen: String):
 	screens[current_screen].visible = false	
@@ -230,7 +285,7 @@ func load_screen(screen: String):
 	
 	current_screen = screen
 	screens[current_screen].visible = true
-	text_controller.activate_texts(screen_texts[current_screen])
+	text_controller.activate_texts(texts[current_screen])
 
 func _ready():
 	text_controller = preload("res://scenes/menu/menu_text_controller.tscn").instantiate()

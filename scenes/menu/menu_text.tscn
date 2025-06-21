@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://2l7qklohp0hu" path="res://scenes/menu/menu_text.gd" id="1_4mfnx"]
 
 [node name="MenuText" type="RichTextLabel"]
-anchors_preset = -1
+z_index = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
