@@ -10,69 +10,61 @@ enum InputResult {
 # State 0 is active during free selection when any text can become active on character typed
 # State 1 is active after a text(s) has been chosen as active.
 var state = 0
-var texts: Array[TypingText]
-var active_texts: Array[TypingText]
-var blocked_texts: Array[TypingText]
-var present_words: Array[String]
-var word_list = load("res://scenes/game/word_list.gd").word_list
-var word_list_size = word_list.size()
-var rng = RandomNumberGenerator.new()
+var texts: Array[MenuText]
+var active_texts: Array[MenuText]
+var blocked_texts: Array[MenuText]
 
-func attach(tt: TypingText):
+# Used because completing a word that changes screen also unblocks all other texts
+# which would continue iterating through the active_texts array which gets changed
+# and they usually all get blocked
+var activate_was_called = false
+
+func attach(tt: MenuText):
 	texts.push_back(tt)
-	if state == 0:
-		active_texts.push_back(tt)
 	
-func detach(tt: TypingText):
+func detach(tt: MenuText):
 	texts.erase(tt)
 	active_texts.erase(tt)
 	blocked_texts.erase(tt)
 	
-func generate_word() -> String:
-	while(true):
-		var new_word = word_list[rng.randi_range(0, word_list_size-1)]
-		var is_subsumed = false
-		for word in present_words:
-			if word.begins_with(new_word) or new_word.begins_with(word):
-				is_subsumed = true
-				break
-		if not is_subsumed:
-			present_words.push_back(new_word)
-			return new_word
-	return ""
+func activate_texts(new_active: Array):	# Array of MenuText (can't state because of no nested typing support)
+	# Block
+	for tt in texts:
+		tt.reset()
+		blocked_texts.push_back(tt)
+	texts.clear()
+	active_texts.clear()
 	
-func block(tt: TypingText):
-	active_texts.erase(tt)
-	texts.erase(tt)
-	blocked_texts.push_back(tt)
-	tt.block()
-	if state == 1 and active_texts.size() == 0:	# If that was the only active text then make all non-blocked active
-		state = 0
-		active_texts = texts.duplicate()
-	
-func unblock(tt: TypingText):
-	blocked_texts.erase(tt)
-	texts.push_back(tt)
-	if state == 0:
+	# Unblock
+	for tt in new_active:
+		blocked_texts.erase(tt)
+		texts.push_back(tt)
 		active_texts.push_back(tt)
-	tt.unblock()
+		
+	state = 1
+	activate_was_called = true
 	
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
-		var incorrect_texts: Array[TypingText] = []
+		var incorrect_texts: Array[MenuText] = []
+		var iteration = 0	# Activate was called will block first input when it shouldn't if the screen change was called from non text source
 		for text in active_texts:
+			if activate_was_called:
+				activate_was_called = false
+				if iteration > 0:
+					return
+			iteration += 1
 			var result = text.process_input(event)
-			match result.type:
+			match result:
 				InputResult.CORRECT:
 					state = 1	# We have now started at least 1 word
 				InputResult.INCORRECT:
 					incorrect_texts.push_back(text)	# We still don't know if it should be red or reset
 				InputResult.FINISHED:	# Word finished, reset
-					present_words.erase(result.word)
 					state = 0
 				InputResult.DELETED:	# Word(s) undoed, reset
 					state = 0
-		if state == 0:	# In cases of reset, finish or when input doesn't fit any text
+		if state == 0:	# In cases of reset, finish, or when input doesn't fit any text
 			active_texts = texts.duplicate()
 		elif state == 1:	# If there's any active texts left, then non-matching ones should be reset
 			if active_texts.size() - incorrect_texts.size() > 0:

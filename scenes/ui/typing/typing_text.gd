@@ -16,7 +16,7 @@ var font_family: Font
 var space_sub = "⎵"	# Used to show a whitespace
 var space_sub_unicode = space_sub.unicode_at(0)
 var colors = {
-	"complete": "#08850a",	# Color for complete words
+	"complete": "#08850a",	# Color for complete characters
 	"wrong": "#ff3c00",		# Color for mistypes
 	"incoming": "#ffffff",	# Color for current and incoming characters
 	"special": "#ffdd80",	# Color for current and incoming special characters

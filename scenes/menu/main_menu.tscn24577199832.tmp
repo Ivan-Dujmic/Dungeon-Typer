@@ -1,0 +1,167 @@
+[gd_scene load_steps=6 format=3 uid="uid://qwcucdk6oio8"]
+
+[ext_resource type="Theme" uid="uid://cuf1n62gflky0" path="res://assets/menu/TitleScreen.tres" id="1_gfgjs"]
+[ext_resource type="Script" uid="uid://bawq4cfv2qo38" path="res://scenes/menu/main_menu.gd" id="1_ngy02"]
+[ext_resource type="Texture2D" uid="uid://dwoauqnr4rx6o" path="res://assets/menu/logo.png" id="1_sbiqi"]
+[ext_resource type="Texture2D" uid="uid://jh4liwhsymv" path="res://assets/menu/background.png" id="2_e66b0"]
+[ext_resource type="FontFile" uid="uid://nm0wv8f4x7q7" path="res://assets/fonts/ia-writer-mono-latin-700-normal.ttf" id="4_3r4tm"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource("1_gfgjs")
+script = ExtResource("1_ngy02")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("2_e66b0")
+
+[node name="TitleScreenContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1980.0
+offset_bottom = 1080.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="TitleScreenContainer"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_sbiqi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StartNewRunButton" type="Button" parent="TitleScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+
+[node name="StatisticsButton" type="Button" parent="TitleScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+
+[node name="SettingsButton" type="Button" parent="TitleScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+
+[node name="ExitGameButton" type="Button" parent="TitleScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+
+[node name="StatsScreenContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_top = 350.0
+offset_right = 1920.0
+offset_bottom = 750.0
+alignment = 1
+
+[node name="ReturnButton" type="Button" parent="StatsScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "Return to Title Screen"
+
+[node name="Spacer" type="Control" parent="StatsScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatsContainer" type="GridContainer" parent="StatsScreenContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+
+[node name="SettingsScreenContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_top = 230.0
+offset_right = 1920.0
+offset_bottom = 810.0
+alignment = 1
+
+[node name="ReturnButton" type="Button" parent="SettingsScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "Return to Title Screen"
+
+[node name="Spacer1" type="Control" parent="SettingsScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DisplaySettingsLabel" type="Label" parent="SettingsScreenContainer"]
+layout_mode = 2
+text = "Display Settings"
+horizontal_alignment = 1
+
+[node name="ResolutionButton" type="OptionButton" parent="SettingsScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="WindowModeButton" type="OptionButton" parent="SettingsScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ScreenButton" type="OptionButton" parent="SettingsScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Spacer2" type="Control" parent="SettingsScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DangerZoneLabel" type="Label" parent="SettingsScreenContainer"]
+layout_mode = 2
+text = "DANGER ZONE"
+horizontal_alignment = 1
+
+[node name="WipeDataButton" type="Button" parent="SettingsScreenContainer"]
+custom_minimum_size = Vector2(500, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+text = "WIPE DATA"
+
+[node name="WipeDataDialog" type="ConfirmationDialog" parent="SettingsScreenContainer"]
+title = "Wipe data?"
+ok_button_text = "WIPE DATA"
+dialog_text = "Are you sure you want to erase all saved data?"
+
+[connection signal="pressed" from="TitleScreenContainer/StartNewRunButton" to="." method="_on_start_new_run_button_pressed"]
+[connection signal="pressed" from="TitleScreenContainer/StatisticsButton" to="." method="_on_statistics_button_pressed"]
+[connection signal="pressed" from="TitleScreenContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="TitleScreenContainer/ExitGameButton" to="." method="_on_exit_game_button_pressed"]
+[connection signal="pressed" from="StatsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="pressed" from="SettingsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="item_selected" from="SettingsScreenContainer/ResolutionButton" to="." method="_on_resolution_button_item_selected"]
+[connection signal="item_selected" from="SettingsScreenContainer/WindowModeButton" to="." method="_on_window_mode_button_item_selected"]
+[connection signal="item_selected" from="SettingsScreenContainer/ScreenButton" to="." method="_on_screen_button_item_selected"]
+[connection signal="pressed" from="SettingsScreenContainer/WipeDataButton" to="." method="_on_wipe_data_button_pressed"]
+[connection signal="confirmed" from="SettingsScreenContainer/WipeDataDialog" to="." method="_on_confirmation_dialog_confirmed"]

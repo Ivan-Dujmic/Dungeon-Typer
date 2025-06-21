@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://qwcucdk6oio8"]
 
 [ext_resource type="Theme" uid="uid://cuf1n62gflky0" path="res://assets/menu/TitleScreen.tres" id="1_gfgjs"]
-[ext_resource type="Script" uid="uid://bawq4cfv2qo38" path="res://scenes/game/main_menu.gd" id="1_ngy02"]
+[ext_resource type="Script" uid="uid://bawq4cfv2qo38" path="res://scenes/menu/main_menu.gd" id="1_ngy02"]
 [ext_resource type="Texture2D" uid="uid://dwoauqnr4rx6o" path="res://assets/menu/logo.png" id="1_sbiqi"]
 [ext_resource type="Texture2D" uid="uid://jh4liwhsymv" path="res://assets/menu/background.png" id="2_e66b0"]
 [ext_resource type="FontFile" uid="uid://nm0wv8f4x7q7" path="res://assets/fonts/ia-writer-mono-latin-700-normal.ttf" id="4_3r4tm"]
@@ -44,7 +44,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Start New Run"
 
 [node name="StatisticsButton" type="Button" parent="TitleScreenContainer"]
 custom_minimum_size = Vector2(500, 70)
@@ -52,7 +51,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Statistics"
 
 [node name="SettingsButton" type="Button" parent="TitleScreenContainer"]
 custom_minimum_size = Vector2(500, 70)
@@ -60,7 +58,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Settings"
 
 [node name="ExitGameButton" type="Button" parent="TitleScreenContainer"]
 custom_minimum_size = Vector2(500, 70)
@@ -68,7 +65,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Exit Game"
 
 [node name="StatsScreenContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -121,18 +117,30 @@ layout_mode = 2
 text = "Display Settings"
 horizontal_alignment = 1
 
-[node name="ResolutionButton" type="OptionButton" parent="SettingsScreenContainer"]
-custom_minimum_size = Vector2(500, 70)
+[node name="DisplaySettingsContainer" type="GridContainer" parent="SettingsScreenContainer"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 2
+
+[node name="Placeholder1" type="Node" parent="SettingsScreenContainer/DisplaySettingsContainer"]
+
+[node name="ResolutionButton" type="OptionButton" parent="SettingsScreenContainer/DisplaySettingsContainer"]
+custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="WindowModeButton" type="OptionButton" parent="SettingsScreenContainer"]
-custom_minimum_size = Vector2(500, 70)
+[node name="Placeholder2" type="Node" parent="SettingsScreenContainer/DisplaySettingsContainer"]
+
+[node name="WindowModeButton" type="OptionButton" parent="SettingsScreenContainer/DisplaySettingsContainer"]
+custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="ScreenButton" type="OptionButton" parent="SettingsScreenContainer"]
-custom_minimum_size = Vector2(500, 70)
+[node name="Placeholder3" type="Node" parent="SettingsScreenContainer/DisplaySettingsContainer"]
+
+[node name="ScreenButton" type="OptionButton" parent="SettingsScreenContainer/DisplaySettingsContainer"]
+custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -164,8 +172,8 @@ dialog_text = "Are you sure you want to erase all saved data?"
 [connection signal="pressed" from="TitleScreenContainer/ExitGameButton" to="." method="_on_exit_game_button_pressed"]
 [connection signal="pressed" from="StatsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
 [connection signal="pressed" from="SettingsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
-[connection signal="item_selected" from="SettingsScreenContainer/ResolutionButton" to="." method="_on_resolution_button_item_selected"]
-[connection signal="item_selected" from="SettingsScreenContainer/WindowModeButton" to="." method="_on_window_mode_button_item_selected"]
-[connection signal="item_selected" from="SettingsScreenContainer/ScreenButton" to="." method="_on_screen_button_item_selected"]
+[connection signal="item_selected" from="SettingsScreenContainer/DisplaySettingsContainer/ResolutionButton" to="." method="_on_resolution_button_item_selected"]
+[connection signal="item_selected" from="SettingsScreenContainer/DisplaySettingsContainer/WindowModeButton" to="." method="_on_window_mode_button_item_selected"]
+[connection signal="item_selected" from="SettingsScreenContainer/DisplaySettingsContainer/ScreenButton" to="." method="_on_screen_button_item_selected"]
 [connection signal="pressed" from="SettingsScreenContainer/WipeDataButton" to="." method="_on_wipe_data_button_pressed"]
 [connection signal="confirmed" from="SettingsScreenContainer/WipeDataDialog" to="." method="_on_confirmation_dialog_confirmed"]
