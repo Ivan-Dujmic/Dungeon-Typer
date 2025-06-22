@@ -42,16 +42,14 @@ func die():
 	queue_free()
 
 # Position should be a tile coordinate
-func initialize(class_init: EnemyClass, difficulty_init: int, position_init: Vector2i):
-	difficulty = difficulty_init
-	
+func initialize(class_init: EnemyClass, position_init: Vector2i):
 	health_bar = $"HealthBar"
-	max_health = class_init.max_health * difficulty
+	max_health = class_init.max_health * GameState.difficulty
 	health = max_health
 	health_regen = class_init.health_regen
 	attack = class_init.attack
 	action_range = class_init.action_range
-	speed = class_init.speed * difficulty
+	speed = class_init.speed * GameState.difficulty
 	action_cooldown = class_init.action_cooldown
 	
 	range_area.set_range(action_range)

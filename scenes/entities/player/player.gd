@@ -4,6 +4,8 @@ class_name Player
 @onready var text_controller = get_node("/root/Game/TextController")
 @onready var health_bar = get_node("/root/Game/UI/HealthBar")
 
+signal player_moved(new_position: Vector2)
+
 var target = Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE)	# Target location
 var last_position = target	# For inputs that try to go through obstacles (if no position change then stop trying)
 
@@ -31,15 +33,13 @@ func _on_range_area_area_exited(area: Area2D):
 	if area is ItemDrop:
 		text_controller.block(area.typing_text)
 
-func initialize(class_init: PlayerClass, difficulty_init: int, position_init: Vector2):
-	difficulty = difficulty_init
-	
+func initialize(class_init: PlayerClass, position_init: Vector2):
 	max_health = class_init.max_health
 	health = max_health
 	health_regen = class_init.health_regen
 	attack = class_init.attack
 	action_range = class_init.action_range
-	speed = class_init.speed / difficulty
+	speed = class_init.speed / GameState.difficulty
 	luck = class_init.luck
 	
 	range_area.set_range(action_range)
@@ -65,9 +65,7 @@ func _physics_process(_delta):
 			velocity = direction * max(8, 2 * global_position.distance_to(target))
 			move_and_slide()
 			
-			var current_tile_x = global_position.x / 16
-			dungeon_generator.generate_to_x_line(current_tile_x + 20)
-			dungeon_generator.erase_to_x_line(current_tile_x - 10)
+			emit_signal("player_moved", global_position)
 
 			animated_sprite.scale.x = - 1 if velocity.x < 0 else 1	# Looking direction
 			

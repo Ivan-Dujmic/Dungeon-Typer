@@ -1,70 +1,6 @@
-extends Node2D
+extends DungeonGenerator
 
-@onready var navigation_region = $NavigationRegion
-@onready var floor_layer = $NavigationRegion/Floor
-@onready var wall_layer = $Walls
-
-@onready var enemy_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/EnemyGenerator")
-
-var difficulty
-
-var rng = RandomNumberGenerator.new()
 var diverging_path_chance = 0.1	# 1 = 100%
-
-# Storing tile positions as a map so we can check it's surroundings when drawing textures
-# The map value is useless as we are only checking if the key exists in the map which effictively makes this map a set 
-# (there are no sets in GDScript)
-var floor_tiles: Dictionary[Vector2i, bool] = {}
-var wall_tiles: Dictionary[Vector2i, bool] = {}
-
-# Also remember tiles sorted by the x coordinate for faster cleanup
-var x_sorted_floor_tiles: Dictionary[int, Array]
-var x_sorted_wall_tiles: Dictionary[int, Array]
-
-var highest_generated_x
-var highest_erased_x
-var highest_drawn_x
-
-# We don't want to spawn enemies immediately
-var can_spawn = false
-
-# Draws textures for tiles until x
-# Should be called for x only once tiles for x+1 were generated
-func draw_to_x_tiles(new_x: int):
-	if new_x > highest_drawn_x:
-		for x in range(highest_drawn_x + 1, new_x + 1):
-			if x_sorted_floor_tiles.has(x):
-				for y in x_sorted_floor_tiles[x]:
-					# Pick random floor texture
-					var texture_cords = Vector2i(rng.randi_range(6, 9), rng.randi_range(0, 2))
-					floor_layer.set_cell(Vector2i(x, y), 0, texture_cords)
-			if x_sorted_wall_tiles.has(x):
-				for y in x_sorted_wall_tiles[x]:
-					var texture_cords = Vector2i(-1, -1)
-		
-					if floor_tiles.has(Vector2i(x, y + 1)):  # Tile down
-						texture_cords = Vector2i(rng.randi_range(1, 4), 0)
-					elif floor_tiles.has(Vector2i(x, y - 1)):  # Tile up
-						texture_cords = Vector2i(rng.randi_range(1, 4), 4)
-					elif floor_tiles.has(Vector2i(x + 1, y)):  # Tile right
-						texture_cords = Vector2i(0, rng.randi_range(0, 3))
-					elif floor_tiles.has(Vector2i(x - 1, y)):  # Tile left
-						texture_cords = Vector2i(5, rng.randi_range(0, 3))
-					elif floor_tiles.has(Vector2i(x + 1, y + 1)):  # Tile down right
-						texture_cords = Vector2i(0, rng.randi_range(0, 3))
-					elif floor_tiles.has(Vector2i(x - 1, y + 1)):  # Tile down left
-						texture_cords = Vector2i(5, rng.randi_range(0, 3))
-					elif floor_tiles.has(Vector2i(x + 1, y - 1)):  # Tile up right
-						texture_cords = Vector2i(0, 4)
-					elif floor_tiles.has(Vector2i(x - 1, y - 1)):  # Tile up left
-						texture_cords = Vector2i(5, 4)
-					
-					if texture_cords != Vector2i(-1, -1):
-						wall_layer.set_cell(Vector2i(x, y), 0, texture_cords)
-					
-	highest_drawn_x = new_x
-	#if not navigation_region.is_baking():
-		#navigation_region.bake_navigation_polygon()
 	
 # Generate more dungeon until and on specific x
 func generate_to_x_line(new_x: int):
@@ -118,22 +54,6 @@ func generate_to_x_line(new_x: int):
 		highest_generated_x = new_x
 	
 	draw_to_x_tiles(new_x - 1)
-	
-# Erase tiles before and on specific x (because the player can't go back)
-func erase_to_x_line(new_x: int):
-	if new_x > highest_erased_x:
-		for x in range(highest_erased_x + 1, new_x + 1):
-			if x_sorted_floor_tiles.has(x):
-				for y in x_sorted_floor_tiles[x]:
-					floor_layer.set_cell(Vector2i(x, y), -1)
-					floor_tiles.erase(Vector2i(x, y))
-				x_sorted_floor_tiles.erase(x)
-			if x_sorted_wall_tiles.has(x):
-				for y in x_sorted_wall_tiles[x]:
-					wall_layer.set_cell(Vector2i(x, y), -1)
-					wall_tiles.erase(Vector2i(x, y))
-				x_sorted_wall_tiles.erase(x)
-	highest_erased_x = new_x
 
 func init_dungeon_start():
 	# Left walls
@@ -148,7 +68,3 @@ func init_dungeon_start():
 	highest_drawn_x = -1
 	
 	generate_to_x_line(20)
-
-func _ready():
-	init_dungeon_start()
-	can_spawn = true

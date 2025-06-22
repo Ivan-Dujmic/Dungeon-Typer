@@ -1,5 +1,5 @@
 extends Node
 
-var dungeon
-var character
+var dungeon = "Crypts"
+var character = "Knight"
 var difficulty = 10

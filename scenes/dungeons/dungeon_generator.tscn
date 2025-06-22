@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7lwvt3qsx1rt"]
+[gd_scene load_steps=13 format=3 uid="uid://daq1x1mxh3x80"]
 
-[ext_resource type="Script" uid="uid://c7xwim5n713m0" path="res://scenes/dungeons/crypts/dungeon_generator.gd" id="1_lwm1w"]
-[ext_resource type="Texture2D" uid="uid://cwgikp3oo621b" path="res://assets/textures/dungeons/crypts/tileset.png" id="2_xuv1t"]
+[ext_resource type="Script" uid="uid://b2gnnaf2mk3v5" path="res://scenes/dungeons/dungeon_generator.gd" id="1_dkdws"]
+[ext_resource type="Texture2D" uid="uid://cwgikp3oo621b" path="res://assets/textures/dungeons/crypts/tileset.png" id="2_dkdws"]
+[ext_resource type="Script" uid="uid://s7yspcm1xuhd" path="res://scenes/dungeons/dungeon_renderer.gd" id="3_6fpe6"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_mjyic"]
 agent_radius = 5.0
@@ -31,7 +32,7 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8
 agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kldst"]
-texture = ExtResource("2_xuv1t")
+texture = ExtResource("2_dkdws")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -170,7 +171,7 @@ navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_kldst")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4ihhh"]
-texture = ExtResource("2_xuv1t")
+texture = ExtResource("2_dkdws")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2, -8, -5, -7, -7, -5, -8, -2, -8, 2, -7, 5, -5, 7, -2, 8, 2, 8, 5, 7, 7, 5, 8, 2, 8, -2, 7, -5, 5, -7, 2, -8)
 1:0/0 = 0
@@ -311,7 +312,10 @@ sources/0 = SubResource("TileSetAtlasSource_4ihhh")
 
 [node name="DungeonGenerator" type="Node2D"]
 y_sort_enabled = true
-script = ExtResource("1_lwm1w")
+script = ExtResource("1_dkdws")
+
+[node name="DungeonRenderer" type="Node" parent="."]
+script = ExtResource("3_6fpe6")
 
 [node name="NavigationRegion" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_mjyic")

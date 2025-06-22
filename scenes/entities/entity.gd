@@ -3,10 +3,7 @@ class_name Entity
 
 @onready var range_area = $RangeArea
 @onready var navigation_agent = $NavigationAgent
-@onready var dungeon_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/DungeonGenerator")
 @onready var animated_sprite = $AnimatedSprite
-
-var difficulty
 
 # Stats
 var max_health: int

@@ -2,20 +2,22 @@ extends Node2D
 
 @onready var tiles_viewport_container = $TilesViewportContainer
 @onready var tiles_viewport = $TilesViewportContainer/TilesViewport
+@onready var y_sort = $TilesViewportContainer/TilesViewport/YSort
 @onready var player = $TilesViewportContainer/TilesViewport/YSort/Player
-@onready var enemy_generator = $TilesViewportContainer/TilesViewport/YSort/EnemyGenerator
-@onready var dungeon_generator = $TilesViewportContainer/TilesViewport/YSort/DungeonGenerator
+@onready var camera = $TilesViewportContainer/TilesViewport/YSort/Player/Camera
 
-@onready var knight_class = preload("res://scenes/entities/player/knight/knight_class.tres")
-@onready var wizard_class = preload("res://scenes/entities/player/wizard/wizard_class.tres")
-
-var difficulty = 10
 var ratio = 0
 
 func _ready():
-	player.initialize(knight_class, difficulty, Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE))
-	enemy_generator.difficulty = difficulty
-	dungeon_generator.difficulty = difficulty
+	var dungeon_generator = load("res://scenes/dungeons/%s/dungeon_generator.tscn" % (GameState.dungeon.to_lower().replace(" ", "_"))).instantiate()
+	y_sort.add_child(dungeon_generator)
+	y_sort.move_child(dungeon_generator, 0)
+	
+	var dungeon_background = load("res://scenes/dungeons/%s/dungeon_background.tscn" % (GameState.dungeon.to_lower().replace(" ", "_"))).instantiate()
+	camera.add_child(dungeon_background)
+	
+	var player_class = load("res://scenes/entities/player/%s/player_class.tres" % (GameState.character.to_lower().replace(" ", "_")))
+	player.initialize(player_class, Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE))
 	
 func _process(_delta):
 	var viewport = get_viewport_rect()

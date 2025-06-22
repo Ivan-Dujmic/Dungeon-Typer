@@ -113,6 +113,7 @@ columns = 5
 
 [node name="DifficultySelectScreenContainer" type="VBoxContainer" parent="."]
 visible = false
+layout_mode = 0
 offset_top = 375.0
 offset_right = 1920.0
 offset_bottom = 700.0
@@ -133,6 +134,9 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+min_value = 1.0
+max_value = 50.0
+value = 1.0
 rounded = true
 alignment = 1
 

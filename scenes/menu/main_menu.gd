@@ -33,7 +33,6 @@ func setup_title_screen():
 	
 func _on_start_new_run_button_pressed() -> void:
 	load_screen("dungeon_select_screen")
-	#get_tree().change_scene_to_file("res://scenes/game/game.tscn")
 	
 func _on_statistics_button_pressed() -> void:
 	load_screen("stats_screen")
@@ -169,9 +168,7 @@ func _on_select_difficulty(difficulty: int):
 	GameState.difficulty = difficulty
 	
 func _on_start_run_button_pressed():
-	print("Dungeon:" + GameState.dungeon)
-	print("Character:" + GameState.character)
-	print("Difficulty:" + str(GameState.difficulty))
+	get_tree().change_scene_to_file("res://scenes/game/game.tscn")
 	
 # STATS
 func setup_stats_screen():

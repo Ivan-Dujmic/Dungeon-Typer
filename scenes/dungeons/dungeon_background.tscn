@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsmlo68jakmaq"]
+
+[ext_resource type="Script" uid="uid://nhjynaf1wngw" path="res://scenes/dungeons/dungeon_background.gd" id="1_ickdr"]
+
+[node name="Background" type="Node2D"]
+z_as_relative = false
+script = ExtResource("1_ickdr")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -26.0
+offset_top = -22.0
+offset_right = 344.0
+offset_bottom = 202.0

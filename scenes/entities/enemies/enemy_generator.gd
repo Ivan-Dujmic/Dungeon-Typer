@@ -7,8 +7,6 @@ extends Node2D
 
 var rng = RandomNumberGenerator.new()
 
-var difficulty
-
 # The position should be a tile coordinate
 func attempt_enemy_spawn(enemy: String, chance: float, position_init: Vector2i):
 	if rng.randf() <= chance:
@@ -16,7 +14,7 @@ func attempt_enemy_spawn(enemy: String, chance: float, position_init: Vector2i):
 			"Skeleton":
 				var new_enemy = skeleton_scene.instantiate()
 				add_child(new_enemy)
-				new_enemy.initialize(skeleton_class, difficulty, position_init)
+				new_enemy.initialize(skeleton_class, position_init)
 				new_enemy.set_target(player)
 			_:
 				return
