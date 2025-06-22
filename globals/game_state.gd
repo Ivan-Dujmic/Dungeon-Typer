@@ -2,4 +2,4 @@ extends Node
 
 var dungeon
 var character
-var difficulty
+var difficulty = 10

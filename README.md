@@ -1,13 +1,4 @@
-# Dungeon Typer
-## Razvoj igre za vježbanje tipkanja na tipkovnici s elementima roguelike žanra
-### Opis zadatka
-Brzo i precizno tipkanje na tipkovnici postaje sve važnija u digitalnom dobu, a interaktivne igre mogu doprinijeti
-motivaciji korisnika za usvajanje i poboljšanje ove vještine. U okviru završnog rada potrebno je razviti računalnu
-igru koja kombinira vježbu tipkanja s elementima roguelike žanra, poput nasumično generiranih izazova,
-progresivnih nadogradnji i resetiranja napretka nakon neuspjeha. Potrebno je istražiti i opisati postojeće
-aplikacije i igre za učenje tipkanja te analizirati njihove pristupe i mehanike. Potom je potrebno definirati koncept
-igre - kako će izgledati izazovi, kako će se generirati nasumični elementi i koje će nadogradnje biti dostupne
-igračima. Za definirani koncept igre potrebno je razviti sustav igre koji uključuje unos teksta kao osnovni način
-interakcije s igrom, te implementirati roguelike elemente, poput nasumično generiranih izazova, perma-smrti
-(permadeath) koja resetira napredak nakon neuspjeha, te postupnog razvoja igrača kroz odabir nadogradnji
-tijekom igre. Pri implementaciji voditi računa o ravnoteži između edukativnog i zabavnog aspekta.
+# Keycrawl
+## Development of a Keyboard Typing Practice Game with Roguelike Elements
+### Task
+Fast and accurate typing on a keyboard is becoming increasingly important in the digital age, and interactive games can contribute to motivating users to learn and improve this skill. As part of the bachelor thesis, it is necessary to develop a computer game that combines typing practice with elements of the roguelike genre, such as randomly generated challenges, progressive upgrades, and progress reset upon failure. It is necessary to research and describe existing applications and games meant for learning typing and analyze their approaches and mechanics. Then, the game concept must be defined—what the challenges will look like, how the random elements will be generated, and which upgrades will be available to players. Based on the defined concept, a game system needs to be developed that includes text input as the main form of interaction with the game and implements roguelike elements such as randomly generated challenges, permadeath (permanent death that resets progress upon failure), and gradual player development through upgrade selection during the game. When implementing, attention should be paid to maintaining a balance between the educational and entertainment aspects.

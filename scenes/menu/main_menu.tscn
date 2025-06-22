@@ -70,9 +70,9 @@ theme_override_font_sizes/font_size = 35
 [node name="DungeonSelectScreenContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 2
-offset_top = 200.0
+offset_top = 150.0
 offset_right = 1920.0
-offset_bottom = 600.0
+offset_bottom = 950.0
 alignment = 1
 
 [node name="ReturnButton" type="Button" parent="DungeonSelectScreenContainer"]
@@ -81,22 +81,71 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Return to Title Screen"
+
+[node name="Spacer" type="Control" parent="DungeonSelectScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="CharacterSelectScreenContainer" type="VBoxContainer" parent="."]
 visible = false
-offset_top = 200.0
+layout_mode = 0
+offset_top = 320.0
 offset_right = 1920.0
-offset_bottom = 600.0
+offset_bottom = 650.0
 alignment = 1
 
 [node name="ReturnButton" type="Button" parent="CharacterSelectScreenContainer"]
-custom_minimum_size = Vector2(500, 70)
+custom_minimum_size = Vector2(600, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Return to Title Screen"
+
+[node name="Spacer" type="Control" parent="CharacterSelectScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CharactersContainer" type="GridContainer" parent="CharacterSelectScreenContainer"]
+custom_minimum_size = Vector2(550, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 5
+
+[node name="DifficultySelectScreenContainer" type="VBoxContainer" parent="."]
+visible = false
+offset_top = 375.0
+offset_right = 1920.0
+offset_bottom = 700.0
+alignment = 1
+
+[node name="ReturnButton" type="Button" parent="DifficultySelectScreenContainer"]
+custom_minimum_size = Vector2(600, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
+
+[node name="Spacer1" type="Control" parent="DifficultySelectScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DifficultyBox" type="SpinBox" parent="DifficultySelectScreenContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+rounded = true
+alignment = 1
+
+[node name="Spacer2" type="Control" parent="DifficultySelectScreenContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartRunButton" type="Button" parent="DifficultySelectScreenContainer"]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("4_3r4tm")
+theme_override_font_sizes/font_size = 35
 
 [node name="StatsScreenContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -112,7 +161,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Return to Title Screen"
 
 [node name="Spacer" type="Control" parent="StatsScreenContainer"]
 layout_mode = 2
@@ -138,7 +186,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "Return to Title Screen"
 
 [node name="Spacer1" type="Control" parent="SettingsScreenContainer"]
 layout_mode = 2
@@ -191,7 +238,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("4_3r4tm")
 theme_override_font_sizes/font_size = 35
-text = "WIPE DATA"
 
 [node name="WipeDataDialog" type="ConfirmationDialog" parent="SettingsScreenContainer"]
 title = "Wipe data?"
@@ -205,7 +251,9 @@ script = ExtResource("6_xn6kt")
 [connection signal="pressed" from="TitleScreenContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="TitleScreenContainer/ExitGameButton" to="." method="_on_exit_game_button_pressed"]
 [connection signal="pressed" from="DungeonSelectScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
-[connection signal="pressed" from="CharacterSelectScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="pressed" from="CharacterSelectScreenContainer/ReturnButton" to="." method="_on_return_button_to_dungeon_pressed"]
+[connection signal="pressed" from="DifficultySelectScreenContainer/ReturnButton" to="." method="_on_return_button_to_character_pressed"]
+[connection signal="pressed" from="DifficultySelectScreenContainer/StartRunButton" to="." method="_on_start_run_button_pressed"]
 [connection signal="pressed" from="StatsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
 [connection signal="pressed" from="SettingsScreenContainer/ReturnButton" to="." method="_on_return_button_pressed"]
 [connection signal="item_selected" from="SettingsScreenContainer/DisplaySettingsContainer/ResolutionButton" to="." method="_on_resolution_button_item_selected"]

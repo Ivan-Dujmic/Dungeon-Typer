@@ -4,6 +4,7 @@ extends Control
 	"title_screen": $TitleScreenContainer,
 	"dungeon_select_screen": $DungeonSelectScreenContainer,
 	"character_select_screen": $CharacterSelectScreenContainer,
+	"difficulty_select_screen": $DifficultySelectScreenContainer,
 	"stats_screen": $StatsScreenContainer,
 	"settings_screen": $SettingsScreenContainer
 }
@@ -13,6 +14,7 @@ var current_screen = "title_screen"
 	"title_screen": [],
 	"dungeon_select_screen": [],
 	"character_select_screen": [],
+	"difficulty_select_screen": [],
 	"stats_screen": [],
 	"settings_screen": [],
 	"wipe_data_dialog": []
@@ -45,6 +47,12 @@ func _on_exit_game_button_pressed() -> void:
 # RETURN BUTTON
 func _on_return_button_pressed() -> void:
 	load_screen("title_screen")
+
+func _on_return_button_to_dungeon_pressed() -> void:
+	load_screen("dungeon_select_screen")
+	
+func _on_return_button_to_character_pressed() -> void:
+	load_screen("character_select_screen")
 	
 # DUNGEON SELECT
 func setup_dungeon_select_screen():
@@ -95,12 +103,75 @@ func setup_dungeon_select_screen():
 
 func _on_select_dungeon(dungeon: String):
 	GameState.dungeon = dungeon
-	print("GOING TO NEW SCREEN WITH DUNGEON " + dungeon)
-	# TODO: go to next screen
+	load_screen("character_select_screen")
 	
 # CHARACTER SELECT
 func setup_character_select_screen():
-	pass
+	# Load preview images
+	for character_name in Progress.unlocked_characters:
+		var folder = character_name.to_lower().replace(" ", "_")
+		character_previews[character_name] = load("res://assets/textures/entities/player/%s/preview.png" % folder)
+		
+	var container = $CharacterSelectScreenContainer/CharactersContainer
+	
+	for character in character_previews.keys():
+		# BUTTON
+		var button = Button.new()
+		button.custom_minimum_size = Vector2(128, 210)
+		button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		button.add_theme_font_override("font", button_font)
+		button.add_theme_font_size_override("font_size", 30)
+		button.pressed.connect(func(): _on_select_character(character))
+
+		# IMAGE
+		var texture_rect = TextureRect.new()
+		texture_rect.texture = character_previews[character]
+		texture_rect.expand = true
+		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		texture_rect.anchor_right = 1.0
+		texture_rect.anchor_bottom = 1.0
+		texture_rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		texture_rect.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		button.add_child(texture_rect)
+
+		# MT
+		var mt = menu_text_scene.instantiate()
+		button.add_child(mt)
+		mt.initialize(text_controller, character, Callable(self, "_on_select_character").bind(character), 30, Vector2(0, 0))
+		mt.anchor_left = 0.0
+		mt.anchor_right = 1.0
+		mt.anchor_top = 1.0
+		mt.anchor_bottom = 1.0
+		mt.offset_left = 0
+		mt.offset_right = 0
+		mt.offset_bottom = -10
+		mt.offset_top = -50
+		mt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		mt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		texts["character_select_screen"].push_back(mt)
+		container.add_child(button)
+	
+func _on_select_character(character: String):
+	GameState.character = character
+	load_screen("difficulty_select_screen")
+	
+func setup_difficulty_select_screen():
+	var difficulty_box = $DifficultySelectScreenContainer/DifficultyBox
+	difficulty_box.value = GameState.difficulty
+	difficulty_box.value_changed.connect(_on_select_difficulty)
+	
+func focus_difficulty_box():
+	var difficulty_box = $DifficultySelectScreenContainer/DifficultyBox
+	difficulty_box.get_line_edit().grab_focus()
+	
+func _on_select_difficulty(difficulty: int):
+	GameState.difficulty = difficulty
+	
+func _on_start_run_button_pressed():
+	print("Dungeon:" + GameState.dungeon)
+	print("Character:" + GameState.character)
+	print("Difficulty:" + str(GameState.difficulty))
 	
 # STATS
 func setup_stats_screen():
@@ -289,6 +360,39 @@ func setup_texts():
 	return_text_3.initialize(text_controller, "Return to Title Screen", return_func, 35, Vector2(0, 0))
 	texts["dungeon_select_screen"].push_back(return_text_3)
 	
+	# CHARACTER SELECT SCREEN
+	var return_func_to_dungeon = Callable(self, "_on_return_button_to_dungeon_pressed")
+	var return_text_4 = menu_text_scene.instantiate()
+	var return_button_4 = $CharacterSelectScreenContainer/ReturnButton
+	return_button_4.add_child(return_text_4)
+	return_text_4.initialize(text_controller, "Return to Dungeon Screen", return_func_to_dungeon, 35, Vector2(0, 0))
+	texts["character_select_screen"].push_back(return_text_4)
+	
+	# DIFFICULTY SELECT SCREEN
+	var return_func_to_character = Callable(self, "_on_return_button_to_character_pressed")
+	var return_text_5 = menu_text_scene.instantiate()
+	var return_button_5 = $DifficultySelectScreenContainer/ReturnButton
+	return_button_5.add_child(return_text_5)
+	return_text_5.initialize(text_controller, "Return to Character Screen", return_func_to_character, 35, Vector2(0, 0))
+	texts["difficulty_select_screen"].push_back(return_text_5)
+	
+	var focus_difficulty_box_func = Callable(self, "focus_difficulty_box")
+	var focus_difficulty_box_text = menu_text_scene.instantiate()
+	var difficulty_screen_container = $DifficultySelectScreenContainer
+	difficulty_screen_container.add_child(focus_difficulty_box_text)
+	difficulty_screen_container.move_child(focus_difficulty_box_text, 2)
+	focus_difficulty_box_text.initialize(text_controller, "Difficulty", focus_difficulty_box_func, 35, Vector2(0, 0))
+	texts["difficulty_select_screen"].push_back(focus_difficulty_box_text)
+	focus_difficulty_box_text.custom_minimum_size.x = 250
+	focus_difficulty_box_text.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	
+	var start_run_func = Callable(self, "_on_start_run_button_pressed")
+	var start_run_text = menu_text_scene.instantiate()
+	var start_run_button = $DifficultySelectScreenContainer/StartRunButton
+	start_run_button.add_child(start_run_text)
+	start_run_text.initialize(text_controller, "Start Run", start_run_func, 35, Vector2(0, 0))
+	texts["difficulty_select_screen"].push_back(start_run_text)
+	
 	# STATS SCREEN
 	var return_text_1 = menu_text_scene.instantiate()
 	var return_button_1 = $StatsScreenContainer/ReturnButton
@@ -356,6 +460,10 @@ func load_screen(screen: String):
 			screen_button.select(DisplayServer.window_get_current_screen())
 		"dungeon_select_screen":
 			screens["dungeon_select_screen"].get_child(0).grab_focus()
+		"character_select_screen":
+			screens["character_select_screen"].get_child(0).grab_focus()
+		"difficulty_select_screen":
+			screens["difficulty_select_screen"].get_child(0).grab_focus()
 	
 	current_screen = screen
 	screens[current_screen].visible = true
@@ -369,6 +477,7 @@ func _ready():
 	setup_title_screen()
 	setup_dungeon_select_screen()
 	setup_character_select_screen()
+	setup_difficulty_select_screen()
 	setup_settings_screen()	
 	setup_stats_screen()
 	setup_texts()
