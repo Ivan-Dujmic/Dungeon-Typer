@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://qwcucdk6oio8"]
+[gd_scene load_steps=8 format=3 uid="uid://qwcucdk6oio8"]
 
 [ext_resource type="Theme" uid="uid://cuf1n62gflky0" path="res://assets/menu/TitleScreen.tres" id="1_gfgjs"]
 [ext_resource type="Script" uid="uid://bawq4cfv2qo38" path="res://scenes/menu/main_menu.gd" id="1_ngy02"]
 [ext_resource type="Texture2D" uid="uid://dwoauqnr4rx6o" path="res://assets/menu/logo.png" id="1_sbiqi"]
 [ext_resource type="Texture2D" uid="uid://jh4liwhsymv" path="res://assets/menu/background.png" id="2_e66b0"]
+[ext_resource type="Script" uid="uid://bfr5ofnyjpfao" path="res://scenes/menu/menu_text_controller.gd" id="3_isoef"]
 [ext_resource type="FontFile" uid="uid://nm0wv8f4x7q7" path="res://assets/fonts/ia-writer-mono-latin-700-normal.ttf" id="4_3r4tm"]
 [ext_resource type="Script" uid="uid://cew6r1fpq1off" path="res://scenes/menu/wipe_data_dialog.gd" id="6_xn6kt"]
 
@@ -16,6 +17,9 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 theme = ExtResource("1_gfgjs")
 script = ExtResource("1_ngy02")
+
+[node name="TextController" type="Node" parent="."]
+script = ExtResource("3_isoef")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 0

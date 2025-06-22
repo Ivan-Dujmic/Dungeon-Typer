@@ -19,7 +19,7 @@ var current_screen = "title_screen"
 	"settings_screen": [],
 	"wipe_data_dialog": []
 }
-var text_controller
+@onready var text_controller = $TextController
 @onready var menu_text_scene = preload("res://scenes/menu/menu_text.tscn")
 
 @onready var dungeon_previews: Dictionary = {}
@@ -104,6 +104,21 @@ func _on_select_dungeon(dungeon: String):
 	GameState.dungeon = dungeon
 	load_screen("character_select_screen")
 	
+func _wipe_dungeon_unlocks():
+	# Everything except return button
+	for i in range(1, len(texts["dungeon_select_screen"])):
+		text_controller.detach(texts["dungeon_select_screen"][i])
+	texts["dungeon_select_screen"] = texts["dungeon_select_screen"].slice(0, 1)
+	
+	var container = $DungeonSelectScreenContainer
+	for child in container.get_children():
+		if child is Button:
+			if child.name != "ReturnButton":
+				container.remove_child(child)
+				child.queue_free()
+	
+	setup_dungeon_select_screen()
+	
 # CHARACTER SELECT
 func setup_character_select_screen():
 	# Load preview images
@@ -155,6 +170,21 @@ func _on_select_character(character: String):
 	GameState.character = character
 	load_screen("difficulty_select_screen")
 	
+func _wipe_character_unlocks():
+	# Everything except return button
+	for i in range(1, len(texts["character_select_screen"])):
+		text_controller.detach(texts["character_select_screen"][i])
+	texts["character_select_screen"] = texts["character_select_screen"].slice(0, 1)
+	
+	var container = $CharacterSelectScreenContainer/CharactersContainer
+	for child in container.get_children():
+		if child is Button:
+			child.queue_free()
+			container.remove_child(child)
+		
+	setup_character_select_screen()
+	
+# DIFFICULTY SELECT
 func setup_difficulty_select_screen():
 	var difficulty_box = $DifficultySelectScreenContainer/DifficultyBox
 	difficulty_box.value = GameState.difficulty
@@ -307,6 +337,8 @@ func _on_confirmation_dialog_confirmed() -> void:
 		text_controller.detach(tt)
 		tt.queue_free()
 	texts["wipe_data_dialog"].clear()
+	_wipe_dungeon_unlocks()
+	_wipe_character_unlocks()
 	
 func _confirm_wipe_data_dialog():
 	var wipe_data_dialog = $SettingsScreenContainer/WipeDataDialog
@@ -467,17 +499,17 @@ func load_screen(screen: String):
 	text_controller.activate_texts(texts[current_screen])
 
 func _ready():
-	text_controller = preload("res://scenes/menu/menu_text_controller.tscn").instantiate()
-	add_child(text_controller)
-	
 	Settings.apply_all_settings()
+	
+	setup_texts()
+	
 	setup_title_screen()
 	setup_dungeon_select_screen()
 	setup_character_select_screen()
 	setup_difficulty_select_screen()
 	setup_settings_screen()	
 	setup_stats_screen()
-	setup_texts()
+	
 	load_screen("title_screen")
 
 func _unhandled_input(event):
