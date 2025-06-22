@@ -68,7 +68,8 @@ func _ready():
 
 func _physics_process(_delta):
 	if target:
-		navigation_agent.target_position = target.global_position
+		if global_position.distance_to(target.global_position) < 256:
+			navigation_agent.target_position = target.global_position
 		
 		if not navigation_agent.is_navigation_finished():
 			animated_sprite.play("moving")
