@@ -17,6 +17,7 @@ var colors = {
 	"wrong": "#ff0000",		# Color for mistypes
 	"incoming": "#de6600",	# Color for current and incoming characters
 }
+var space_sub = "_"	# Used to show a whitespace in mistakes
 
 # Word tracking
 var chars_completed
@@ -99,7 +100,10 @@ func process_input(event):
 		else:	# Just Backspace
 			if chars_completed != 0 || incorrect_mode:
 				if incorrect_mode:
-					text = text.insert(pos_first_incoming, text.substr(pos_incorrect, 1))
+					if text.substr(pos_incorrect, 1) == space_sub:	# Space substitute
+						text = text.insert(pos_first_incoming, " ")
+					else:
+						text = text.insert(pos_first_incoming, text.substr(pos_incorrect, 1))
 					text = text.erase(pos_incorrect)
 					incorrect_mode = false
 					pos_first_incoming -= 1
@@ -119,7 +123,10 @@ func process_input(event):
 		if not incorrect_mode:
 			incorrect_mode = true
 			text = text.erase(pos_first_incoming)
-			text = text.insert(pos_incorrect, next_char)
+			if next_char == " ":	# Space substitute
+				text = text.insert(pos_incorrect, space_sub)
+			else:
+				text = text.insert(pos_incorrect, next_char)
 			pos_first_incoming += 1
 			return text_controller.InputResult.INCORRECT
 		else:
