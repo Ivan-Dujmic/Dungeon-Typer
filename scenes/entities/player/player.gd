@@ -4,8 +4,6 @@ class_name Player
 @onready var text_controller = get_node("/root/Game/TextController")
 @onready var health_bar = get_node("/root/Game/UI/HealthBar")
 
-signal player_moved(new_position: Vector2)
-
 var target = Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE)	# Target location
 var last_position = target	# For inputs that try to go through obstacles (if no position change then stop trying)
 
@@ -65,7 +63,7 @@ func _physics_process(_delta):
 			velocity = direction * max(8, 2 * global_position.distance_to(target))
 			move_and_slide()
 			
-			emit_signal("player_moved", global_position)
+			Signals.emit_signal("entity_moved", self, global_position)
 
 			animated_sprite.scale.x = - 1 if velocity.x < 0 else 1	# Looking direction
 			

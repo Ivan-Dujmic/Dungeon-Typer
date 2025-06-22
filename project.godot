@@ -21,6 +21,7 @@ Constants="*res://globals/constants.gd"
 Settings="*res://globals/settings.gd"
 Progress="*res://globals/progress.gd"
 GameState="*res://globals/game_state.gd"
+Signals="*res://globals/signals.gd"
 
 [display]
 

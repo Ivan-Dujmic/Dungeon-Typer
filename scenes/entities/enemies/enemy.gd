@@ -77,6 +77,8 @@ func _physics_process(_delta):
 			var direction = (next_path_point - global_position).normalized()
 			velocity = direction * speed
 			move_and_slide()
+			
+			Signals.emit_signal("entity_moved", self, global_position)
 
 			animated_sprite.scale.x = - 1 if velocity.x <= 0 else 1	# Looking direction
 		else:

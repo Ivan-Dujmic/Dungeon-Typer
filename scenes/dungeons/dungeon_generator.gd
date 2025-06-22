@@ -87,12 +87,16 @@ func erase_to_x_line(new_x: int):
 func init_dungeon_start():
 	pass
 	
-func _on_player_moved(player_pos: Vector2):
-	var current_tile_x = player_pos.x / 16
-	generate_to_x_line(current_tile_x + 20)
-	erase_to_x_line(current_tile_x - 10)
+func _on_entity_moved(entity: Entity, entity_pos: Vector2):
+	var current_tile_x = entity_pos.x / 16
+	if entity is Player:
+		generate_to_x_line(current_tile_x + 20)
+		erase_to_x_line(current_tile_x - 10)
+	elif entity is Enemy:
+		if current_tile_x <= highest_erased_x:
+			entity.queue_free()
 
 func _ready():
 	init_dungeon_start()
 	can_spawn = true
-	player.connect("player_moved", Callable(self, "_on_player_moved"))
+	Signals.connect("entity_moved", Callable(self, "_on_entity_moved"))
