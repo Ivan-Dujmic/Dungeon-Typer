@@ -17,7 +17,7 @@ func _ready():
 	camera.add_child(dungeon_background)
 	
 	var player_class = load("res://scenes/entities/player/%s/player_class.tres" % (GameState.character.to_lower().replace(" ", "_")))
-	player.initialize(player_class, Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE))
+	player.initialize(player_class, Vector2(0.5 * Constants.TILE_SIZE, 0.5 * Constants.TILE_SIZE))
 	
 func _process(_delta):
 	var viewport = get_viewport_rect()

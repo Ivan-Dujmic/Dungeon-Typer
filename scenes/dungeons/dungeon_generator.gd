@@ -9,6 +9,9 @@ class_name DungeonGenerator
 @onready var enemy_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/EnemyGenerator")
 @onready var player: Player = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player")
 
+# We don't want to spawn enemies immediately
+var can_spawn: bool = false
+
 var rng = RandomNumberGenerator.new()
 
 # Storing tile positions as a map so we can check it's surroundings when drawing textures
@@ -18,15 +21,24 @@ var floor_tiles: Dictionary[Vector2i, bool] = {}
 var wall_tiles: Dictionary[Vector2i, bool] = {}
 
 # Also remember tiles sorted by the x coordinate for faster cleanup
-var x_sorted_floor_tiles: Dictionary[int, Array]
-var x_sorted_wall_tiles: Dictionary[int, Array]
+var x_sorted_floor_tiles: Dictionary[int, Array] = {}
+var x_sorted_wall_tiles: Dictionary[int, Array] = {}
 
-var highest_generated_x
-var highest_erased_x
-var highest_drawn_x
+var highest_generated_x: int
+var highest_erased_x: int
+var highest_drawn_x: int
 
-# We don't want to spawn enemies immediately
-var can_spawn = false
+# Dungeons structures and weights in roll to build them on each x draw
+var structure_weights: Dictionary[String, int] = {}
+
+# Dictionary => { "y": int, "width": int }
+# Y levels of all paths and theirs widths
+# Used to know when to merge paths
+# Also to keep track of path count to not go overboard
+# Even width paths should have the upper middle y level stored
+var paths_y: Array[Dictionary] = []
+
+var max_paths: int = 1
 
 # Draws textures for tiles until x
 # Should be called for x only once tiles for x+1 were generated
@@ -41,8 +53,10 @@ func draw_to_x_tiles(new_x: int):
 			if x_sorted_wall_tiles.has(x):
 				for y in x_sorted_wall_tiles[x]:
 					var texture_cords = Vector2i(-1, -1)
-		
-					if floor_tiles.has(Vector2i(x, y + 1)):  # Tile down
+			
+					if floor_tiles.has(Vector2i(x, y)): # Wall on tile (intersected structures -> remove wall to merge)
+						pass	# Just don't draw
+					elif floor_tiles.has(Vector2i(x, y + 1)):  # Tile down
 						texture_cords = dungeon_renderer.wall_top()
 					elif floor_tiles.has(Vector2i(x, y - 1)):  # Tile up
 						texture_cords = dungeon_renderer.wall_bottom()
@@ -84,7 +98,7 @@ func erase_to_x_line(new_x: int):
 				x_sorted_wall_tiles.erase(x)
 	highest_erased_x = new_x
 
-func init_dungeon_start():
+func initialize():
 	pass
 	
 func _on_entity_moved(entity: Entity, entity_pos: Vector2):
@@ -97,6 +111,6 @@ func _on_entity_moved(entity: Entity, entity_pos: Vector2):
 			entity.queue_free()
 
 func _ready():
-	init_dungeon_start()
+	initialize()
 	can_spawn = true
 	Signals.connect("entity_moved", Callable(self, "_on_entity_moved"))

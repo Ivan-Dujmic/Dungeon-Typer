@@ -4,8 +4,8 @@ class_name Player
 @onready var text_controller = get_node("/root/Game/TextController")
 @onready var health_bar = get_node("/root/Game/UI/HealthBar")
 
-var target = Vector2(2.5 * Constants.TILE_SIZE, 5.5 * Constants.TILE_SIZE)	# Target location
-var last_position = target	# For inputs that try to go through obstacles (if no position change then stop trying)
+var target: Vector2
+var last_position: Vector2	# For inputs that try to go through obstacles (if no position change then stop trying)
 
 var luck: float
 
