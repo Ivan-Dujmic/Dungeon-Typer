@@ -30,15 +30,30 @@ var highest_drawn_x: int
 
 # Dungeons structures and weights in roll to build them on each x draw
 var structure_weights: Dictionary[String, int] = {}
+var total_weight: int
 
-# Dictionary => { "y": int, "width": int }
-# Y levels of all paths and theirs widths
-# Used to know when to merge paths
+# Used to know when to merge paths (based on y and width)
 # Also to keep track of path count to not go overboard
-# Even width paths should have the upper middle y level stored
-var paths_y: Array[Dictionary] = []
+var paths_y: Array[Path] = []
 
 var max_paths: int = 1
+
+# We don't want to calculate on every roll_structure, so we recalculate on new structures
+func calculate_total_weight():
+	total_weight = 0
+	for weight in structure_weights.values():
+		total_weight += weight
+
+func roll_structure() -> String:
+	var rand = randi() % total_weight
+	var sum = 0
+	
+	for key in structure_weights.keys():
+		sum += structure_weights[key]
+		if rand < sum:
+			return key
+			
+	return ""	# Shouldn't happen if careful!
 
 # Draws textures for tiles until x
 # Should be called for x only once tiles for x+1 were generated
@@ -59,7 +74,12 @@ func draw_to_x_tiles(new_x: int):
 					elif floor_tiles.has(Vector2i(x, y + 1)):  # Tile down
 						texture_cords = dungeon_renderer.wall_top()
 					elif floor_tiles.has(Vector2i(x, y - 1)):  # Tile up
-						texture_cords = dungeon_renderer.wall_bottom()
+						if floor_tiles.has(Vector2i(x + 1, y)):  # Tile right:
+							texture_cords = dungeon_renderer.wall_bottom_left_outer()
+						elif floor_tiles.has(Vector2i(x - 1, y)):  # Tile left:
+							texture_cords = dungeon_renderer.wall_bottom_right_outer()
+						else:
+							texture_cords = dungeon_renderer.wall_bottom()
 					elif floor_tiles.has(Vector2i(x + 1, y)):  # Tile right
 						texture_cords = dungeon_renderer.wall_left()
 					elif floor_tiles.has(Vector2i(x - 1, y)):  # Tile left
@@ -69,14 +89,27 @@ func draw_to_x_tiles(new_x: int):
 					elif floor_tiles.has(Vector2i(x - 1, y + 1)):  # Tile down left
 						texture_cords = dungeon_renderer.wall_top_right()
 					elif floor_tiles.has(Vector2i(x + 1, y - 1)):  # Tile up right
-						texture_cords = dungeon_renderer.wall_bottom_left()
+						texture_cords = dungeon_renderer.wall_bottom_left_inner()
 					elif floor_tiles.has(Vector2i(x - 1, y - 1)):  # Tile up left
-						texture_cords = dungeon_renderer.wall_bottom_right()
+						texture_cords = dungeon_renderer.wall_bottom_right_inner()
 					
 					if texture_cords != Vector2i(-1, -1):
 						wall_layer.set_cell(Vector2i(x, y), 0, texture_cords)
 					
 	highest_drawn_x = new_x
+	
+func place_tile(x: int, y: int, tile: String):
+	match tile:
+		"wall":
+			if not x_sorted_wall_tiles.has(x):
+				x_sorted_wall_tiles[x] = []
+			wall_tiles[Vector2i(x, y)] = true
+			x_sorted_wall_tiles[x].push_back(y)
+		"floor":
+			if not x_sorted_floor_tiles.has(x):
+				x_sorted_floor_tiles[x] = []
+			floor_tiles[Vector2i(x, y)] = true
+			x_sorted_floor_tiles[x].push_back(y)
 	
 # Generate more dungeon until and on specific x
 func generate_to_x_line(_new_x: int):

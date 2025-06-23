@@ -25,8 +25,14 @@ func wall_top_left() -> Vector2i:
 func wall_top_right() -> Vector2i:
 	return Vector2i.ZERO
 	
-func wall_bottom_left() -> Vector2i:
+func wall_bottom_left_inner() -> Vector2i:
 	return Vector2i.ZERO
 	
-func wall_bottom_right() -> Vector2i:
+func wall_bottom_right_inner() -> Vector2i:
+	return Vector2i.ZERO
+	
+func wall_bottom_left_outer() -> Vector2i:
+	return Vector2i.ZERO
+	
+func wall_bottom_right_outer() -> Vector2i:
 	return Vector2i.ZERO
