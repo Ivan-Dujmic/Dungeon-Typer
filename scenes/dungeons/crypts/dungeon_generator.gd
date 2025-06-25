@@ -24,7 +24,7 @@ func generate_to_x_line(new_x: int):
 				if path.structure == "":
 					path.structure = roll_structure()
 					path.time = 0
-				
+
 				match path.structure:
 					"straight":
 						generate_straight(x, path)
@@ -204,11 +204,138 @@ func generate_to_x_line(new_x: int):
 					"split":
 						pass
 					"big_empty":
-						pass
+						if path.time == 0:
+							generate_straight(x, path)
+							path.time += 1
+						elif path.time == 1:
+							generate_straight(x, path)
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 5
+							for y in range(bottom_y - 4, bottom_y + 1):
+								place_tile(x, y, "wall")
+							for y in range(bottom_y - path.width - 9, bottom_y - path.width - 4):
+								place_tile(x, y, "wall")
+							path.time += 1
+						elif path.time <= path.width + 9:
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 5
+							place_tile(x, bottom_y, "wall")
+							place_tile(x, bottom_y - path.width - 9, "wall")
+							for y in range(bottom_y - path.width - 8, bottom_y):
+								place_tile(x, y, "floor")
+							path.time += 1
+						elif path.time == path.width + 10:
+							generate_straight(x, path)
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 5
+							for y in range(bottom_y - 4, bottom_y + 1):
+								place_tile(x, y, "wall")
+							for y in range(bottom_y - path.width - 9, bottom_y - path.width - 1):
+								place_tile(x, y, "wall")
+							path.time += 1
+						elif path.time == path.width + 11:
+							generate_straight(x, path)
+							path.finish_structure()
 					"double":
-						pass
+						if path.time == 0:
+							path.flags["length"] = 4 + randi() % 6	# 4 - 10
+							generate_straight(x, path)
+							path.time += 1
+						elif path.time == 1 or path.time == 6 + path.flags["length"]:
+							generate_straight(x, path)
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 4
+							for y in range(bottom_y - 3, bottom_y + 1):
+								place_tile(x, y, "wall")
+							for y in range(bottom_y - path.width - 7, bottom_y - path.width - 3):
+								place_tile(x, y, "wall")
+							path.time += 1
+						elif path.time <= 3 or path.time == 4 + path.flags["length"] or path.time == 5 + path.flags["length"]:
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 4
+							place_tile(x, bottom_y, "wall")
+							place_tile(x, bottom_y - path.width - 7, "wall")
+							for y in range(bottom_y - path.width - 6, bottom_y):
+								place_tile(x, y, "floor")
+							path.time += 1
+						elif path.time == 4 or path.time == 3 + path.flags["length"]:
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 4
+							place_tile(x, bottom_y - path.width - 7, "wall")
+							place_tile(x, bottom_y - path.width - 6, "floor")
+							place_tile(x, bottom_y - path.width - 5, "floor")
+							place_tile(x, bottom_y - path.width - 4, "floor")
+							for y in range(bottom_y - path.width - 3, bottom_y - 3):
+								place_tile(x, y, "wall")
+							place_tile(x, bottom_y - 3, "floor")
+							place_tile(x, bottom_y - 2, "floor")
+							place_tile(x, bottom_y - 1, "floor")
+							place_tile(x, bottom_y, "wall")
+							path.time += 1
+						elif path.time <= 2 + path.flags["length"]:
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 4
+							place_tile(x, bottom_y - path.width - 7, "wall")
+							place_tile(x, bottom_y - path.width - 6, "floor")
+							place_tile(x, bottom_y - path.width - 5, "floor")
+							place_tile(x, bottom_y - path.width - 4, "floor")
+							place_tile(x, bottom_y - path.width - 3, "wall")
+							place_tile(x, bottom_y - 4, "wall")
+							place_tile(x, bottom_y - 3, "floor")
+							place_tile(x, bottom_y - 2, "floor")
+							place_tile(x, bottom_y - 1, "floor")
+							place_tile(x, bottom_y, "wall")
+							path.time += 1
+						elif path.time == 7 + path.flags["length"]:
+							generate_straight(x, path)
+							path.finish_structure()
 					"pillars":
-						pass
+						if path.time == 0:
+							path.flags["columns"] = 2 + randi() % 4	# 2 - 6 columns of pillars
+							generate_straight(x, path)
+							path.time += 1
+						elif path.time == 1:
+							generate_straight(x, path)
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 5
+							for y in range(bottom_y - 4, bottom_y + 1):
+								place_tile(x, y, "wall")
+							for y in range(bottom_y - path.width - 9, bottom_y - path.width - 4):
+								place_tile(x, y, "wall")
+							path.time += 1
+						elif path.time < 4 + 4 * path.flags["columns"]:
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 5
+							place_tile(x, bottom_y, "wall")
+							place_tile(x, bottom_y - path.width - 9, "wall")
+							match path.time % 4:
+								0, 1:
+									place_tile(x, bottom_y - path.width - 8, "floor")
+									place_tile(x, bottom_y - path.width - 7, "floor")
+									place_tile(x, bottom_y - path.width - 6, "wall")
+									place_tile(x, bottom_y - path.width - 5, "wall")
+									for y in range(bottom_y - path.width - 4, bottom_y - 4):
+										place_tile(x, y, "floor")
+									place_tile(x, bottom_y - 4, "wall")
+									place_tile(x, bottom_y - 3, "wall")
+									place_tile(x, bottom_y - 2, "floor")
+									place_tile(x, bottom_y - 1, "floor")
+								2, 3:
+									for y in range(bottom_y - path.width - 8, bottom_y):
+										place_tile(x, y, "floor")
+							path.time += 1
+						elif path.time == 4 + 4 * path.flags["columns"]:
+							generate_straight(x, path)
+							@warning_ignore("integer_division")
+							var bottom_y = path.y + path.width / 2 + 5
+							for y in range(bottom_y - 4, bottom_y + 1):
+								place_tile(x, y, "wall")
+							for y in range(bottom_y - path.width - 9, bottom_y - path.width - 4):
+								place_tile(x, y, "wall")
+							path.time += 1
+						elif path.time == 5 + 4 * path.flags["columns"]:
+							generate_straight(x, path)
+							path.finish_structure()
 						
 			x += 1
 		highest_generated_x = new_x
@@ -218,21 +345,17 @@ func generate_to_x_line(new_x: int):
 func initialize():
 	max_paths = 3
 	structure_weights = {
-		"straight": 100,	# No change
-		"offset": 100,	# Offset up or down by one
-		"width_change": 70,	# Change width
-		"turn": 40,	# Go up or down a few tiles
+		"straight": 10,	# No change
+		"offset": 10,	# Offset up or down by one
+		"width_change": 10,	# Change width
+		"turn": 4,	# Go up or down a few tiles
 		#"split": 1,	# Diverging paths -> (2x) turn + straight
-		#"big_empty": 1,	# Big empty room with possible diverging paths
-		#"double": 1,	# Split corridors by a middle wall
-		#"pillars": 1,	# Repeating pillars in 2 rows
+		"big_empty": 2,	# Big empty room with possible diverging paths
+		"double": 2,	# Split corridors by a middle wall
+		"pillars": 2,	# Repeating pillars in 2 rows
 	}
 	calculate_total_weight()
 	paths_y.push_back(Path.new(0, 3))
-	paths_y.push_back(Path.new(5, 3))
-	paths_y.push_back(Path.new(10, 3))
-	paths_y.push_back(Path.new(-5, 3))
-	paths_y.push_back(Path.new(-10, 3))
 	
 	# Left walls
 	for y in range(-2,3):
