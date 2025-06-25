@@ -106,6 +106,8 @@ func place_tile(x: int, y: int, tile: String):
 			wall_tiles[Vector2i(x, y)] = true
 			x_sorted_wall_tiles[x].push_back(y)
 		"floor":
+			if can_spawn:
+				enemy_generator.attempt_enemy_spawn("Skeleton", 0.05, Vector2i(x, y))
 			if not x_sorted_floor_tiles.has(x):
 				x_sorted_floor_tiles[x] = []
 			floor_tiles[Vector2i(x, y)] = true
@@ -145,5 +147,4 @@ func _on_entity_moved(entity: Entity, entity_pos: Vector2):
 
 func _ready():
 	initialize()
-	can_spawn = true
 	Signals.connect("entity_moved", Callable(self, "_on_entity_moved"))

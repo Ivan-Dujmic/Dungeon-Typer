@@ -19,7 +19,7 @@ func movement_tt_setup():
 	# Calculate position so that the next typed letter is just after the half screen point
 	
 	var size = font.get_string_size("A".repeat(2 * 26), HORIZONTAL_ALIGNMENT_LEFT, -1, 49)
-	var position = Vector2((get_viewport().size.x - size.x) / 2, 875)
+	var position = Vector2((game.get_viewport_rect().size.x - size.x) / 2, 875)
 	# Function to be called by TypingText on word complete
 	var on_word_complete_forward_func = Callable(self, "_on_word_complete_forward").bind(player)
 	# Initalize
@@ -38,7 +38,7 @@ func movement_tt_setup():
 	# Calculate position so that the next typed letter is just after the half screen point
 	size = font.get_string_size("A".repeat(2 * 16), HORIZONTAL_ALIGNMENT_LEFT, -1, 39)
 	add_child(tt_move_up)
-	position = Vector2((get_viewport().size.x - size.x) / 2, 840)
+	position = Vector2((game.get_viewport_rect().size.x - size.x) / 2, 840)
 	# Function to be called by TypingText on word complete
 	var on_word_complete_up_func = Callable(self, "_on_word_complete_up").bind(player)
 	# Initalize
@@ -56,7 +56,7 @@ func movement_tt_setup():
 	add_child(tt_move_down)
 	# Calculate position so that the next typed letter is just after the half screen point
 	size = font.get_string_size("A".repeat(2 * 16), HORIZONTAL_ALIGNMENT_LEFT, -1, 39)
-	position = Vector2((get_viewport().size.x - size.x) / 2, 925)
+	position = Vector2((game.get_viewport_rect().size.x - size.x) / 2, 925)
 	# Function to be called by TypingText on word complete
 	var on_word_complete_down_func = Callable(self, "_on_word_complete_down").bind(player)
 	# Initalize
@@ -110,7 +110,7 @@ func _ready():
 
 func _process(_delta):
 	var tt_to_remove: Array[TypingText]	# We don't want to erase from dict while iterating through it
-	var ratio = game.ratio
+	var ratio = game.get_viewport_rect().size.x / game.tiles_viewport.size.x
 	for tt in attached_tt_dict:
 		var data = attached_tt_dict[tt]
 		if is_instance_valid(data[0]):
@@ -120,7 +120,7 @@ func _process(_delta):
 			position *= ratio	# Scale for viewport
 			position.x -= data[1].x / 2	# - Half of text width
 			position.y -= data[1].y	# - Text height
-			position += Vector2(get_viewport().size) / 2	# Camera is centered, viewport is top left
+			position += Vector2(game.get_viewport_rect().size) / 2	# Camera is centered, viewport is top left
 			tt.position = position
 		else:
 			tt_to_remove.push_back(tt)

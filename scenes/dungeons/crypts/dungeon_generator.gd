@@ -18,6 +18,8 @@ func generate_to_x_line(new_x: int):
 	if new_x > highest_generated_x:
 		var x = highest_generated_x + 1
 		while x <= new_x:
+			if x > 15:
+				can_spawn = true
 			for path in paths_y:
 				if path.structure == "":
 					path.structure = roll_structure()
@@ -134,13 +136,17 @@ func generate_to_x_line(new_x: int):
 							var top_y
 							var bottom_y
 							if path.flags["direction"] == "up":
+								@warning_ignore("integer_division")
 								top_y = path.y - path.width / 2 - path.flags["length"]
+								@warning_ignore("integer_division")
 								bottom_y = path.y - path.width / 2 - 1
 								if path.width % 2 == 1:
 									top_y -= 1
 									bottom_y -= 1
 							else:
+								@warning_ignore("integer_division")
 								top_y = path.y + path.width / 2 + 2
+								@warning_ignore("integer_division")
 								bottom_y = path.y + path.width / 2 + 1 + path.flags["length"]
 							for y in range(top_y, bottom_y + 1):
 								place_tile(x, y, "wall")
@@ -149,14 +155,18 @@ func generate_to_x_line(new_x: int):
 							var top_y
 							var bottom_y
 							if path.flags["direction"] == "up":
+								@warning_ignore("integer_division")
 								top_y = path.y - path.width / 2 - path.flags["length"]
 								if path.width % 2 == 1:
 									top_y -= 1
+								@warning_ignore("integer_division")
 								bottom_y = path.y + path.width / 2 + 1
 							else:
+								@warning_ignore("integer_division")
 								top_y = path.y - path.width / 2
 								if path.width % 2 == 1:
 									top_y -= 1
+								@warning_ignore("integer_division")
 								bottom_y = path.y + path.width / 2 + 1 + path.flags["length"]
 							place_tile(x, top_y, "wall")
 							place_tile(x, bottom_y, "wall")
@@ -173,10 +183,14 @@ func generate_to_x_line(new_x: int):
 							var top_y
 							var bottom_y
 							if path.flags["direction"] == "up":
+								@warning_ignore("integer_division")
 								top_y = path.y + path.width / 2 + 2
+								@warning_ignore("integer_division")
 								bottom_y = path.y + path.width / 2 + 1 + path.flags["length"]
 							else:
+								@warning_ignore("integer_division")
 								top_y = path.y - path.width / 2 - path.flags["length"]
+								@warning_ignore("integer_division")
 								bottom_y = path.y - path.width / 2 - 1
 								if path.width % 2 == 1:
 									top_y -= 1
@@ -205,9 +219,9 @@ func initialize():
 	max_paths = 3
 	structure_weights = {
 		"straight": 100,	# No change
-		"offset": 10,	# Offset up or down by one
-		"width_change": 7,	# Change width
-		"turn": 4,	# Go up or down a few tiles
+		"offset": 100,	# Offset up or down by one
+		"width_change": 70,	# Change width
+		"turn": 40,	# Go up or down a few tiles
 		#"split": 1,	# Diverging paths -> (2x) turn + straight
 		#"big_empty": 1,	# Big empty room with possible diverging paths
 		#"double": 1,	# Split corridors by a middle wall
@@ -215,6 +229,10 @@ func initialize():
 	}
 	calculate_total_weight()
 	paths_y.push_back(Path.new(0, 3))
+	paths_y.push_back(Path.new(5, 3))
+	paths_y.push_back(Path.new(10, 3))
+	paths_y.push_back(Path.new(-5, 3))
+	paths_y.push_back(Path.new(-10, 3))
 	
 	# Left walls
 	for y in range(-2,3):
