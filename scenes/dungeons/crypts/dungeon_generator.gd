@@ -207,7 +207,7 @@ func generate_to_x_line(new_x: int):
 						if path.time == 0:
 							generate_straight(x, path)
 							path.time += 1
-						elif path.time == 1:
+						elif path.time == 1 or path.time == path.width + 10:
 							generate_straight(x, path)
 							@warning_ignore("integer_division")
 							var bottom_y = path.y + path.width / 2 + 5
@@ -223,15 +223,6 @@ func generate_to_x_line(new_x: int):
 							place_tile(x, bottom_y - path.width - 9, "wall")
 							for y in range(bottom_y - path.width - 8, bottom_y):
 								place_tile(x, y, "floor")
-							path.time += 1
-						elif path.time == path.width + 10:
-							generate_straight(x, path)
-							@warning_ignore("integer_division")
-							var bottom_y = path.y + path.width / 2 + 5
-							for y in range(bottom_y - 4, bottom_y + 1):
-								place_tile(x, y, "wall")
-							for y in range(bottom_y - path.width - 9, bottom_y - path.width - 1):
-								place_tile(x, y, "wall")
 							path.time += 1
 						elif path.time == path.width + 11:
 							generate_straight(x, path)
@@ -294,7 +285,7 @@ func generate_to_x_line(new_x: int):
 							path.flags["columns"] = 2 + randi() % 4	# 2 - 6 columns of pillars
 							generate_straight(x, path)
 							path.time += 1
-						elif path.time == 1:
+						elif path.time == 1 or path.time == 4 + 4 * path.flags["columns"]:
 							generate_straight(x, path)
 							@warning_ignore("integer_division")
 							var bottom_y = path.y + path.width / 2 + 5
@@ -323,15 +314,6 @@ func generate_to_x_line(new_x: int):
 								2, 3:
 									for y in range(bottom_y - path.width - 8, bottom_y):
 										place_tile(x, y, "floor")
-							path.time += 1
-						elif path.time == 4 + 4 * path.flags["columns"]:
-							generate_straight(x, path)
-							@warning_ignore("integer_division")
-							var bottom_y = path.y + path.width / 2 + 5
-							for y in range(bottom_y - 4, bottom_y + 1):
-								place_tile(x, y, "wall")
-							for y in range(bottom_y - path.width - 9, bottom_y - path.width - 4):
-								place_tile(x, y, "wall")
 							path.time += 1
 						elif path.time == 5 + 4 * path.flags["columns"]:
 							generate_straight(x, path)
