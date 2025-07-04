@@ -1,5 +1,6 @@
 extends Control
-# Implements HealthBar
+
+@onready var player = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player")
 
 var health_ratio = 1.0
 
@@ -8,6 +9,7 @@ var health_color = Color.GREEN
 var border_color = Color.BLACK
 
 func _ready():
+	player.health_changed.connect(update_health)
 	queue_redraw()
 	
 func _draw():

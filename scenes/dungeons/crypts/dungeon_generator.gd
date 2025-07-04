@@ -327,7 +327,7 @@ func generate_to_x_line(new_x: int):
 func initialize():
 	max_paths = 3
 	structure_weights = {
-		"straight": 10,	# No change
+		"straight": 15,	# No change
 		"offset": 10,	# Offset up or down by one
 		"width_change": 10,	# Change width
 		"turn": 4,	# Go up or down a few tiles

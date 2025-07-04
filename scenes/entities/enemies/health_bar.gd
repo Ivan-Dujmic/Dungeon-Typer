@@ -1,5 +1,4 @@
 extends Node2D
-# Implements HealthBar
 
 var size = Vector2i(10, 1)
 var health_ratio = 1

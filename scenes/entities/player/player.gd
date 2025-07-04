@@ -2,15 +2,18 @@ extends Entity
 class_name Player
 
 @onready var text_controller = get_node("/root/Game/TextController")
-@onready var health_bar = get_node("/root/Game/UI/HealthBar")
+@onready var inventory = get_node("/root/Game/UI/Control/InventoryContainer")
+
+signal health_changed(ratio: float)
 
 var target: Vector2
 var last_position: Vector2	# For inputs that try to go through obstacles (if no position change then stop trying)
 
 var luck: float
+var slots: int
 
 func update_health():
-	health_bar.update_health(float(health) / max_health)
+	emit_signal("health_changed", float(health) / max_health)
 
 func move(move_amount: Vector2):
 	target += move_amount * speed
@@ -39,8 +42,11 @@ func initialize(class_init: PlayerClass, position_init: Vector2):
 	action_range = class_init.action_range
 	speed = class_init.speed / GameState.difficulty
 	luck = class_init.luck
+	slots = class_init.slots
 	
 	range_area.set_range(action_range)
+	
+	inventory.resize(slots)
 	
 	animated_sprite.sprite_frames = class_init.animation_frames
 	

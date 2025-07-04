@@ -81,5 +81,6 @@ attack = 15
 action_range = 192
 speed = 120.0
 luck = 1.5
+slots = 2
 animation_frames = SubResource("SpriteFrames_82fa5")
 metadata/_custom_type_script = "uid://cc4baxauc4c53"
