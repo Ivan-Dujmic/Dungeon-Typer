@@ -6,10 +6,11 @@ extends CanvasLayer
 @onready var camera = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player/Camera")
 
 @onready var typing_text_scene = preload("res://scenes/ui/typing/typing_text.tscn")
+@onready var inventory_item_scene = preload("res://scenes/ui/inventory/inventory_item.tscn")
 
 var font = load("res://assets/fonts/ia-writer-mono-latin-400-normal.ttf")
 
-# attached_tt_dict[tt] = [object, size, y_offset]
+# attached_tt_dict[tt] = [object, size, y_offset, is_in_game_world]
 var attached_tt_dict: Dictionary
 
 func movement_tt_setup():
@@ -77,6 +78,7 @@ func create_attached_tt(
 	chars_per_side: int, 
 	incoming_word_count: int, 
 	y_offset: int,
+	is_in_game_world: bool,
 	unblock: bool
 	) -> TypingText:
 	var tt = typing_text_scene.instantiate()
@@ -94,16 +96,20 @@ func create_attached_tt(
 		text_controller.unblock(tt)
 		
 	var size = font.get_string_size("A".repeat(2 * chars_per_side), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	attached_tt_dict[tt] = [object, size, y_offset]
+	attached_tt_dict[tt] = [object, size, y_offset, is_in_game_world]
 	return tt
 
 func create_enemy_tt(enemy: Enemy) -> TypingText:
 	var on_word_complete_attack_func = Callable(self, "_on_word_complete_attack").bind(player, enemy)
-	return create_attached_tt(on_word_complete_attack_func, enemy, 24, 14, 2, -13, false)
+	return create_attached_tt(on_word_complete_attack_func, enemy, 24, 14, 2, -13, true, false)
 
 func create_item_drop_tt(item_drop: ItemDrop) -> TypingText:
 	var on_word_complete_pick_up_func = Callable(self, "_on_word_complete_pick_up").bind(player, item_drop)
-	return create_attached_tt(on_word_complete_pick_up_func, item_drop, 24, 14, 1, -8, false)
+	return create_attached_tt(on_word_complete_pick_up_func, item_drop, 24, 14, 1, -8, true, false)
+
+func create_inventory_item_tt(inventory_item: InventoryItem) -> TypingText:
+	var on_word_complete_use_func = Callable(self, "_on_word_complete_inventory_use").bind(player, inventory_item)
+	return create_attached_tt(on_word_complete_use_func, inventory_item, 18, 14, 1, 60, false, true)
 
 func _ready():
 	movement_tt_setup()
@@ -114,14 +120,21 @@ func _process(_delta):
 	for tt in attached_tt_dict:
 		var data = attached_tt_dict[tt]
 		if is_instance_valid(data[0]):
-			# Data = [object, size, y_offset]
-			var position = data[0].global_position - camera.global_position	# Object middle - camera middle
-			position.y += data[2]	# y_offset
-			position *= ratio	# Scale for viewport
-			position.x -= data[1].x / 2	# - Half of text width
-			position.y -= data[1].y	# - Text height
-			position += Vector2(game.get_viewport_rect().size) / 2	# Camera is centered, viewport is top left
-			tt.position = position
+			# Data = [object, size, y_offset, is_in_game_world]
+			if data[3]:
+				var position = data[0].global_position - camera.global_position	# Object middle - camera middle
+				position.y += data[2]	# y_offset
+				position *= ratio	# Scale for viewport
+				position.x -= data[1].x / 2	# - Half of text width
+				position.y -= data[1].y	# - Text height
+				position += Vector2(game.get_viewport_rect().size) / 2	# Camera is centered, viewport is top left
+				tt.position = position
+			else:
+				var position = data[0].global_position
+				position.y += data[2]	# y_offset
+				position.x -= data[1].x / 2	# - Half of text width
+				position.y -= data[1].y	# - Text height
+				tt.position = position
 		else:
 			tt_to_remove.push_back(tt)
 		
@@ -154,4 +167,12 @@ func _on_word_complete_pick_up(_completed_word, player_arg: Player, item_drop: I
 		item_drop.data.use_command.new().execute(player_arg)
 		item_drop.queue_free()
 	else:
-		pass # TODO: Add to inventory
+		var inventory_item = inventory_item_scene.instantiate()
+		if player_arg.inventory.add_item(inventory_item):	# If successfully added to inventory
+			inventory_item.initialize(item_drop.data)
+			item_drop.queue_free()
+			
+func _on_word_complete_inventory_use(_complete_word, player_arg: Player, inventory_item: InventoryItem):
+	inventory_item.data.use_command.new().execute(player_arg)
+	player_arg.inventory.remove_item(inventory_item)
+	inventory_item.queue_free()

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjtgqhxgh32ul"]
+
+[ext_resource type="Script" uid="uid://2ie0rp4jujhl" path="res://scenes/ui/inventory/inventory_item.gd" id="1_1f4sr"]
+
+[node name="InventoryItem" type="Sprite2D"]
+position = Vector2(32, 32)
+scale = Vector2(6, 6)
+script = ExtResource("1_1f4sr")

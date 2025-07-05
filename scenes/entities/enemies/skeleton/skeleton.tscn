@@ -1,20 +1,27 @@
-[gd_scene load_steps=9 format=3 uid="uid://d08pcc1fpnw0j"]
+[gd_scene load_steps=11 format=3 uid="uid://d08pcc1fpnw0j"]
 
 [ext_resource type="PackedScene" uid="uid://dp2ekxset7b2x" path="res://scenes/entities/enemies/enemy.tscn" id="1_j55ia"]
 [ext_resource type="Script" uid="uid://d0awbb2cmmjhs" path="res://scenes/entities/enemies/skeleton/skeleton.gd" id="1_t8pow"]
 [ext_resource type="Script" uid="uid://ilgn67vqlgyg" path="res://scenes/items/loot_entry.gd" id="3_huws8"]
-[ext_resource type="Resource" uid="uid://2k86g60um668" path="res://scenes/items/health_pickup/health_pickup.tres" id="4_nnsoc"]
+[ext_resource type="Resource" uid="uid://ck3wdgc6l8f2e" path="res://scenes/items/health_pickup/health_pickup.tres" id="4_nnsoc"]
 [ext_resource type="Script" uid="uid://cj0go5seembrl" path="res://scenes/items/loot_table.gd" id="5_gotl3"]
+[ext_resource type="Resource" uid="uid://2k86g60um668" path="res://scenes/items/health_potion/health_potion.tres" id="5_nnsoc"]
+
+[sub_resource type="Resource" id="Resource_gotl3"]
+script = ExtResource("3_huws8")
+item = ExtResource("4_nnsoc")
+chance = 1.0
+metadata/_custom_type_script = "uid://ilgn67vqlgyg"
 
 [sub_resource type="Resource" id="Resource_m475b"]
 script = ExtResource("3_huws8")
-item = ExtResource("4_nnsoc")
-chance = 0.2
+item = ExtResource("5_nnsoc")
+chance = 1.0
 metadata/_custom_type_script = "uid://ilgn67vqlgyg"
 
 [sub_resource type="Resource" id="Resource_2j4hg"]
 script = ExtResource("5_gotl3")
-drops = Array[ExtResource("3_huws8")]([SubResource("Resource_m475b")])
+drops = Array[ExtResource("3_huws8")]([SubResource("Resource_gotl3"), SubResource("Resource_m475b")])
 metadata/_custom_type_script = "uid://cj0go5seembrl"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j55ia"]

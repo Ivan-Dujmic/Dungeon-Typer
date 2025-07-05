@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://2k86g60um668"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://ck3wdgc6l8f2e"]
 
 [ext_resource type="Script" uid="uid://c45rxougu1ch" path="res://scenes/items/item_data.gd" id="1_xfxdg"]
 [ext_resource type="Texture2D" uid="uid://f8fg4apuauqn" path="res://assets/textures/items/health_pickup.png" id="2_6rd26"]
-[ext_resource type="Script" uid="uid://c173gc8tfesws" path="res://scenes/items/health_pickup/health_pickup_command.gd" id="3_kb16f"]
+[ext_resource type="Script" uid="uid://c173gc8tfesws" path="res://scenes/items/health_potion/health_potion_command.gd" id="3_xfxdg"]
 
 [resource]
 script = ExtResource("1_xfxdg")
 name = "Health Pickup"
 description = "Instantly restores a percentage of max health on pickup"
 texture = ExtResource("2_6rd26")
-use_command = ExtResource("3_kb16f")
+use_command = ExtResource("3_xfxdg")
 use_on_pickup = true
 metadata/_custom_type_script = "uid://c45rxougu1ch"
