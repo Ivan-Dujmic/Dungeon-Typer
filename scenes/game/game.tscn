@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b8w8gbtnm42q7"]
+[gd_scene load_steps=11 format=3 uid="uid://b8w8gbtnm42q7"]
 
 [ext_resource type="Script" uid="uid://bjmkt0u31kwlj" path="res://scenes/game/game.gd" id="1_87uf6"]
 [ext_resource type="PackedScene" uid="uid://d05xsrxdp6exu" path="res://scenes/entities/player/player.tscn" id="3_4j704"]
@@ -6,7 +6,10 @@
 [ext_resource type="Script" uid="uid://b6qns4sqyahov" path="res://scenes/ui/inventory/inventory_container.gd" id="6_bdhmt"]
 [ext_resource type="Script" uid="uid://dhnwgxltb5676" path="res://scenes/ui/ui.gd" id="6_vaxfo"]
 [ext_resource type="Script" uid="uid://co6g0omtsauln" path="res://scenes/ui/stats/health_bar.gd" id="7_ftsea"]
+[ext_resource type="Script" uid="uid://dffd6d76nt3w1" path="res://scenes/ui/game_over_ui.gd" id="8_87uf6"]
 [ext_resource type="Script" uid="uid://bkjvlxjha3dst" path="res://scenes/ui/typing/text_controller.gd" id="8_otnwt"]
+[ext_resource type="PackedScene" uid="uid://cw57nevfwt3nl" path="res://scenes/menu/menu_text_controller.tscn" id="9_2a8rs"]
+[ext_resource type="Theme" uid="uid://cad7ye5r222e4" path="res://assets/menu/GameOver.tres" id="10_4j704"]
 
 [node name="Game" type="Node2D"]
 z_as_relative = false
@@ -72,3 +75,53 @@ script = ExtResource("6_bdhmt")
 
 [node name="TextController" type="Node" parent="."]
 script = ExtResource("8_otnwt")
+
+[node name="GameOverUI" type="CanvasLayer" parent="."]
+process_mode = 2
+visible = false
+script = ExtResource("8_87uf6")
+
+[node name="MenuTextController" parent="GameOverUI" instance=ExtResource("9_2a8rs")]
+
+[node name="Panel" type="Panel" parent="GameOverUI"]
+custom_minimum_size = Vector2(400, 300)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("10_4j704")
+
+[node name="GameOverLabel" type="Label" parent="GameOverUI/Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.0
+offset_top = 10.0
+offset_right = 46.0
+offset_bottom = 33.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 30
+text = "Game Over!"
+horizontal_alignment = 1
+
+[node name="ExitButton" type="Button" parent="GameOverUI/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -65.0
+offset_top = -70.0
+offset_right = 65.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0

@@ -5,6 +5,7 @@ class_name Player
 @onready var inventory = get_node("/root/Game/UI/Control/InventoryContainer")
 
 signal health_changed(ratio: float)
+signal player_died()
 
 var target: Vector2
 var last_position: Vector2	# For inputs that try to go through obstacles (if no position change then stop trying)
@@ -14,6 +15,9 @@ var slots: int
 
 func update_health():
 	emit_signal("health_changed", float(health) / max_health)
+
+func die():
+	emit_signal("player_died")
 
 func move(move_amount: Vector2):
 	target += move_amount * speed

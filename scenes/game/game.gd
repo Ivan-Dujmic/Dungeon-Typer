@@ -5,8 +5,13 @@ extends Node2D
 @onready var y_sort = $TilesViewportContainer/TilesViewport/YSort
 @onready var player = $TilesViewportContainer/TilesViewport/YSort/Player
 @onready var camera = $TilesViewportContainer/TilesViewport/YSort/Player/Camera
+@onready var game_over_ui = $GameOverUI
 
 var ratio = 0
+
+func _game_over():
+	game_over_ui.visible = true
+	get_tree().paused = true
 
 func _ready():
 	var dungeon_generator = load("res://scenes/dungeons/%s/dungeon_generator.tscn" % (GameState.dungeon.to_lower().replace(" ", "_"))).instantiate()
@@ -18,6 +23,8 @@ func _ready():
 	
 	var player_class = load("res://scenes/entities/player/%s/player_class.tres" % (GameState.character.to_lower().replace(" ", "_")))
 	player.initialize(player_class, Vector2(0.5 * Constants.TILE_SIZE, 0.5 * Constants.TILE_SIZE))
+	
+	player.player_died.connect(_game_over)
 	
 func _process(_delta):
 	var viewport = get_viewport_rect()
