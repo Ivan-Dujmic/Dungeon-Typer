@@ -83,7 +83,7 @@ func unblock():
 	self_modulate = colors["unblocked"]
 	is_blocked = false
 
-func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_side_init: int, incoming_word_count_init: int, position_init: Vector2, special_word_chance_init: float = 0):
+func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_side_init: int, incoming_word_count_init: int, position_init: Vector2, special_word_chance_init: float = 0, tutorial_text: String = ""):
 	on_word_complete = on_word_complete_init
 	font_size = font_size_init
 	chars_per_side = chars_per_side_init
@@ -113,7 +113,8 @@ func initialize(on_word_complete_init: Callable, font_size_init: int, chars_per_
 	# Word initialization
 	# The left (complete) side always has a fixed number of raw characters = 2 * color_tags_size + chars_per_size
 	# The right side has each word in it's own tags
-	text = get_string_in_tags(" ".repeat(chars_per_side), "complete") + get_string_in_tags("", "wrong")
+	tutorial_text = " ".repeat(chars_per_side - len(tutorial_text)) + tutorial_text
+	text = get_string_in_tags(tutorial_text, "complete") + get_string_in_tags("", "wrong")
 	for i in range(incoming_word_count):
 		append_random_word()
 		

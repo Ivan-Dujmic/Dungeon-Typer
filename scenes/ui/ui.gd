@@ -32,7 +32,8 @@ func movement_tt_setup():
 		26, 
 		10,
 		position,
-		0.05
+		0.05,
+		"Forward > "
 	)
 	text_controller.unblock(tt_move_forward)
 	movements_texts.append(tt_move_forward)
@@ -51,7 +52,9 @@ func movement_tt_setup():
 		39, 
 		16, 
 		4,
-		position
+		position,
+		0,
+		"Up > "
 	)
 	text_controller.unblock(tt_move_up)
 	movements_texts.append(tt_move_up)
@@ -70,7 +73,9 @@ func movement_tt_setup():
 		39, 
 		16, 
 		4,
-		position
+		position,
+		0,
+		"Down > "
 	)
 	text_controller.unblock(tt_move_down)
 	movements_texts.append(tt_move_down)
