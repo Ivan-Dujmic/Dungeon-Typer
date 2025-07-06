@@ -6,12 +6,14 @@ extends CanvasLayer
 
 @onready var panels: Dictionary[String, Node] = {
 	"game_over": $GameOverPanel,
+	"victory": $VictoryPanel,
 	"modifier": $ModifierPanel
 }
 var current_panel = ""
 
 @onready var texts: Dictionary[String, Array] = {
 	"game_over": [],
+	"victory": [],
 	"modifier": [],
 	"": []
 }
@@ -44,6 +46,13 @@ func setup_texts():
 	game_over_exit_text.initialize(text_controller, "Exit", game_over_exit_func, 35, Vector2(0, 0))
 	texts["game_over"].push_back(game_over_exit_text)
 	
+	# VICTORY PANEL
+	var victory_exit_text = menu_text_scene.instantiate()
+	var victory_exit_button = $VictoryPanel/ExitButton
+	victory_exit_button.add_child(victory_exit_text)
+	victory_exit_text.initialize(text_controller, "Exit", game_over_exit_func, 35, Vector2(0, 0))
+	texts["victory"].push_back(victory_exit_text)
+	
 	# MODIFIER PANEL
 	var skip_func = Callable(self, "_skip_modifier")
 	var skip_text = menu_text_scene.instantiate()
@@ -61,6 +70,8 @@ func load_panel(panel: String):
 			get_tree().paused = false
 		"game_over":
 			panels["game_over"].get_child(2).grab_focus()
+		"victory":
+			panels["victory"].get_child(2).grab_focus()
 		"modifier":
 			# Delete previous modifier texts (only modifier texts) and effects array
 			for i in range(1, len(texts["modifier"])):

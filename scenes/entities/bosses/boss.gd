@@ -29,6 +29,7 @@ func _on_action_timer_timeout():
 		
 func die():
 	queue_free()
+	Signals.boss_defeated.emit()
 
 # Position should be a tile coordinate
 func initialize(class_init: BossClass, position_init: Vector2i):

@@ -15,6 +15,10 @@ func _game_over():
 	popup_ui.load_panel("game_over")
 	get_tree().paused = true
 	
+func _victory():
+	popup_ui.load_panel("victory")
+	get_tree().paused = true
+	
 func _modifier_open():
 	text_controller.ignore = true
 	popup_ui.load_panel("modifier")
@@ -35,6 +39,7 @@ func _ready():
 	GameState.boss_active = false
 	
 	player.player_died.connect(_game_over)
+	Signals.boss_defeated.connect(_victory)
 	Signals.modifier_selection.connect(_modifier_open)
 	
 func _process(_delta):
