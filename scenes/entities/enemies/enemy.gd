@@ -41,6 +41,7 @@ func die():
 			item_drops.add_child(new_drop)
 			new_drop.initialize(drop, global_position + Vector2((randf()-0.5)*20, (randf()-0.5)*20))
 	
+	GameState.run_enemies_defeated += 1
 	queue_free()
 
 # Position should be a tile coordinate

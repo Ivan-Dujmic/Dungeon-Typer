@@ -186,6 +186,7 @@ func _on_word_complete_boss(completed_word, player_arg: Player, boss: Boss):
 func _on_word_complete_pick_up(_completed_word, player_arg: Player, item_drop: ItemDrop):
 	if item_drop.data.use_on_pickup:
 		item_drop.data.use_command.new().execute(player_arg)
+		GameState.run_items_used += 1
 		item_drop.queue_free()
 	else:
 		var inventory_item = inventory_item_scene.instantiate()
@@ -195,5 +196,6 @@ func _on_word_complete_pick_up(_completed_word, player_arg: Player, item_drop: I
 			
 func _on_word_complete_inventory_use(_complete_word, player_arg: Player, inventory_item: InventoryItem):
 	inventory_item.data.use_command.new().execute(player_arg)
+	GameState.run_items_used += 1
 	player_arg.inventory.remove_item(inventory_item)
 	inventory_item.queue_free()

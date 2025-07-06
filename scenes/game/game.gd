@@ -12,10 +12,12 @@ class_name Game
 var ratio = 0
 
 func _game_over():
+	GameState.add_run_stats_to_all_time_stats(false)
 	popup_ui.load_panel("game_over")
 	get_tree().paused = true
 	
 func _victory():
+	GameState.add_run_stats_to_all_time_stats(true)
 	popup_ui.load_panel("victory")
 	get_tree().paused = true
 	
@@ -35,8 +37,7 @@ func _ready():
 	var player_class = load("res://scenes/entities/player/%s/player_class.tres" % (GameState.character.to_lower().replace(" ", "_")))
 	player.initialize(player_class, Vector2(0.5 * Constants.TILE_SIZE, 0.5 * Constants.TILE_SIZE))
 	
-	GameState.modifier_roll_amount = 3
-	GameState.boss_active = false
+	GameState.start_run()
 	
 	player.player_died.connect(_game_over)
 	Signals.boss_defeated.connect(_victory)

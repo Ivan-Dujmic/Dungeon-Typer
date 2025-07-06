@@ -5,3 +5,6 @@
 
 [node name="Entity" instance=ExtResource("1_hsvl8")]
 script = ExtResource("2_b8cxn")
+
+[node name="Hitbox" parent="." index="0"]
+shape = null

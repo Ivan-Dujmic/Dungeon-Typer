@@ -361,7 +361,7 @@ func generate_to_x_line(new_x: int):
 	draw_to_x_tiles(new_x - 1)
 
 func initialize():
-	final_x = 5
+	final_x = 50
 	
 	max_paths = 3
 	structure_weights = {

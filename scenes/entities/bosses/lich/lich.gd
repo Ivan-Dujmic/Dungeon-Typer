@@ -11,8 +11,20 @@ func initialize(class_init: BossClass, position_init: Vector2i):
 	tile_position = position_init
 
 func _on_action_timer_timeout():
+	var spawns: Array[Vector2i] = []
 	for i in range(2):
 		var spawn_pos: Vector2i
-		spawn_pos.x = randi_range(tile_position.x - 1, tile_position.x + 1)
-		spawn_pos.y = randi_range(tile_position.y - 5, tile_position.y + 5)
-		enemy_generator.attempt_enemy_spawn("Skeleton", 1, spawn_pos)
+		# Don't spawn two at the same location
+		while true:
+			spawn_pos.x = randi_range(tile_position.x - 1, tile_position.x + 1)
+			spawn_pos.y = randi_range(tile_position.y - 4, tile_position.y + 4)
+			var found = false
+			for spawn in spawns:
+				if spawn_pos == spawn:
+					found = true
+					break
+			if not found:
+				break
+		spawns.append(spawn_pos)
+	for spawn in spawns:
+		enemy_generator.attempt_enemy_spawn("Skeleton", 1, spawn)

@@ -28,8 +28,9 @@ func _on_action_timer_timeout():
 	return
 		
 func die():
-	queue_free()
+	GameState.run_enemies_defeated += 1
 	Signals.boss_defeated.emit()
+	queue_free()
 
 # Position should be a tile coordinate
 func initialize(class_init: BossClass, position_init: Vector2i):

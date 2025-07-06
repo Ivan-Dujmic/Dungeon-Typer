@@ -74,6 +74,8 @@ func _unhandled_input(event: InputEvent):
 				InputResult.FINISHED:	# Word finished, reset
 					present_words.erase(result.word)
 					state = 0
+					GameState.run_words_completed += 1
+					GameState.run_characters_typed += len(result.word)
 				InputResult.DELETED:	# Word(s) undoed, reset
 					state = 0
 		if state == 0:	# In cases of reset, finish or when input doesn't fit any text
