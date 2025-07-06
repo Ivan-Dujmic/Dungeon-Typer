@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=8 format=3 uid="uid://cad7ye5r222e4"]
 
-[ext_resource type="FontFile" uid="uid://nm0wv8f4x7q7" path="res://assets/fonts/ia-writer-mono-latin-700-normal.ttf" id="1_gf4sj"]
+[ext_resource type="FontFile" uid="uid://nm0wv8f4x7q7" path="res://assets/fonts/ia-writer-mono-latin-700-normal.ttf" id="1_knxn7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hys3s"]
 bg_color = Color(0.294118, 0.294118, 0.294118, 0.380392)
@@ -65,14 +65,14 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gf4sj"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.462745)
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 0.752941)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
 [resource]
-default_font = ExtResource("1_gf4sj")
+default_font = ExtResource("1_knxn7")
 default_font_size = 20
 Button/colors/font_color = Color(0.870875, 0.401186, 0, 1)
 Button/colors/font_focus_color = Color(0.870588, 0.4, 0, 1)

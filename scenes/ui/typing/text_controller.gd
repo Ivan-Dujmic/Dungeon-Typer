@@ -17,6 +17,7 @@ var present_words: Array[String]
 var word_list = load("res://scenes/game/word_list.gd").word_list
 var word_list_size = word_list.size()
 var rng = RandomNumberGenerator.new()
+var ignore = false	# When going from one text controller to another, we want to ignore one character
 
 func attach(tt: TypingText):
 	texts.push_back(tt)
@@ -30,14 +31,13 @@ func detach(tt: TypingText):
 	
 func generate_word() -> String:
 	while(true):
+		var exists = false
 		var new_word = word_list[rng.randi_range(0, word_list_size-1)]
-		var is_subsumed = false
 		for word in present_words:
-			if word.begins_with(new_word) or new_word.begins_with(word):
-				is_subsumed = true
+			if word == new_word:
+				exists = true
 				break
-		if not is_subsumed:
-			present_words.push_back(new_word)
+		if not exists:
 			return new_word
 	return ""
 	
@@ -58,6 +58,10 @@ func unblock(tt: TypingText):
 	tt.unblock()
 	
 func _unhandled_input(event: InputEvent):
+	if ignore:
+		ignore = false
+		return
+		
 	if event is InputEventKey and event.pressed:
 		var incorrect_texts: Array[TypingText] = []
 		for text in active_texts:

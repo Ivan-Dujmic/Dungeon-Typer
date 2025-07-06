@@ -15,10 +15,17 @@ var health: int:	# Current health
 			die()
 var health_regen: int	# Health regen per second
 var attack: int	# Attack power
-var action_range: int	# Pixel range in which the player can performs actions
+var max_action_range: int = 240
+var action_range: int:	# Pixel range in which the player can performs actions
+	set(value):
+		action_range = clamp(value, 0, max_action_range)
+		update_action_range(value)
 var speed: float	# Movement speed
 
 func update_health():
+	return
+	
+func update_action_range(_value: int):
 	return
 
 func take_damage(damage: int):

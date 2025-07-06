@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://c85kgyv10unbt"]
+
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="1_8vtom"]
+[ext_resource type="Script" uid="uid://qj8hi1sonryo" path="res://scenes/modifiers/strength/strength_command.gd" id="1_b2m0i"]
+[ext_resource type="Script" uid="uid://cwjk5tihq8lc7" path="res://scenes/modifiers/strength/strength_requirements.gd" id="2_m0d7l"]
+[ext_resource type="Texture2D" uid="uid://c2s1j1p3rghvj" path="res://assets/textures/modifiers/strength.png" id="3_8rrov"]
+
+[resource]
+script = ExtResource("1_8vtom")
+name = "Strength"
+description = "Increases attack damage"
+texture = ExtResource("3_8rrov")
+effect_command = ExtResource("1_b2m0i")
+requirements = ExtResource("2_m0d7l")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"

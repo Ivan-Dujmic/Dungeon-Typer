@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://b4x7rd1gchq80"]
+
+[ext_resource type="Script" uid="uid://c45rxougu1ch" path="res://scenes/items/item_data.gd" id="1_vsyll"]
+[ext_resource type="Texture2D" uid="uid://oc2ygu6yhqrv" path="res://assets/textures/items/chest.png" id="2_xlcpi"]
+[ext_resource type="Script" uid="uid://gu6smpsapbkg" path="res://scenes/items/chest/chest_command.gd" id="3_8whgn"]
+
+[resource]
+script = ExtResource("1_vsyll")
+name = "Chest"
+description = "Provides a choice between modifiers."
+texture = ExtResource("2_xlcpi")
+use_command = ExtResource("3_8whgn")
+use_on_pickup = true
+metadata/_custom_type_script = "uid://c45rxougu1ch"

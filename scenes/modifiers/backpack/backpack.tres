@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://ccn0lftpit43e"]
+
+[ext_resource type="Script" uid="uid://ckr35soenfpq3" path="res://scenes/modifiers/backpack/backpack_command.gd" id="1_qeqyo"]
+[ext_resource type="Script" uid="uid://hxts6c4a4w6c" path="res://scenes/modifiers/backpack/backpack_requirements.gd" id="2_uep77"]
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="3_d5w02"]
+[ext_resource type="Texture2D" uid="uid://drhg886asydlv" path="res://assets/textures/modifiers/backpack.png" id="4_v3f0k"]
+
+[resource]
+script = ExtResource("3_d5w02")
+name = "Backpack"
+description = "Adds an inventory slot"
+texture = ExtResource("4_v3f0k")
+effect_command = ExtResource("1_qeqyo")
+requirements = ExtResource("2_uep77")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"

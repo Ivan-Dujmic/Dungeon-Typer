@@ -11,10 +11,12 @@ var target: Vector2
 var last_position: Vector2	# For inputs that try to go through obstacles (if no position change then stop trying)
 
 var luck: float
-var slots: int
 
 func update_health():
 	emit_signal("health_changed", float(health) / max_health)
+
+func update_action_range(value: int):
+	range_area.set_range(value)
 
 func die():
 	emit_signal("player_died")
@@ -46,11 +48,10 @@ func initialize(class_init: PlayerClass, position_init: Vector2):
 	action_range = class_init.action_range
 	speed = class_init.speed / GameState.difficulty
 	luck = class_init.luck
-	slots = class_init.slots
 	
 	range_area.set_range(action_range)
 	
-	inventory.resize(slots)
+	inventory.resize(class_init.slots)
 	
 	animated_sprite.sprite_frames = class_init.animation_frames
 	

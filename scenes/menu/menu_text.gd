@@ -90,7 +90,15 @@ func process_input(event):
 		pos_first_incoming += 1
 		if event.unicode == 32:	# Space, complete word
 			reset()
-			on_word_complete.call()
+			var root = get_tree().root
+			var game = null
+			for child in root.get_children():
+				if child is Game:
+					game = child
+			if game:	# Game
+				on_word_complete.call(self)
+			else:	# Main Menu
+				on_word_complete.call()
 			return text_controller.InputResult.FINISHED
 		return text_controller.InputResult.CORRECT
 	elif event.keycode == KEY_BACKSPACE:	# Backspace

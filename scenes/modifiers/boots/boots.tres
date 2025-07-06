@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://mv1bx7l64f87"]
+
+[ext_resource type="Script" uid="uid://cp0qw5rang5oa" path="res://scenes/modifiers/boots/boots_command.gd" id="1_uiflf"]
+[ext_resource type="Script" uid="uid://dsykp51m12xwg" path="res://scenes/modifiers/boots/boots_requirements.gd" id="2_be11n"]
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="3_oqrjt"]
+[ext_resource type="Texture2D" uid="uid://cv10juxkqm767" path="res://assets/textures/modifiers/boots.png" id="4_uiflf"]
+
+[resource]
+script = ExtResource("3_oqrjt")
+name = "Boots"
+description = "Increases movement speed"
+texture = ExtResource("4_uiflf")
+effect_command = ExtResource("1_uiflf")
+requirements = ExtResource("2_be11n")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"

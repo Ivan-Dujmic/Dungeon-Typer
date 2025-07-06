@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://qatpv8ye3mtk"]
+
+[ext_resource type="Script" uid="uid://7bjwxj2t2vir" path="res://scenes/modifiers/regeneration/regeneration_command.gd" id="1_mtue4"]
+[ext_resource type="Script" uid="uid://dwpismlik4v44" path="res://scenes/modifiers/regeneration/regeneration_requirements.gd" id="2_k5rtn"]
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="3_caol1"]
+[ext_resource type="Texture2D" uid="uid://bt12bfaig3jku" path="res://assets/textures/modifiers/regeneration.png" id="4_mtue4"]
+
+[resource]
+script = ExtResource("3_caol1")
+name = "Regeneration"
+description = "Increases health regen"
+texture = ExtResource("4_mtue4")
+effect_command = ExtResource("1_mtue4")
+requirements = ExtResource("2_k5rtn")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"

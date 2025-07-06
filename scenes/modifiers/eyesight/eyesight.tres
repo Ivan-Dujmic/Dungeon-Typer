@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://b61hdevebe2u6"]
+
+[ext_resource type="Script" uid="uid://gjdo5wfgmk8n" path="res://scenes/modifiers/eyesight/eyesight_command.gd" id="1_i7jcy"]
+[ext_resource type="Script" uid="uid://clt8oc31fsc5h" path="res://scenes/modifiers/eyesight/eyesight_requirements.gd" id="2_u8x8t"]
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="3_j6lht"]
+[ext_resource type="Texture2D" uid="uid://dlsosvrq7xsk0" path="res://assets/textures/modifiers/eyesight.png" id="4_i7jcy"]
+
+[resource]
+script = ExtResource("3_j6lht")
+name = "Eyesight"
+description = "Increases action range"
+texture = ExtResource("4_i7jcy")
+effect_command = ExtResource("1_i7jcy")
+requirements = ExtResource("2_u8x8t")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"

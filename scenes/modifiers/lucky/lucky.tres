@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://dhkgnwp56y5bo"]
+
+[ext_resource type="Script" uid="uid://d3ke07vd157wx" path="res://scenes/modifiers/lucky/lucky_command.gd" id="1_m18rd"]
+[ext_resource type="Script" uid="uid://dm8w3oe8lwsr6" path="res://scenes/modifiers/lucky/lucky_requirements.gd" id="2_b5jpk"]
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="3_8j6e2"]
+[ext_resource type="Texture2D" uid="uid://dh2wqae40h7jd" path="res://assets/textures/modifiers/lucky.png" id="4_m18rd"]
+
+[resource]
+script = ExtResource("3_8j6e2")
+name = "Lucky"
+description = "Increases luck"
+texture = ExtResource("4_m18rd")
+effect_command = ExtResource("1_m18rd")
+requirements = ExtResource("2_b5jpk")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ModifierData" load_steps=5 format=3 uid="uid://nx7hu37e4yd0"]
+
+[ext_resource type="Script" uid="uid://cvfotrk1foud3" path="res://scenes/modifiers/healthy/healthy_command.gd" id="1_igfdh"]
+[ext_resource type="Script" uid="uid://bchky6f8frx4a" path="res://scenes/modifiers/healthy/healthy_requirements.gd" id="2_tlp4k"]
+[ext_resource type="Script" uid="uid://b7ppl1fevxwhf" path="res://scenes/modifiers/modifier_data.gd" id="3_orvfc"]
+[ext_resource type="Texture2D" uid="uid://dnui5jmlhfjd8" path="res://assets/textures/modifiers/healthy.png" id="4_igfdh"]
+
+[resource]
+script = ExtResource("3_orvfc")
+name = "Healthy"
+description = "Increases max health"
+texture = ExtResource("4_igfdh")
+effect_command = ExtResource("1_igfdh")
+requirements = ExtResource("2_tlp4k")
+metadata/_custom_type_script = "uid://b7ppl1fevxwhf"
