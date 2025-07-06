@@ -32,6 +32,7 @@ func _ready():
 	player.initialize(player_class, Vector2(0.5 * Constants.TILE_SIZE, 0.5 * Constants.TILE_SIZE))
 	
 	GameState.modifier_roll_amount = 3
+	GameState.boss_active = false
 	
 	player.player_died.connect(_game_over)
 	Signals.modifier_selection.connect(_modifier_open)

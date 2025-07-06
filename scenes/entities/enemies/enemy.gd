@@ -34,11 +34,13 @@ func _on_action_timer_timeout():
 		target.take_damage(attack)
 		
 func die():
-	var drops = loot_table.roll()
-	for drop in drops:
-		var new_drop = item_drop.instantiate()
-		item_drops.add_child(new_drop)
-		new_drop.initialize(drop, global_position + Vector2((randf()-0.5)*20, (randf()-0.5)*20))
+	if not GameState.boss_active:
+		var drops = loot_table.roll()
+		for drop in drops:
+			var new_drop = item_drop.instantiate()
+			item_drops.add_child(new_drop)
+			new_drop.initialize(drop, global_position + Vector2((randf()-0.5)*20, (randf()-0.5)*20))
+	
 	queue_free()
 
 # Position should be a tile coordinate

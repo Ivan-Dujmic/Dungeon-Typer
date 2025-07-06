@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://irxk2ar62ro5"]
+
+[ext_resource type="PackedScene" uid="uid://kveuda4p7rla" path="res://scenes/entities/entity.tscn" id="1_myum2"]
+[ext_resource type="Script" uid="uid://b8x8k26fef2n0" path="res://scenes/entities/bosses/boss.gd" id="2_ti37w"]
+[ext_resource type="Script" uid="uid://dil4j1aa1ehf7" path="res://scenes/entities/bosses/health_bar.gd" id="3_3ckdr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c8ylr"]
+
+[node name="Entity" instance=ExtResource("1_myum2")]
+script = ExtResource("2_ti37w")
+
+[node name="CollisionCircle" parent="RangeArea" index="0"]
+shape = SubResource("CircleShape2D_c8ylr")
+
+[node name="NavigationAgent" parent="." index="3"]
+path_postprocessing = 0
+
+[node name="ActionTimer" type="Timer" parent="." index="5"]
+autostart = true
+
+[node name="HealthBar" type="Node2D" parent="." index="6"]
+z_index = 1
+script = ExtResource("3_3ckdr")
+
+[connection signal="timeout" from="ActionTimer" to="." method="_on_action_timer_timeout"]

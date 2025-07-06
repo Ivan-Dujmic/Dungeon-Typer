@@ -22,9 +22,10 @@ func generate_to_x_line(new_x: int):
 				can_spawn = true
 			for path in paths_y:
 				if path.structure == "":
-					path.structure = roll_structure()
-					path.time = 0
-
+					if x >= final_x:
+						path.structure = "final"
+					else:
+						path.structure = roll_structure()
 				match path.structure:
 					"straight":
 						generate_straight(x, path)
@@ -318,13 +319,50 @@ func generate_to_x_line(new_x: int):
 						elif path.time == 5 + 4 * path.flags["columns"]:
 							generate_straight(x, path)
 							path.finish_structure()
-						
+					"final":
+						if path.flags.has("lock_x"):
+							if player.global_position.x / Constants.TILE_SIZE > path.flags["lock_x"]:
+								player.target = Vector2(path.flags["lock_x"] + 0.5, path.y + 0.5) * Constants.TILE_SIZE
+								ui.block_movement()
+						if path.time < 10:
+							generate_straight(x, path)
+							path.time += 1
+						elif path.time == 10:
+							var top_y = path.y - 6
+							var bottom_y = path.y + 6
+							generate_straight(x, path)
+							@warning_ignore("integer_division")
+							for y in range(top_y, top_y + 6 - ceil(path.width / 2)):
+								place_tile(x, y, "wall")
+							@warning_ignore("integer_division")
+							for y in range(bottom_y - 4 + floor(path.width / 2), bottom_y + 1):
+								place_tile(x, y, "wall")
+							path.time += 1
+						elif path.time <= 27:
+							var top_y = path.y - 6
+							var bottom_y = path.y + 6
+							place_tile(x, top_y, "wall")
+							place_tile(x, bottom_y, "wall")
+							for y in range(top_y + 1, bottom_y):
+								place_tile(x, y, "floor")
+							path.time += 1
+							if path.time == 15:
+								path.flags["lock_x"] = x
+						elif path.time == 28:
+							var top_y = path.y - 6
+							var bottom_y = path.y + 6
+							for y in range(top_y, bottom_y + 1):
+								place_tile(x, y, "wall")
+							enemy_generator.attempt_enemy_spawn("Lich", 1, Vector2i(x - 2, path.y))
+							path.time += 1
 			x += 1
 		highest_generated_x = new_x
 	
 	draw_to_x_tiles(new_x - 1)
 
 func initialize():
+	final_x = 5
+	
 	max_paths = 3
 	structure_weights = {
 		"straight": 15,	# No change
@@ -335,6 +373,7 @@ func initialize():
 		"big_empty": 2,	# Big empty room with possible diverging paths
 		"double": 2,	# Split corridors by a middle wall
 		"pillars": 2,	# Repeating pillars in 2 rows
+		"final": 0
 	}
 	calculate_total_weight()
 	paths_y.push_back(Path.new(0, 3))

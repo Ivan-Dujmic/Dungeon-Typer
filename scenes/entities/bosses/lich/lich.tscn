@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7ikyxyamh17m"]
+
+[ext_resource type="PackedScene" uid="uid://irxk2ar62ro5" path="res://scenes/entities/bosses/boss.tscn" id="1_hsvl8"]
+[ext_resource type="Script" uid="uid://rj7kcpyfvi8k" path="res://scenes/entities/bosses/lich/lich.gd" id="2_b8cxn"]
+
+[node name="Entity" instance=ExtResource("1_hsvl8")]
+script = ExtResource("2_b8cxn")

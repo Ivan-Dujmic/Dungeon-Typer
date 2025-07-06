@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="BossClass" load_steps=5 format=3 uid="uid://4q4b2xp1xfdi"]
+
+[ext_resource type="Texture2D" uid="uid://clrqlf4428eeg" path="res://assets/textures/entities/bosses/lich.png" id="1_uvunj"]
+[ext_resource type="Script" uid="uid://cycoegpsxxf1a" path="res://scenes/entities/bosses/boss_class.gd" id="1_xfqmr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37ut4"]
+atlas = ExtResource("1_uvunj")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xfqmr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37ut4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 0.0
+}]
+
+[resource]
+script = ExtResource("1_xfqmr")
+max_health = 60
+health_regen = 1
+attack = 0
+action_range = 0
+speed = 0.0
+action_cooldown = 10.0
+animation_frames = SubResource("SpriteFrames_xfqmr")
+metadata/_custom_type_script = "uid://cycoegpsxxf1a"

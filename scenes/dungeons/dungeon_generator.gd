@@ -8,6 +8,7 @@ class_name DungeonGenerator
 
 @onready var enemy_generator = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/EnemyGenerator")
 @onready var player: Player = get_node("/root/Game/TilesViewportContainer/TilesViewport/YSort/Player")
+@onready var ui = get_node("/root/Game/UI")
 
 # We don't want to spawn enemies immediately
 var can_spawn: bool = false
@@ -31,6 +32,9 @@ var highest_drawn_x: int
 # Dungeons structures and weights in roll to build them on each x draw
 var structure_weights: Dictionary[String, int] = {}
 var total_weight: int
+
+# x line at which the final challenge/boss room spawns
+var final_x
 
 # Used to know when to merge paths (based on y and width)
 # Also to keep track of path count to not go overboard
@@ -106,7 +110,7 @@ func place_tile(x: int, y: int, tile: String):
 			wall_tiles[Vector2i(x, y)] = true
 			x_sorted_wall_tiles[x].push_back(y)
 		"floor":
-			if can_spawn:
+			if can_spawn and paths_y[0].structure != "final":
 				enemy_generator.attempt_enemy_spawn("Skeleton", 0.05, Vector2i(x, y))
 			if not x_sorted_floor_tiles.has(x):
 				x_sorted_floor_tiles[x] = []

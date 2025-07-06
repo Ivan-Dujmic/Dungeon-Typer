@@ -13,6 +13,8 @@ var font = load("res://assets/fonts/ia-writer-mono-latin-400-normal.ttf")
 # attached_tt_dict[tt] = [object, size, y_offset, is_in_game_world]
 var attached_tt_dict: Dictionary
 
+var movements_texts: Array[TypingText] = []
+
 func movement_tt_setup():
 	# Preload forward movement typing text
 	var tt_move_forward = typing_text_scene.instantiate()
@@ -33,6 +35,7 @@ func movement_tt_setup():
 		0.05
 	)
 	text_controller.unblock(tt_move_forward)
+	movements_texts.append(tt_move_forward)
 		
 	# Preload up movement typing text
 	var tt_move_up = typing_text_scene.instantiate()
@@ -51,6 +54,7 @@ func movement_tt_setup():
 		position
 	)
 	text_controller.unblock(tt_move_up)
+	movements_texts.append(tt_move_up)
 	
 	# Preload down movement typing text
 	var tt_move_down = typing_text_scene.instantiate()
@@ -69,6 +73,15 @@ func movement_tt_setup():
 		position
 	)
 	text_controller.unblock(tt_move_down)
+	movements_texts.append(tt_move_down)
+
+func block_movement():
+	for tt in movements_texts:
+		text_controller.block(tt)
+	
+func unblock_movement():
+	for tt in movements_texts:
+		text_controller.unblock(tt)
 
 # Creates a typing text and attaches it (horizontally centered) to the given object
 func create_attached_tt(
@@ -102,6 +115,10 @@ func create_attached_tt(
 func create_enemy_tt(enemy: Enemy) -> TypingText:
 	var on_word_complete_attack_func = Callable(self, "_on_word_complete_attack").bind(player, enemy)
 	return create_attached_tt(on_word_complete_attack_func, enemy, 24, 14, 2, -13, true, false)
+
+func create_boss_tt(boss: Boss) -> TypingText:
+	var on_word_complete_boss_func = Callable(self, "_on_word_complete_boss").bind(player, boss)
+	return create_attached_tt(on_word_complete_boss_func, boss, 24, 14, 6, -32, true, false)
 
 func create_item_drop_tt(item_drop: ItemDrop) -> TypingText:
 	var on_word_complete_pick_up_func = Callable(self, "_on_word_complete_pick_up").bind(player, item_drop)
@@ -161,6 +178,10 @@ func _on_word_complete_down(_completed_word, player_arg: Player):
 func _on_word_complete_attack(completed_word, player_arg: Player, enemy: Enemy):
 	var damage = player_arg.attack * 2 if completed_word.is_special else player_arg.attack
 	enemy.take_damage(damage)
+	
+func _on_word_complete_boss(completed_word, player_arg: Player, boss: Boss):
+	var damage = player_arg.attack * 2 if completed_word.is_special else player_arg.attack
+	boss.take_damage(damage)
 	
 func _on_word_complete_pick_up(_completed_word, player_arg: Player, item_drop: ItemDrop):
 	if item_drop.data.use_on_pickup:
