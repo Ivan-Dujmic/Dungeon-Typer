@@ -16,7 +16,7 @@ var target: Entity
 var target_in_range = false
 
 func update_health():
-	health_bar.update_health(float(health) / max_health)
+	health_bar.update_health(health, max_health)
 
 func set_target(new_target: Entity):
 	target = new_target

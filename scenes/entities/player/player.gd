@@ -10,10 +10,13 @@ signal player_died()
 var target: Vector2
 var last_position: Vector2	# For inputs that try to go through obstacles (if no position change then stop trying)
 
-var luck: float
+var luck: float:
+	set(value):
+		luck = value
+		update_stat.emit("luck", value)
 
 func update_health():
-	emit_signal("health_changed", float(health) / max_health)
+	emit_signal("health_changed", health, max_health)
 
 func update_action_range(value: int):
 	range_area.set_range(value)

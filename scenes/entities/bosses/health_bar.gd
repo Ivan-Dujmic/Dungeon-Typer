@@ -15,6 +15,6 @@ func _draw():
 	draw_rect(Rect2(Vector2.ZERO, size), empty_color)
 	draw_rect(Rect2(Vector2.ZERO, Vector2(bar_width, size.y)), health_color)
 	
-func update_health(ratio: float):
-	health_ratio = ratio
+func update_health(value: int, max_value: int):
+	health_ratio = float(value) / max_value
 	queue_redraw()
