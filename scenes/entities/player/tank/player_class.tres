@@ -1,0 +1,86 @@
+[gd_resource type="Resource" script_class="PlayerClass" load_steps=13 format=3 uid="uid://dhvydgwo0drur"]
+
+[ext_resource type="Texture2D" uid="uid://d003feom5xxua" path="res://assets/textures/entities/player/tank/idle.png" id="1_taskr"]
+[ext_resource type="Texture2D" uid="uid://5xg158424ymi" path="res://assets/textures/entities/player/tank/moving.png" id="2_is5mn"]
+[ext_resource type="Script" uid="uid://cc4baxauc4c53" path="res://scenes/entities/player/player_class.gd" id="3_cphnv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_is5mn"]
+atlas = ExtResource("1_taskr")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7c1q"]
+atlas = ExtResource("1_taskr")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cphnv"]
+atlas = ExtResource("1_taskr")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_shpo2"]
+atlas = ExtResource("1_taskr")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dfd5"]
+atlas = ExtResource("2_is5mn")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eexhc"]
+atlas = ExtResource("2_is5mn")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7oj7l"]
+atlas = ExtResource("2_is5mn")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ke8m7"]
+atlas = ExtResource("2_is5mn")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a0dd2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_is5mn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o7c1q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cphnv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_shpo2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dfd5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eexhc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7oj7l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ke8m7")
+}],
+"loop": true,
+"name": &"moving",
+"speed": 8.0
+}]
+
+[resource]
+script = ExtResource("3_cphnv")
+max_health = 250
+health_regen = 2
+attack = 10
+action_range = 96
+speed = 110.0
+luck = 2.0
+slots = 3
+animation_frames = SubResource("SpriteFrames_a0dd2")
+metadata/_custom_type_script = "uid://cc4baxauc4c53"

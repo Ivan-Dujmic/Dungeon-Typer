@@ -10,6 +10,8 @@ const dungeons: Array[String] = [
 const characters: Array[String] = [
 	"Knight",
 	"Wizard",
+	"Vampire",
+	"Tank",
 ]
 
 const modifiers: Array[String] = [

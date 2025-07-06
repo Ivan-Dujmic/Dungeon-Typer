@@ -2,12 +2,12 @@ extends Node
 
 var unlocked_dungeons: Array[String] = [
 	"Crypts",
-	"Forest"
 ]
 
 var unlocked_characters: Array[String] = [
 	"Knight",
-	"Wizard"
+	"Wizard",
+	"Vampire",
 ]
 
 var runs_started: int = 0
@@ -42,5 +42,6 @@ func wipe_data():
 	
 	unlocked_characters = [
 		"Knight",
-		"Wizard"
+		"Wizard",
+		"Vampire",
 	]
