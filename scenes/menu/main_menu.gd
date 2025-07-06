@@ -99,6 +99,29 @@ func setup_dungeon_select_screen():
 
 		texts["dungeon_select_screen"].push_back(mt)
 		container.add_child(button)
+	
+	# Locked dungeons
+	for dungeon in Constants.dungeons:
+		if dungeon not in Progress.unlocked_dungeons:
+			# BUTTON (disabled)
+			var button = Button.new()
+			button.custom_minimum_size = Vector2(400, 330)
+			button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			button.add_theme_font_override("font", button_font)
+			button.add_theme_font_size_override("font_size", 35)
+
+			# IMAGE
+			var texture_rect = TextureRect.new()
+			texture_rect.texture = load("res://assets/textures/dungeons/locked_dungeon_preview.png")
+			texture_rect.expand = true
+			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			texture_rect.anchor_right = 1.0
+			texture_rect.anchor_bottom = 1.0
+			texture_rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			texture_rect.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			button.add_child(texture_rect)
+			
+			container.add_child(button)
 
 func _on_select_dungeon(dungeon: String):
 	GameState.dungeon = dungeon
@@ -165,6 +188,29 @@ func setup_character_select_screen():
 
 		texts["character_select_screen"].push_back(mt)
 		container.add_child(button)
+		
+	# Locked dungeons
+	for character in Constants.characters:
+		if character not in Progress.unlocked_characters:
+			# BUTTON (disabled)
+			var button = Button.new()
+			button.custom_minimum_size = Vector2(128, 210)
+			button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			button.add_theme_font_override("font", button_font)
+			button.add_theme_font_size_override("font_size", 30)
+
+			# IMAGE
+			var texture_rect = TextureRect.new()
+			texture_rect.texture = load("res://assets/textures/entities/player/locked_character_preview.png")
+			texture_rect.expand = true
+			texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			texture_rect.anchor_right = 1.0
+			texture_rect.anchor_bottom = 1.0
+			texture_rect.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			texture_rect.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			button.add_child(texture_rect)
+			
+			container.add_child(button)
 	
 func _on_select_character(character: String):
 	GameState.character = character
