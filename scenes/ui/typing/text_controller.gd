@@ -38,6 +38,7 @@ func generate_word() -> String:
 				exists = true
 				break
 		if not exists:
+			present_words.append(new_word)
 			return new_word
 	return ""
 	
