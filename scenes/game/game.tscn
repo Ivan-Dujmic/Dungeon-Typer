@@ -164,7 +164,17 @@ theme_override_font_sizes/font_size = 30
 text = "Game Over!"
 horizontal_alignment = 1
 
-[node name="STATSPLACEHOLDER" type="Node" parent="PopupUI/GameOverPanel"]
+[node name="StatsContainer" type="GridContainer" parent="PopupUI/GameOverPanel"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
 
 [node name="ExitButton" type="Button" parent="PopupUI/GameOverPanel"]
 layout_mode = 1
@@ -210,7 +220,19 @@ theme_override_font_sizes/font_size = 30
 text = "Run Completed!"
 horizontal_alignment = 1
 
-[node name="STATSPLACEHOLDER" type="Node" parent="PopupUI/VictoryPanel"]
+[node name="StatsContainer" type="GridContainer" parent="PopupUI/VictoryPanel"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_right = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
 
 [node name="ExitButton" type="Button" parent="PopupUI/VictoryPanel"]
 layout_mode = 1
@@ -284,6 +306,4 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[connection signal="pressed" from="PopupUI/GameOverPanel/ExitButton" to="PopupUI" method="_on_exit_game_menu"]
-[connection signal="pressed" from="PopupUI/VictoryPanel/ExitButton" to="PopupUI" method="_on_exit_game_menu"]
 [connection signal="pressed" from="PopupUI/ModifierPanel/SkipButton" to="PopupUI" method="_skip_modifier"]

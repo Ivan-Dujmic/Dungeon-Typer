@@ -12,13 +12,19 @@ class_name Game
 var ratio = 0
 
 func _game_over():
-	GameState.add_run_stats_to_all_time_stats(false)
 	popup_ui.load_panel("game_over")
+	GameState.add_run_stats_to_all_time_stats(false)
 	get_tree().paused = true
 	
-func _victory():
-	GameState.add_run_stats_to_all_time_stats(true)
+func _victory(dungeon: String):
 	popup_ui.load_panel("victory")
+	GameState.add_run_stats_to_all_time_stats(true)
+	match dungeon:
+		"Crypts":
+			if "Forest" not in Progress.unlocked_dungeons:
+				Progress.unlocked_dungeons.append("Forest")
+			if "Tank" not in Progress.unlocked_characters:
+				Progress.unlocked_characters.append("Tank")
 	get_tree().paused = true
 	
 func _modifier_open():

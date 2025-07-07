@@ -29,7 +29,7 @@ func _on_action_timer_timeout():
 		
 func die():
 	GameState.run_enemies_defeated += 1
-	Signals.boss_defeated.emit()
+	Signals.boss_defeated.emit(GameState.dungeon)
 	queue_free()
 
 # Position should be a tile coordinate
