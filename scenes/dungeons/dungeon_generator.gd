@@ -112,9 +112,9 @@ func place_tile(x: int, y: int, tile: String):
 		"floor":
 			if can_spawn and paths_y[0].structure != "final":
 				if randf() < 0.7:
-					enemy_generator.attempt_enemy_spawn("Skeleton", 0.08, Vector2i(x, y))
+					enemy_generator.attempt_enemy_spawn("Skeleton", 0.1, Vector2i(x, y))
 				else:
-					enemy_generator.attempt_enemy_spawn("Flaming Skull", 0.08, Vector2i(x, y))
+					enemy_generator.attempt_enemy_spawn("Flaming Skull", 0.1, Vector2i(x, y))
 			if not x_sorted_floor_tiles.has(x):
 				x_sorted_floor_tiles[x] = []
 			floor_tiles[Vector2i(x, y)] = true

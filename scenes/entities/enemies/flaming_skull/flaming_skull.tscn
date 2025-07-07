@@ -25,6 +25,7 @@ drops = Array[ExtResource("3_i7l7m")]([SubResource("Resource_n3j22"), SubResourc
 metadata/_custom_type_script = "uid://cj0go5seembrl"
 
 [node name="Entity" instance=ExtResource("1_gc0uh")]
+z_index = 2
 collision_mask = 0
 script = ExtResource("2_yt6h2")
 loot_table = SubResource("Resource_etyoy")
