@@ -27,4 +27,7 @@ func _on_action_timer_timeout():
 				break
 		spawns.append(spawn_pos)
 	for spawn in spawns:
-		enemy_generator.attempt_enemy_spawn("Skeleton", 1, spawn)
+		if randf() < 0.7:
+			enemy_generator.attempt_enemy_spawn("Skeleton", 1, spawn)
+		else:
+			enemy_generator.attempt_enemy_spawn("Flaming Skull", 1, spawn)

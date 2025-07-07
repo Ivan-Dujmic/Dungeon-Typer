@@ -1,0 +1,30 @@
+[gd_scene load_steps=10 format=3 uid="uid://cspmhowv46syo"]
+
+[ext_resource type="PackedScene" uid="uid://dp2ekxset7b2x" path="res://scenes/entities/enemies/enemy.tscn" id="1_gc0uh"]
+[ext_resource type="Script" uid="uid://bqwxjldodxluq" path="res://scenes/entities/enemies/flaming_skull/flaming_skull.gd" id="2_yt6h2"]
+[ext_resource type="Script" uid="uid://ilgn67vqlgyg" path="res://scenes/items/loot_entry.gd" id="3_i7l7m"]
+[ext_resource type="Resource" uid="uid://ck3wdgc6l8f2e" path="res://scenes/items/health_pickup/health_pickup.tres" id="4_sfjka"]
+[ext_resource type="Script" uid="uid://cj0go5seembrl" path="res://scenes/items/loot_table.gd" id="5_r5g3r"]
+[ext_resource type="Resource" uid="uid://b4x7rd1gchq80" path="res://scenes/items/chest/chest.tres" id="5_sfjka"]
+
+[sub_resource type="Resource" id="Resource_n3j22"]
+script = ExtResource("3_i7l7m")
+item = ExtResource("4_sfjka")
+chance = 0.2
+metadata/_custom_type_script = "uid://ilgn67vqlgyg"
+
+[sub_resource type="Resource" id="Resource_r5g3r"]
+script = ExtResource("3_i7l7m")
+item = ExtResource("5_sfjka")
+chance = 0.12
+metadata/_custom_type_script = "uid://ilgn67vqlgyg"
+
+[sub_resource type="Resource" id="Resource_etyoy"]
+script = ExtResource("5_r5g3r")
+drops = Array[ExtResource("3_i7l7m")]([SubResource("Resource_n3j22"), SubResource("Resource_r5g3r")])
+metadata/_custom_type_script = "uid://cj0go5seembrl"
+
+[node name="Entity" instance=ExtResource("1_gc0uh")]
+collision_mask = 0
+script = ExtResource("2_yt6h2")
+loot_table = SubResource("Resource_etyoy")
