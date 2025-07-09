@@ -14,6 +14,7 @@ var ratio = 0
 func _game_over():
 	popup_ui.load_panel("game_over")
 	GameState.add_run_stats_to_all_time_stats(false)
+	Save.save_game()
 	get_tree().paused = true
 	
 func _victory(dungeon: String):
@@ -25,6 +26,7 @@ func _victory(dungeon: String):
 				Progress.unlocked_dungeons.append("Forest")
 			if "Tank" not in Progress.unlocked_characters:
 				Progress.unlocked_characters.append("Tank")
+	Save.save_game()
 	get_tree().paused = true
 	
 func _modifier_open():

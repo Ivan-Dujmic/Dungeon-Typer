@@ -44,6 +44,8 @@ func set_resolution(res: int = -1):
 		
 	DisplayServer.window_set_size(RESOLUTIONS[resolution][1])
 	center_window()
+	
+	Save.save_game()
 
 func set_screen(index: int = -1):
 	if index != -1:
@@ -57,6 +59,8 @@ func set_screen(index: int = -1):
 		
 	DisplayServer.window_set_current_screen(index)
 	center_window()
+	
+	Save.save_game()
 
 func center_window():
 	var screen_index = DisplayServer.window_get_current_screen()

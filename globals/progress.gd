@@ -45,3 +45,5 @@ func wipe_data():
 		"Wizard",
 		"Vampire",
 	]
+	
+	Save.save_game()

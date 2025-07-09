@@ -133,6 +133,8 @@ func _wipe_dungeon_unlocks():
 		text_controller.detach(texts["dungeon_select_screen"][i])
 	texts["dungeon_select_screen"] = texts["dungeon_select_screen"].slice(0, 1)
 	
+	dungeon_previews = {}
+	
 	var container = $DungeonSelectScreenContainer
 	for child in container.get_children():
 		if child is Button:
@@ -221,6 +223,8 @@ func _wipe_character_unlocks():
 	for i in range(1, len(texts["character_select_screen"])):
 		text_controller.detach(texts["character_select_screen"][i])
 	texts["character_select_screen"] = texts["character_select_screen"].slice(0, 1)
+	
+	character_previews = {}
 	
 	var container = $CharacterSelectScreenContainer/CharactersContainer
 	for child in container.get_children():
